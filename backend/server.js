@@ -12,7 +12,6 @@ const app = express();
 dotenv.config();
 const __dirname = path.resolve();
 const PORT = process.env.PORT || 5001;
-
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -21,18 +20,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/message", messageeditroutes);
-app.use("/getStates", (req, res) => {
-  console.log("i am running");
-  res.send("hello i am comming");
-});
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
-
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
-});
-app.use("/getuser", (req, res) => {
-  console.log("got it");
-  res.send("hello i am comming");
 });
 
 app.listen(PORT, async () => {

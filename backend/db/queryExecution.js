@@ -1,14 +1,16 @@
 import mysql from "mysql2/promise";
-
+import dotenv from "dotenv";
+dotenv.config();
 const dbPool = mysql.createPool({
   connectionLimit: 10,
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "states",
-  port: 3306,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DATABASE,
+  port: process.env.DB_PORT,
 });
-
+// import dotenv from "dotenv";
+// dotenv.config();
 async function executeQuery(query, params, callback) {
   let connection;
   try {
