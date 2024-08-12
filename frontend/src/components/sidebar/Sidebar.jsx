@@ -5,9 +5,9 @@ import SearchInput from "./SearchInput";
 const Sidebar = () => {
   return (
     <div className="flex flex-col p-4 border-r sm:w-1/4 border-slate-500">
-      <SearchInput />
+      {/* <SearchInput />
       <div className="px-3 divider"></div>
-      <Conversations />
+      <Conversations /> */}
       <LogoutButton />
     </div>
   );
