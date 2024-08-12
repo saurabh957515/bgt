@@ -10,32 +10,32 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('hello')
+    console.log("hello");
     await login(username, password);
   };
   return (
     <section className="h-[100vh] w-[100vw] bg-blue-100   p-5">
       <div className="h-full m-auto bg-white sm:flex sm:w-3/4 rounded-2xl">
-        <div className="h-full ">
+        <div className="h-full max-sm:h-1/3">
           <img
             src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
             alt="login form"
-            className="object-cover w-full h-full"
+            className="object-cover w-full h-full "
             style={{ borderRadius: "1rem 0 0 1rem" }}
           />
         </div>
-        <div className="h-full py-8 mx-5 grow">
+        <div className="h-full px-4 py-8 sm:mx-5 grow">
           <form onSubmit={handleSubmit}>
             <div className="pb-1 mb-3 d-flex align-items-center">
               <i
                 className="fas fa-cubes fa-2x me-3"
                 style={{ color: "#ff6219" }}
               ></i>
-              <span className="mb-0 h1 fw-bold">Logo</span>
+              <span className="mb-0 h1 fw-bold max-sm:text-white">Logo</span>
             </div>
 
             <h5
-              className="pb-3 mb-3 fw-normal"
+              className="pb-3 mb-3 fw-normal max-sm:text-white"
               style={{ letterSpacing: "1px" }}
             >
               Sign into your account
@@ -48,7 +48,7 @@ const Login = () => {
               <input
                 type="text"
                 placeholder="Enter Username"
-               className="form-control"
+                className="form-control"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -61,7 +61,7 @@ const Login = () => {
               <input
                 type="password"
                 placeholder="Enter Password"
-               className="form-control"
+                className="form-control"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
