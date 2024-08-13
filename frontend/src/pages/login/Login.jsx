@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
-
+import Image from "../LocationImage.jpg";
+import TextInput from "../../Fileds/TextInput";
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
+  const [username, setUsername] = useState("username");
+  const [password, setPassword] = useState("username@123");
+  const navigate = useNavigate();
   const { loading, login } = useLogin();
 
   const handleSubmit = async (e) => {
@@ -14,131 +15,92 @@ const Login = () => {
     await login(username, password);
   };
   return (
-    <section className="h-[100vh] w-[100vw] bg-blue-100   p-5">
-      <div className="h-full m-auto bg-white sm:flex sm:w-3/4 rounded-2xl">
-        <div className="h-full max-sm:h-1/3">
-          <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
-            alt="login form"
-            className="object-cover w-full h-full "
-            style={{ borderRadius: "1rem 0 0 1rem" }}
-          />
-        </div>
-        <div className="h-full px-4 py-8 sm:mx-5 grow">
-          <form onSubmit={handleSubmit}>
-            <div className="pb-1 mb-3 d-flex align-items-center">
-              <i
-                className="fas fa-cubes fa-2x me-3"
-                style={{ color: "#ff6219" }}
-              ></i>
-              <span className="mb-0 h1 fw-bold max-sm:text-white">Logo</span>
+    <div className="h-[100vh] w-[100vw] sm:flex overflow-hidden bg-white">
+      <div className="relative w-1/2 h-full">
+        <img
+          src={Image}
+          alt="login form"
+          className="absolute top-0 object-cover w-full h-full opacity-80"
+        />
+        <div className="absolute top-0 left-0 z-10 flex items-center w-full h-full p-4 text-4xl font-bold text-center text-gray-800">
+          <div className="mx-auto">
+            <h1 className="text-4xl font-bold">Welcome to Career Growth</h1>
+            <div className="text-base font-medium">
+              Move Towards Growth and Learning.
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center justify-center w-1/2 h-full">
+        <div className="w-3/4">
+          <form className="w-full px-4 text-sm" onSubmit={handleSubmit}>
+            <div className="text-2xl font-medium text-gray-800">Log In</div>
 
-            <h5
-              className="pb-3 mb-3 fw-normal max-sm:text-white"
-              style={{ letterSpacing: "1px" }}
-            >
+            <h5 className="py-2 text-base font-medium text-gray-800">
               Sign into your account
             </h5>
 
-            <div className="mb-2 form-outline">
-              <label className="form-label" htmlFor="form2Example17">
+            <div className="w-full">
+              <label
+                className="block pb-2 text-gray-800"
+                htmlFor="form2Example17"
+              >
                 Username
               </label>
-              <input
-                type="text"
+              <TextInput
                 placeholder="Enter Username"
-                className="form-control"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                handleChange={(e) => setUsername(e.target.value)}
+                className="w-full text-gray-800 bg-white "
               />
             </div>
 
-            <div className="mb-4 form-outline">
-              <label className="form-label" htmlFor="form2Example27">
+            <div className="">
+              <label
+                className="block pb-2 text-gray-800"
+                htmlFor="form2Example27"
+              >
                 Password
               </label>
-              <input
-                type="password"
+              <TextInput
                 placeholder="Enter Password"
-                className="form-control"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                handleChange={(e) => setPassword(e.target.value)}
+                className="w-full text-gray-800 bg-white"
               />
             </div>
 
-            <div className="pt-1 mb-4">
-              <button className="btn btn-dark btn-lg btn-block" type="submit">
+            <div className="w-full">
+              <button
+                className="w-full py-2 text-sm font-semibold text-white bg-[#5B8EDC] rounded "
+                // type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/')
+                }}
+              >
                 Login
               </button>
             </div>
-            <div className="flex flex-col items-center justify-center">
-              <a className="small text-muted" href="#!">
+            <div className="flex flex-col items-center justify-center py-1 text-sm">
+              <a className="small text-muted text-[#666]" href="#!">
                 Forgot password?
               </a>
-              <Link
-                to="/signup"
-                className="mb-5 pb-lg-2"
-                style={{ color: "#393f81" }}
-              >
+              <Link to="/signup" className=" pb-lg-2" style={{ color: "#666" }}>
                 Don't have an account?{" "}
-                <a href="#!" style={{ color: "#393f81" }}>
+                <a href="#!" style={{ color: "#5B8EDC" }}>
                   Register here
                 </a>
               </Link>
-              <a href="#!" className="small text-muted">
-                Terms of use.
+              <a href="#!" className="small text-muted text-[#666]">
+                Terms of use & Privacy policy
               </a>
-              <a href="#!" className="small text-muted">
-                Privacy policy
-              </a>
+              <a href="#!" className="small text-muted"></a>
             </div>
           </form>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 export default Login;
-
-// STARTER CODE FOR THIS FILE
-// const Login = () => {
-// 	return (
-// 		<div className='flex flex-col items-center justify-center mx-auto min-w-96'>
-// 			<div className='w-full p-6 bg-gray-400 bg-opacity-0 rounded-lg shadow-md bg-clip-padding backdrop-filter backdrop-blur-lg'>
-// 				<h1 className='text-3xl font-semibold text-center text-gray-300'>
-// 					Login
-// 					<span className='text-blue-500'> ChatApp</span>
-// 				</h1>
-
-// 				<form>
-// 					<div>
-// 						<label className='p-2 label'>
-// 							<span className='text-base label-text'>Username</span>
-// 						</label>
-// 						<input type='text' placeholder='Enter username' className='w-full h-10 input input-bordered' />
-// 					</div>
-
-// 					<div>
-// 						<label className='label'>
-// 							<span className='text-base label-text'>Password</span>
-// 						</label>
-// 						<input
-// 							type='password'
-// 							placeholder='Enter Password'
-// 							className='w-full h-10 input input-bordered'
-// 						/>
-// 					</div>
-// 					<a href='#' className='inline-block mt-2 text-sm hover:underline hover:text-blue-600'>
-// 						{"Don't"} have an account?
-// 					</a>
-
-// 					<div>
-// 						<button className='mt-2 btn btn-block btn-sm'>Login</button>
-// 					</div>
-// 				</form>
-// 			</div>
-// 		</div>
-// 	);
-// };
-// export default Login;

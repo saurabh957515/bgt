@@ -13,14 +13,14 @@ const useSignup = () => {
     confirmPassword,
     email
   }) => {
-    // const success = handleInputErrors({
-    //   full_name,
-    //   username,
-    //   password,
-    //   confirmPassword,
-    //   gender,
-    // });
-    // if (!success) return;
+    const success = handleInputErrors({
+      full_name,
+      username,
+      password,
+      confirmPassword,
+      email,
+    });
+    if (!success) return;
 
     setLoading(true);
     try {
@@ -55,13 +55,13 @@ const useSignup = () => {
 export default useSignup;
 
 function handleInputErrors({
-  fullName,
+  full_name,
   username,
   password,
   confirmPassword,
-  gender,
+  email,
 }) {
-  if (!fullName || !username || !password || !confirmPassword || !gender) {
+  if (!full_name || !username || !password || !confirmPassword || !email) {
     toast.error("Please fill in all fields");
     return false;
   }

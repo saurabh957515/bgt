@@ -26,12 +26,5 @@ app.get("*", (req, res) => {
 });
 
 app.listen(PORT, async () => {
-  await sql("SELECT 1", [], (callback) => {
-    if (callback?.err) {
-      console.error("Error executing query:", err);
-    } else {
-      console.log("Connected To Database", callback);
-    }
-  });
   console.log(`Server Running on port ${PORT}`);
 });

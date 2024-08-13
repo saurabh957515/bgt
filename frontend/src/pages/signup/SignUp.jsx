@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GenderCheckbox from "./GenderCheckbox";
 import { useState } from "react";
 import useSignup from "../../hooks/useSignup";
-
+import Image from "../LocationImage.jpg";
+import TextInput from "../../Fileds/TextInput";
 const SignUp = () => {
   const [inputs, setInputs] = useState({
     full_name: "",
@@ -13,160 +14,156 @@ const SignUp = () => {
   });
 
   const { loading, signup } = useSignup();
-
+  const navigate = useNavigate();
   const handleCheckboxChange = (gender) => {
     setInputs({ ...inputs, gender });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(inputs);
+    console.log("hello i am comming..");
     await signup(inputs);
   };
 
   return (
-    <section>
-      <div
-        className="px-4 py-5 text-center px-md-5 text-lg-start"
-        style={{ backgroundColor: "hsl(0, 0%, 96%)" }}
-      >
-        <div className="container">
-          <div className="row gx-lg-5 align-items-center">
-            <div className="mb-5 col-lg-6 mb-lg-0">
-              <h1 className="my-5 display-3 fw-bold ls-tight">
-                The best offer <br />
-                <span className="text-primary">for your business</span>
-              </h1>
-              <p style={{ color: "hsl(217, 10%, 50.8%)" }}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Eveniet, itaque accusantium odio, soluta, corrupti aliquam
-                quibusdam tempora at cupiditate quis eum maiores libero
-                veritatis? Dicta facilis sint aliquid ipsum atque?
-              </p>
-            </div>
-
-            <div className="mb-5 col-lg-6 mb-lg-0">
-              <div className="card">
-                <div className="py-5 card-body px-md-5">
-                  <form onSubmit={handleSubmit}>
-                    {/* 2 column grid layout with text inputs for the first and last names */}
-                    <div className="row">
-                      <div className="mb-2 col-md-6">
-                        <div className="form-outline">
-                          <label className="form-label" htmlFor="form3Example1">
-                            User Name
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="Enter Username"
-                            className="form-control"
-                            value={inputs.username}
-                            onChange={(e) =>
-                              setInputs({ ...inputs, username: e.target.value })
-                            }
-                          />
-                        </div>
-                      </div>
-                      <div className="mb-2 col-md-6">
-                        <div className="form-outline">
-                          <label className="form-label" htmlFor="form3Example2">
-                            Full Name
-                          </label>
-                          <input
-                            type="text"
-                             placeholder="Enter Fullname"
-                            className="form-control"
-                            value={inputs.full_name}
-                            onChange={(e) =>
-                              setInputs({
-                                ...inputs,
-                                full_name: e.target.value,
-                              })
-                            }
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Email input */}
-                    <div className="mb-2 form-outline">
-                      <label className=" form-label" htmlFor="form3Example3">
-                        Email address
-                      </label>
-                      <input
-                        type="text"
-                         placeholder="Enter Emailaddress"
-                        className="form-control"
-                        value={inputs.email}
-                        onChange={(e) =>
-                          setInputs({ ...inputs, email: e.target.value })
-                        }
-                      />
-                    </div>
-
-                    {/* Password input */}
-                    <div className="mb-2 form-outline">
-                      <label className=" form-label" htmlFor="form3Example4">
-                        Password
-                      </label>
-                      <input
-                      placeholder="******"
-                        type="password"
-                        id="form3Example4"
-                        className="form-control"
-                        value={inputs.password}
-                        onChange={(e) =>
-                          setInputs({ ...inputs, password: e.target.value })
-                        }
-                      />
-                    </div>
-
-                    <div className="mb-2 form-outline">
-                      <label className="form-label" htmlFor="form3Example4">
-                        Confirm Password
-                      </label>
-                      <input
-                        placeholder="******"
-                        type="password"
-                        id="form3Example4"
-                        className="form-control"
-                        value={inputs.confirmPassword}
-                        onChange={(e) =>
-                          setInputs({
-                            ...inputs,
-                            confirmPassword: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="my-2 btn btn-primary btn-block"
-                    >
-                      Sign up
-                    </button>
-
-                    {/* Register buttons */}
-                    <div className="text-center">
-                      <Link
-                        to={"/login"}
-                        className="inline-block mt-2 text-sm hover:text-blue-600"
-                        href="#"
-                      >
-                        Already have an account?
-                      </Link>
-                      <p>or sign up with:</p>
-                    </div>
-                  </form>
-                </div>
-              </div>
+    <div className="h-[100vh] w-[100vw] sm:flex overflow-hidden bg-white">
+      <div className="relative w-1/2 h-full">
+        <img
+          src={Image}
+          alt="login form"
+          className="absolute top-0 object-cover w-full h-full opacity-80"
+        />
+        <div className="absolute top-0 left-0 z-10 flex items-center w-full h-full p-4 text-4xl font-bold text-center text-gray-800">
+          <div className="mx-auto">
+            <h1 className="text-4xl font-bold">Welcome to Career Growth</h1>
+            <div className="text-base font-medium">
+              Move Towards Growth and Learning.
             </div>
           </div>
         </div>
       </div>
-      {/* Jumbotron */}
-    </section>
+
+      <div className="flex items-center justify-center w-1/2 h-full">
+        <div className="w-3/4">
+          <form
+            className="w-full px-4 text-sm text-gray-800"
+            onSubmit={handleSubmit}
+          >
+            <div className="text-2xl font-medium text-gray-800">SignUp</div>
+
+            <h5 className="py-2 text-base font-medium text-gray-800">
+              SignUp Your first account
+            </h5>
+
+            <div className="w-full">
+              <label className="" htmlFor="form3Example1">
+                User Name
+              </label>
+              <TextInput
+                type="text"
+                placeholder="Enter Username"
+                className="w-full mt-2 text-gray-800 bg-white "
+                value={inputs.username}
+                handleChange={(e) =>
+                  setInputs({ ...inputs, username: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="w-full">
+              <label className="" htmlFor="form3Example2">
+                Full Name
+              </label>
+              <TextInput
+                type="text"
+                placeholder="Enter Fullname"
+                className="w-full mt-2 text-gray-800 bg-white "
+                value={inputs.full_name}
+                handleChange={(e) =>
+                  setInputs({
+                    ...inputs,
+                    full_name: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="w-full">
+              <label className="" htmlFor="form3Example3">
+                Email address
+              </label>
+              <TextInput
+                type="text"
+                placeholder="Enter Email"
+                className="w-full mt-2 text-gray-800 bg-white "
+                value={inputs.email}
+                handleChange={(e) =>
+                  setInputs({ ...inputs, email: e.target.value })
+                }
+              />
+            </div>
+            <div className="w-full">
+              <label className="" htmlFor="form3Example4">
+                Password
+              </label>
+              <TextInput
+                placeholder="******"
+                id="form3Example4"
+                className="w-full mt-2 text-gray-800 bg-white "
+                value={inputs.password}
+                handleChange={(e) =>
+                  setInputs({ ...inputs, password: e.target.value })
+                }
+              />
+            </div>
+            <div className="w-full">
+              <label className="" htmlFor="form3Example4">
+                Confirm Password
+              </label>
+              <TextInput
+                placeholder="******"
+                id="form3Example4"
+                className="w-full mt-2 text-gray-800 bg-white "
+                value={inputs.confirmPassword}
+                handleChange={(e) =>
+                  setInputs({ ...inputs, confirmPassword: e.target.value })
+                }
+              />
+            </div>
+            <div className="w-full">
+              <button
+                className="w-full py-2 text-sm font-semibold text-white bg-[#5B8EDC] rounded "
+                // type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/login")
+                }}
+              >
+                SignUp
+              </button>
+            </div>
+            <div className="flex flex-col items-center justify-center py-1">
+              <a className="text-sm small text-muted" href="#!">
+                Forgot password?
+              </a>
+              <Link
+                to="/login"
+                className="text-sm pb-lg-2"
+                style={{ color: "#393f81" }}
+              >
+                Already have an account?{" "}
+                <a href="#!" style={{ color: "#393f81" }}>
+                  LogIn here
+                </a>
+              </Link>
+              <a href="#!" className="text-sm small text-muted">
+                Terms of use & Privacy policy
+              </a>
+              <a href="#!" className="small text-muted"></a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 export default SignUp;

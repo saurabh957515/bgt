@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "bootstrap": "^5.3.3",
+    "@headlessui/react": "^2.1.2",
+    "@heroicons/react": "^2.1.5",
     "chatapp": "file:..",
     "mdb-react-ui-kit": "^8.0.0",
     "react": "^18.2.0",
@@ -18,6 +19,8 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.23.1",
+    "react-select": "^5.8.0",
+    "react-tooltip": "^5.28.0",
     "socket.io-client": "^4.7.5",
     "zustand": "^4.5.2"
   },
