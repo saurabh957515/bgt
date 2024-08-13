@@ -1,6 +1,7 @@
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 dotenv.config();
+
 const dbPool = mysql.createPool({
   connectionLimit: 10,
   host: process.env.DB_HOST,
@@ -9,8 +10,7 @@ const dbPool = mysql.createPool({
   database: process.env.DATABASE,
   port: process.env.DB_PORT,
 });
-// import dotenv from "dotenv";
-// dotenv.config();
+
 async function executeQuery(query, params, callback) {
   let connection;
   try {
@@ -21,7 +21,7 @@ async function executeQuery(query, params, callback) {
     }
     return results;
   } catch (error) {
-    callback({ error: error });
+    if (callback) callback({ error: error });
     console.log("Database error occurred", error);
     throw error;
   } finally {
@@ -29,7 +29,43 @@ async function executeQuery(query, params, callback) {
   }
 }
 
-// Example usage
+async function checkAndCreateUsersTable() {
+  const checkQuery = `
+    SELECT COUNT(*) AS count
+    FROM information_schema.tables 
+    WHERE table_schema = ? 
+    AND table_name = 'users';
+  `;
+  try {
+    const [rows] = await executeQuery(checkQuery, [process.env.DATABASE]);
+    if (rows.count === 0) {
+      const createTableQuery = `
+        CREATE TABLE users (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          full_name VARCHAR(255),
+          username VARCHAR(255),
+          password VARCHAR(255),
+          profile_pic VARCHAR(255),
+          email VARCHAR(255),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );
+      `;
+      await executeQuery(createTableQuery, [], (results) => {
+        console.log("Users table created:", results);
+      });
+    } else {
+      console.log("Users table already exists.");
+    }
+  } catch (error) {
+    console.error("Error checking/creating users table:", error);
+  }
+}
+
+// Example usage: Check and create the users table if it doesn't exist
+checkAndCreateUsersTable();
+
+// Example usage: Execute a query
 // executeQuery('SELECT 1', [], (err, results) => {
 //   if (err) console.error("Query failed", err);
 //   else console.log("Query succeeded", results);
