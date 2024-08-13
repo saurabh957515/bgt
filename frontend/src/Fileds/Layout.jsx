@@ -48,7 +48,7 @@ const navigation = [
   { name: "Dashboard", to: "/", icon: HomeIcon, current: true },
   { name: "Inquiry", to: "/inquiry", icon: UsersIcon, current: false },
   { name: "Admissions", to: "/admissions", icon: FolderIcon, current: false },
-  { name: "Calendar", to: "/", icon: CalendarIcon, current: false },
+  { name: "Fee Details", to: "/feedetails", icon: CalendarIcon, current: false },
   { name: "Documents", to: "/", icon: DocumentDuplicateIcon, current: false },
   { name: "Reports", to: "/", icon: ChartPieIcon, current: false },
 ];

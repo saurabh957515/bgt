@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import { useAuthContext } from "./context/AuthContext";
 import Inquiry from "./pages/Inquiry/Inquiry";
 import Admissions from "./pages/Admissions/Admissions";
+import FeeDetails from "./pages/FeeDetails/FeeDetails";
 
 function App() {
   const { authUser } = useAuthContext();
@@ -39,6 +40,11 @@ function App() {
           path="/signup"
           // element={authUser ? <Navigate to="/" /> : <SignUp />}
           element={<SignUp/>}
+        />
+         <Route
+          path="/feedetails"
+          // element={authUser ? <Navigate to="/" /> : <SignUp />}
+          element={<FeeDetails/>}
         />
       </Routes>
       <Toaster />

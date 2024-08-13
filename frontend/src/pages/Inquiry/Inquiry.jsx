@@ -5,7 +5,13 @@ const Inquiry = () => {
   return (
     <Layout title="Inquiry">
       <div className="p-4 ml-4">
+        <div className="flex justify-between">
         <h1 className="text-base font-medium text-gray-800">Inquiry List</h1>
+        <button className="p-2 font-semibold text-white bg-[#5B8EDC] rounded">
+            Create Inquiry
+        </button>
+        </div>
+       
         <div className="mt-2 space-y-2 text-sm text-gray-800">
           <div className="grid grid-cols-6 px-3 py-3 font-bold bg-gray-100 rounded">
             <div>Inquir No</div>
