@@ -62,13 +62,6 @@ async function checkAndCreateUsersTable() {
   }
 }
 
-// Example usage: Check and create the users table if it doesn't exist
 checkAndCreateUsersTable();
-
-// Example usage: Execute a query
-// executeQuery('SELECT 1', [], (err, results) => {
-//   if (err) console.error("Query failed", err);
-//   else console.log("Query succeeded", results);
-// });
 
 export default executeQuery;

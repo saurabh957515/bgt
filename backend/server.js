@@ -4,10 +4,12 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
+import admissionRoutes from './routes/admission.routes.js'
 import messageRoutes from "./routes/message.routes.js";
+import inquiryRoutes from "./routes/inquiry.routes.js";
+import educationRoutes from "./routes/Education.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import messageeditroutes from "./routes/messageedit.routes.js";
-import sql from "./db/queryExecution.js";
 const app = express();
 dotenv.config();
 const __dirname = path.resolve();
@@ -17,6 +19,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/inquiry", inquiryRoutes);
+app.use("/api/admission", admissionRoutes);
+app.use("/api/education", educationRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/message", messageeditroutes);
