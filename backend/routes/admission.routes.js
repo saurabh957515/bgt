@@ -6,6 +6,7 @@ import {
   deleteAdmission,
   getByFilter
 } from "../controllers/Admissions.controller.js";
+import protectRoute from "../middleware/protectRoute.js";
 const router = express.Router();
 router.post("/", createAdmission);
 router.get("/", getAdmissionDetail);

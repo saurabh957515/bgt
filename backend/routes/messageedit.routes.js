@@ -5,7 +5,6 @@ import Message from "../models/message.model.js";
 const router = express.Router();
 
 router.get("/chat/:id", protectRoute, async (req, res) => {
-  console.log("outside console");
   try {
     const { id: messageID } = req.params;
     console.log("hello ", messageID);

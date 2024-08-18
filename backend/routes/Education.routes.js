@@ -1,6 +1,6 @@
 import express from "express";
 import { createEducation,updateEducation ,getEducationDetails,getByFilter, deleteEducation} from "../controllers/Education.controller.js";
-
+import protectRoute from "../middleware/protectRoute.js";
 const router = express.Router();
 router.post("/", createEducation);
 router.get("/", getEducationDetails);
