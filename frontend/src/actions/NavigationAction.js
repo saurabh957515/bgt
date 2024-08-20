@@ -2,6 +2,8 @@ export const ON_PRESS_DASHBORD = "navigationReducer/ON_PRESS_DASHBORD";
 export const ON_PRESS_DASHBORD_CHILD =
   "navigationReducer/ON_PRESS_DASHBORD_CHILD";
 export const ON_PRESS_THEME_COLOR = "navigationReducer/ON_PRESS_THEME_COLOR";
+export const TOAST_MESSAGE_SET = "navigationReducer/TOAST_MESSAGE_SET";
+
 export const ON_PRESS_GENERAL_SETTING =
   "navigationReducer/ON_PRESS_GENERAL_SETTING";
 export const ON_PRESS_NOTIFICATION = "navigationReducer/ON_PRESS_NOTIFICATION";
@@ -99,6 +101,11 @@ export const toggleMenuArrow = () => (dispatch, getState) => {
   }
 };
 
+
+export const setToastMessage = (message) => ({
+  type: TOAST_MESSAGE_SET,
+  payload: message,
+});
 export const tostMessageLoad = (val) => (dispatch, getState) => {
   dispatch({
     type: TOAST_MESSAGE_LOAD,

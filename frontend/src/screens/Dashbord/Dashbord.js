@@ -100,7 +100,7 @@ class Dashbord extends React.Component {
               HeaderText="Dashboard"
               Breadcrumb={[{ name: "Dashboard" }]}
             />
-            <div className="clearfix row">
+            <div className="row clearfix">
               {cardData.map((data, i) => (
                 <SparkleCard
                   index={i}
@@ -117,7 +117,7 @@ class Dashbord extends React.Component {
               ))}
             </div>
 
-            <div className="clearfix row">
+            <div className="row clearfix">
               <div className="col-lg-6 col-md-12">
                 <div className="card">
                   <div className="header">
@@ -183,7 +183,7 @@ class Dashbord extends React.Component {
                       </Dropdown.Toggle>
                     </Dropdown>
                   </div>
-                  <div className="text-center body">
+                  <div className="body text-center">
                     <h4 className="margin-0">Total Sale</h4>
                     <div
                       id="topsaleDonut"
@@ -220,7 +220,7 @@ class Dashbord extends React.Component {
               </div>
             </div>
 
-            <div className="clearfix row">
+            <div className="row clearfix">
               <div className="col-lg-4 col-md-12">
                 <ResentChat />
               </div>
@@ -343,7 +343,7 @@ class Dashbord extends React.Component {
               </div>
             </div>
 
-            <div className="clearfix row">
+            <div className="row clearfix">
               <div className="col-lg-4 col-md-12">
                 <FeedCards />
               </div>
@@ -353,7 +353,7 @@ class Dashbord extends React.Component {
               <div className="col-lg-4 col-md-12">
                 <div className="card overflowhidden">
                   <div className="body top_counter bg-success">
-                    <div className="bg-transparent icon">
+                    <div className="icon bg-transparent">
                       <img
                         src={require("../../assets/images/xs/avatar2.jpg")}
                         className="rounded-circle"
@@ -393,7 +393,7 @@ class Dashbord extends React.Component {
               </div>
             </div>
 
-            <div className="clearfix row">
+            <div className="row clearfix">
               <div className="col-lg-12">
                 <div className="card">
                   <div className="header">

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { Route, Switch, withRouter } from "react-router-dom";
 import Login from "./screens/Login";
 import dashboard from "./screens/Dashbord/Dashbord";
@@ -60,6 +60,10 @@ import basicelements from "./screens/Forms/BasicElements";
 import tablenormal from "./screens/Tables/TableNormal";
 import echart from "./screens/Charts/Echart";
 import leafletmap from "./screens/Maps/GoogleMaps";
+import CreateInquiry from "./screens/Inquiry/CreateInquiry";
+import Inquires from "./screens/Inquiry/Inquires";
+import TotalAdmission from "./screens/Admission/TotalAdmission";
+import Admissions from "./screens/Admission/partials/Admissions";
 
 window.__DEV__ = true;
 const App = ({ isLoggedin, history }) => {
@@ -70,6 +74,7 @@ const App = ({ isLoggedin, history }) => {
   res = res.length > 0 ? res[baseUrl.length] : "/";
   res = res ? res : "/";
   const activeKey1 = res;
+  const dispatch=useDispatch()
   useEffect(() => {
     const allowedPaths = [
       "",
@@ -82,14 +87,16 @@ const App = ({ isLoggedin, history }) => {
       "page403",
       "page500",
       "page503",
-      "maintanance"
+      "maintanance",
     ];
 
-    if (!localStorage.getItem("login-user") && !allowedPaths.includes(activeKey1)) {
-      history.push("/login"); // Redirect to login page if not logged in and not on an allowed path
+    if (
+      !localStorage.getItem("login-user") &&
+      !allowedPaths.includes(activeKey1)
+    ) {
+      history.push("/login"); 
     }
   }, [isLoggedin, activeKey1]);
-console.log(  localStorage.getItem("login-user"));
 
   return (
     <div id="wrapper">
@@ -183,6 +190,16 @@ console.log(  localStorage.getItem("login-user"));
                 exact
                 path={`${process.env.PUBLIC_URL}/appchat`}
                 component={appChat}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/admission`}
+                component={TotalAdmission}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/totalAdmission`}
+                component={Admissions}
               />
               <Route
                 exact
@@ -390,9 +407,19 @@ console.log(  localStorage.getItem("login-user"));
                 component={basicelements}
               />
               <Route
-                exact
+              exact
                 path={`${process.env.PUBLIC_URL}/tablenormal`}
                 component={tablenormal}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/createinquiry`}
+                component={CreateInquiry}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/inquiry`}
+                component={Inquires}
               />
               <Route
                 exact

@@ -13,11 +13,15 @@ export async function createAdmission(req, res) {
     address: req?.body.address,
     date_of_birth: req?.body.date_of_birth,
     is_acknowledged: req?.body?.is_acknowledged,
-  }; 
- 
+  };
+
   try {
     const result = await Admission.create(newAdmission);
-    res.send(result);
+    res.send({
+      message: "admission completed !",
+      status: "success",
+      admission_id: result?.id,
+    });
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",
@@ -47,7 +51,7 @@ export async function getByFilter(req, res) {
 export async function deleteAdmission(req, res) {
   try {
     const result = await Admission?.deleteByID(req.params.id);
-    res.send({ Message: "Inquiry Removed!" });
+    res.send({ message: "Admission Removed!", status: "success" });
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",
@@ -58,8 +62,7 @@ export async function deleteAdmission(req, res) {
 export async function updateAdmission(req, res) {
   try {
     const result = await Admission?.updateByID(req?.body, req.params.id);
-    console.log(result);
-    res.send({ Message: "Inquiry Removed!" });
+    res.send({ message: "Admission Details updated !", status: "success" });
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",

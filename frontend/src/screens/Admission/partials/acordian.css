@@ -1,0 +1,123 @@
+h3 {
+    font-family: Roboto-Thin;
+    font-size: 34px;
+    color: #333; /* Dark gray for the heading */
+}
+
+h5 {
+    font-family: Roboto-Medium;
+    font-size: 20px;
+    color: #555; /* Medium gray for the subheading */
+}
+
+h6 {
+    font-family: Roboto-Medium;
+    font-size: 16px;
+    color: #777; /* Lighter gray for the theme block */
+}
+
+.accordion-wrap {
+    width: 100%;
+    display: flex;
+    background-color: #f7f7f7; /* Light background */
+    flex-direction: column;
+    padding: 20px;
+}
+
+.accordion-wrap a {
+    color: #333; /* Dark gray text */
+    text-decoration: none;
+}
+
+.accordion-wrap a:hover {
+    text-decoration: none;
+}
+
+.accordion {
+    position: relative;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.4); /* Soft white shadow */
+    margin-bottom: 10px; /* Spacing between accordion items */
+    border-radius: 8px; /* Slight rounding of corners */
+    background-color: #ffffff; /* White background for accordion */
+}
+
+.teaser {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 24px;
+    position: relative;
+    background-color: #ffffff; /* White background for teaser */
+    border-radius: 8px 8px 0 0; /* Round top corners only */
+}
+
+.time {
+    margin-top: 5px;
+    width: 200px;
+    color: #555; /* Medium gray for the time */
+}
+
+.title .theme {
+    opacity: 0.6; /* Increased opacity for better visibility */
+}
+
+@media (max-width: 990px) {
+    .teaser {
+        flex-direction: column;
+    }
+}
+
+.content {
+    padding: 20px; /* Padding around the content */
+    background-color: #ffffff; /* White background for content */
+    border-radius: 0 0 8px 8px; /* Round bottom corners only */
+    color: #444; /* Slightly darker gray for the content */
+    margin-right: 90px;
+}
+
+@media (max-width: 1200px) {
+    .content {
+        padding: 0 20px 20px 20px;
+    }
+}
+
+.accordion-toggle {
+    width: 100px;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.05); /* Light gray background */
+    right: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s ease;
+}
+
+.accordion-toggle span {
+    background-color: #333; /* Dark gray for the toggle lines */
+    transition: 0.3s ease;
+}
+
+.accordion-toggle span.one {
+    height: 1px;
+    width: 26px;
+    position: absolute;
+    top: 50%;
+}
+
+.accordion-toggle span.two {
+    width: 1px;
+    height: 26px;
+    position: absolute;
+    left: 50%;
+    opacity: 0;
+    transform: rotate(120deg);
+}
+
+.accordion.collapsed .accordion-toggle span.two {
+    opacity: 1;
+    transform: rotate(0);
+}
+    

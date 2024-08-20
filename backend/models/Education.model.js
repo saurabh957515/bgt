@@ -13,7 +13,6 @@ class Education {
     try {
       const query = `SELECT * FROM education`;
       const result = await sql(query);
-      console.log(result);
 
       return result;
     } catch (error) {
@@ -113,7 +112,6 @@ class Education {
       `;
 
       const result = await sql(query, values);
-      console.log(result);
       return result;
     } catch (error) {
       throw error;

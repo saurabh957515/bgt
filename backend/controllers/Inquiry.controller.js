@@ -16,8 +16,12 @@ export async function createInquiry(req, res) {
   };
 
   try {
-    const result = await Inquiry.create(newInquiry);
-    res.send(result);
+    const added_Inquiry = await Inquiry.create(newInquiry);
+    res.send({
+      message: "New Inquiry Added !",
+      added_Inquiry: added_Inquiry,
+      status: "success  ",
+    });
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",
@@ -47,7 +51,11 @@ export async function getByFilter(req, res) {
 export async function deleteInquiry(req, res) {
   try {
     const result = await Inquiry?.deleteByID(req.params.id);
-    res.send({ Message: "Inquiry Removed!" });
+    if (result) {
+      res.send({ message: "Inquiry Removed !", status: "success" });
+    } else {
+      res.send({ message: "Inquiry not removed !", status: "failer" });
+    }
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",
@@ -57,8 +65,7 @@ export async function deleteInquiry(req, res) {
 export async function updateInquiry(req, res) {
   try {
     const result = await Inquiry?.updateByID(req?.body, req.params.id);
-    console.log(result);
-    res.send({ Message: "Inquiry Removed!" });
+    res.send({ message: "Inquiry Updated!" ,status:"success" });
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",

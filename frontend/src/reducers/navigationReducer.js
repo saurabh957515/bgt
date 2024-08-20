@@ -10,10 +10,12 @@ import {
   ON_PRESS_SIDE_MENU_TAB,
   TOGGLE_MENU_ARROW,
   TOAST_MESSAGE_LOAD,
+  TOAST_MESSAGE_SET,
 } from "../actions/NavigationAction";
 
 const initialState = {
   isToastMessage: false,
+  toastMessage: "",  
   addClassactive: [
     false,
     false,
@@ -434,6 +436,11 @@ export default (state = initialState, action) => {
         isToastMessage: !state.isToastMessage,
       };
     }
+    case TOAST_MESSAGE_SET:
+      return {
+        ...state,
+        toastMessage: action.payload,
+      };
 
     default:
       return state;

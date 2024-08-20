@@ -117,12 +117,6 @@ class NavbarMenu extends React.Component {
     }
   }
 
-  // componentWillReceiveProps(){
-  //   this.setState({
-  //     linkupdate:!this.state.linkupdate
-  //   })
-  // }
-
   activeMenutabContainer(id) {
     var parents = document.getElementById("main-menu");
     var activeMenu = document.getElementById(id);
@@ -149,29 +143,32 @@ class NavbarMenu extends React.Component {
       sideMenuTab,
       isToastMessage,
       activeKey,
+      toastMessage,
     } = this.props;
     document.body.classList.add(themeColor);
     const handleLogout = () => {
-    const isLogout = 
-      this.props.history.push("/login");
+      const isLogout = this.props.history.push("/login");
     };
     return (
       <div>
         {isToastMessage ? (
-          <Toast
-            id="toast-container"
-            show={isToastMessage}
-            onClose={() => {
-              this.props.tostMessageLoad(false);
-            }}
-            className="toast-info toast-top-right"
-            autohide={true}
-            delay={5000}
-          >
-            <Toast.Header className="mb-0 toast-info">
-              Hello, welcome to Lucid, a unique admin Template.
-            </Toast.Header>
-          </Toast>
+         <Toast
+         id="toast-container"
+         show={isToastMessage}
+         onClose={() => {
+           this.props.tostMessageLoad(false);
+         }}
+         className="toast-info toast-top-right"
+         autohide={true}
+         delay={5000}
+       >
+         <Toast.Header className="mb-0 toast-info justify-content-between">
+           <strong className="me-auto">
+             {toastMessage ? toastMessage : "Welcome to RR Overseas"}
+           </strong>
+         </Toast.Header>
+       </Toast>
+       
         ) : null}
         <nav className="navbar navbar-fixed-top">
           <div className="container-fluid">
@@ -402,7 +399,7 @@ class NavbarMenu extends React.Component {
                     </ul>
                   </li>
                   <li>
-                    <Logout  history={this.props.history}/>
+                    <Logout history={this.props.history} />
                   </li>
                 </ul>
               </div>
@@ -454,21 +451,6 @@ class NavbarMenu extends React.Component {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              <hr />
-              <ul className="row list-unstyled">
-                <li className="col-4">
-                  <small>Sales</small>
-                  <h6>456</h6>
-                </li>
-                <li className="col-4">
-                  <small>Order</small>
-                  <h6>1350</h6>
-                </li>
-                <li className="col-4">
-                  <small>Revenue</small>
-                  <h6>$2.13B</h6>
-                </li>
-              </ul>
             </div>
             <ul className="nav nav-tabs">
               <li className="nav-item">
@@ -544,15 +526,56 @@ class NavbarMenu extends React.Component {
                         >
                           <Link to="dashboard">Analytical</Link>
                         </li>
+                      </ul>
+                    </li>
+                    <li className="" id="inquiryContainer">
+                      <a
+                        href="#!"
+                        className="has-arrow"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.activeMenutabContainer("inquiryContainer");
+                        }}
+                      >
+                        <i className="icon-call-in"></i> <span>Inquiry</span>
+                      </a>
+                      <ul className="collapse">
+                        <li className={activeKey === "inquiry" ? "active" : ""}>
+                          <Link to="inquiry">Inquiry List</Link>
+                        </li>
                         <li
                           className={
-                            activeKey === "demographic" ? "active" : ""
+                            activeKey === "createinquiry" ? "active" : ""
                           }
                         >
-                          <Link to="demographic">Demographic</Link>
+                          <Link to="createinquiry">Create New</Link>
                         </li>
-                        <li className={activeKey === "ioT" ? "active" : ""}>
-                          <Link to="ioT">IoT</Link>
+                      </ul>
+                    </li>
+                    <li className="" id="admissionContainer">
+                      <a
+                        href="#!"
+                        className="has-arrow"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.activeMenutabContainer("admissionContainer");
+                        }}
+                      >
+                        <i className="icon-graduation"></i>{" "}
+                        <span>Admission</span>
+                      </a>
+                      <ul className="collapse">
+                        <li
+                          className={activeKey === "admission" ? "active" : ""}
+                        >
+                          <Link to="admission">Admission</Link>
+                        </li>
+                        <li
+                          className={
+                            activeKey === "totaladmission" ? "active" : ""
+                          }
+                        >
+                          <Link to="totaladmission">Total Admissions</Link>
                         </li>
                       </ul>
                     </li>
@@ -565,40 +588,21 @@ class NavbarMenu extends React.Component {
                           this.activeMenutabContainer("AppContainer");
                         }}
                       >
-                        <i className="icon-grid"></i> <span>App</span>
+                        <i className="icon-grid"></i> <span>Messages</span>
                       </a>
                       <ul className="collapse">
-                        <li
-                          className={activeKey === "appinbox" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="appinbox">Inbox</Link>
-                        </li>
                         <li
                           className={activeKey === "appchat" ? "active" : ""}
                           onClick={() => {}}
                         >
                           <Link to="appchat">Chat</Link>
                         </li>
-                        <li
-                          className={
-                            activeKey === "appcalendar" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="appcalendar">Calendar</Link>
-                        </li>
+
                         <li
                           className={activeKey === "appcontact" ? "active" : ""}
                           onClick={() => {}}
                         >
                           <Link to="appcontact">Contact Card</Link>
-                        </li>
-                        <li
-                          className={activeKey === "apptaskbar" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="apptaskbar">Taskboard</Link>
                         </li>
                       </ul>
                     </li>
@@ -631,497 +635,47 @@ class NavbarMenu extends React.Component {
                         >
                           <Link to="filedocuments">Documents</Link>
                         </li>
-                        <li
-                          className={activeKey === "filemedia" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="filemedia">Media</Link>
-                        </li>
-                        <li
-                          className={activeKey === "fileimages" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="fileimages">Images</Link>
-                        </li>
                       </ul>
                     </li>
-                    <li id="BlogContainer" className="">
-                      <a
-                        href="#!"
-                        className="has-arrow"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.activeMenutabContainer("BlogContainer");
-                        }}
-                      >
-                        <i className="icon-globe"></i> <span>Blog</span>
-                      </a>
-                      <ul className="collapse">
-                        <li
-                          className={
-                            activeKey === "blognewpost" ? "active" : ""
-                          }
-                        >
-                          <Link to="blognewpost">New Post</Link>
-                        </li>
-                        <li
-                          className={activeKey === "bloglist" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="bloglist">Blog List</Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "blogdetails" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="blogdetails">Blog Detail</Link>
-                        </li>
-                      </ul>
-                    </li>
-                    <li id="UIElementsContainer" className="">
-                      <a
-                        href="#uiElements"
-                        className="has-arrow"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.activeMenutabContainer("UIElementsContainer");
-                        }}
-                      >
-                        <i className="icon-diamond"></i>{" "}
-                        <span>UI Elements</span>
-                      </a>
-                      <ul className="collapse">
-                        <li
-                          className={
-                            activeKey === "uitypography" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="uitypography">Typography</Link>
-                        </li>
-                        <li
-                          className={activeKey === "uitabs" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="uitabs">Tabs</Link>
-                        </li>
-                        <li
-                          className={activeKey === "uibuttons" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="uibuttons">Buttons</Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "bootstrapui" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="bootstrapui">Bootstrap UI</Link>
-                        </li>
-                        <li
-                          className={activeKey === "uiicons" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="uiicons">Icons</Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "uinotifications" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="uinotifications">Notifications</Link>
-                        </li>
-                        <li
-                          className={activeKey === "uicolors" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="uicolors">Colors</Link>
-                        </li>
 
-                        <li
-                          className={
-                            activeKey === "uilistgroup" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="uilistgroup">List Group</Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "uimediaobject" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="uimediaobject">Media Object</Link>
-                        </li>
-                        <li
-                          className={activeKey === "uimodal" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="uimodal">Modals</Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "uiprogressbar" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="uiprogressbar">Progress Bars</Link>
-                        </li>
-                      </ul>
-                    </li>
-                    <li id="WidgetsContainer" className="">
+                    <li className="" id="feesContainer">
                       <a
                         href="#!"
                         className="has-arrow"
                         onClick={(e) => {
                           e.preventDefault();
-                          this.activeMenutabContainer("WidgetsContainer");
+                          this.activeMenutabContainer("feesContainer");
                         }}
                       >
-                        <i className="icon-puzzle"></i> <span>Widgets</span>
+                        <i className="">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-1"
+                            style={{
+                              height: "28px",
+                              width: "26px",
+                            }}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                            />
+                          </svg>
+                        </i>{" "}
+                        <span>Fees </span>
                       </a>
                       <ul className="collapse">
-                        <li
-                          className={
-                            activeKey === "widgetsdata" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="widgetsdata">Data</Link>
-                        </li>
-
-                        <li
-                          className={
-                            activeKey === "widgetsweather" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="widgetsweather">Weather</Link>
-                        </li>
-
-                        <li
-                          className={
-                            activeKey === "widgetsblog" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="widgetsblog">Blog</Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "widgetsecommers" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="widgetsecommers">eCommerce</Link>
+                        <li className={activeKey === "inquiry" ? "active" : ""}>
+                          <Link to="dashboard">Analytical</Link>
                         </li>
                       </ul>
                     </li>
-                    <li id="AuthenticationContainer" className="">
-                      <a
-                        href="#!"
-                        className="has-arrow"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.activeMenutabContainer(
-                            "AuthenticationContainer"
-                          );
-                        }}
-                      >
-                        <i className="icon-lock"></i>{" "}
-                        <span>Authentication</span>
-                      </a>
-                      <ul
-                        className={
-                          addClassactive[6] ? "collapse in" : "collapse"
-                        }
-                      >
-                        <li
-                          className={addClassactiveChildAuth[0] ? "active" : ""}
-                        >
-                          <a href="login">Login</a>
-                        </li>
-                        <li
-                          className={addClassactiveChildAuth[1] ? "active" : ""}
-                        >
-                          <a href="registration">Register</a>
-                        </li>
-                        <li
-                          className={addClassactiveChildAuth[2] ? "active" : ""}
-                        >
-                          <a href="lockscreen">Lockscreen</a>
-                        </li>
-                        <li
-                          className={addClassactiveChildAuth[3] ? "active" : ""}
-                        >
-                          <a href="forgotpassword">Forgot Password</a>
-                        </li>
-                        <li
-                          className={addClassactiveChildAuth[4] ? "active" : ""}
-                        >
-                          <a href="page404">Page 404</a>
-                        </li>
-                        <li
-                          className={addClassactiveChildAuth[5] ? "active" : ""}
-                        >
-                          <a href="page403">Page 403</a>
-                        </li>
-                        <li
-                          className={addClassactiveChildAuth[6] ? "active" : ""}
-                        >
-                          <a href="page500">Page 500</a>
-                        </li>
-                        <li
-                          className={addClassactiveChildAuth[7] ? "active" : ""}
-                        >
-                          <a href="page503">Page 503</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li id="PagesContainer" className="">
-                      <a
-                        href="#!"
-                        className="has-arrow"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.activeMenutabContainer("PagesContainer");
-                        }}
-                      >
-                        <i className="icon-docs"></i> <span>Pages</span>
-                      </a>
-                      <ul className="collapse">
-                        <li
-                          className={activeKey === "blankpage" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="blankpage">Blank Page</Link>{" "}
-                        </li>
-                        <li
-                          className={
-                            activeKey === "profilev1page" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="profilev1page">
-                            Profile{" "}
-                            <span className="float-right badge badge-default">
-                              v1
-                            </span>
-                          </Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "profilev2page" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="profilev2page">
-                            Profile{" "}
-                            <span className="float-right badge badge-warning">
-                              v2
-                            </span>
-                          </Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "imagegalleryprofile" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="imagegalleryprofile">Image Gallery </Link>{" "}
-                        </li>
-
-                        <li
-                          className={activeKey === "timeline" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="timeline">Timeline</Link>
-                        </li>
-
-                        <li
-                          className={activeKey === "pricing" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="pricing">Pricing</Link>
-                        </li>
-                        <li
-                          className={activeKey === "invoices" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="invoices">
-                            Invoices
-                            <span className="float-right badge badge-default">
-                              v1
-                            </span>
-                          </Link>
-                        </li>
-                        <li
-                          className={activeKey === "invoicesv2" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="invoicesv2">
-                            Invoices{" "}
-                            <span className="float-right badge badge-warning">
-                              v2
-                            </span>
-                          </Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "searchresult" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="searchresult">Search Results</Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "helperclass" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="helperclass">Helper Classes</Link>
-                        </li>
-                        <li
-                          className={activeKey === "teamsboard" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="teamsboard">Teams Board</Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "projectslist" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="projectslist">Projects List</Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "maintanance" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="maintanance">Maintenance</Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "testimonials" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="testimonials">Testimonials</Link>
-                        </li>
-                        <li
-                          className={activeKey === "faqs" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="faqs">FAQ</Link>
-                        </li>
-                      </ul>
-                    </li>
-                    <li id="FormsContainer" className="">
-                      <a
-                        href="#!"
-                        className="has-arrow"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.activeMenutabContainer("FormsContainer");
-                        }}
-                      >
-                        <i className="icon-pencil"></i> <span>Forms</span>
-                      </a>
-                      <ul className={"collapse"}>
-                        <li
-                          className={
-                            activeKey === "formvalidation" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="formvalidation">Form Validation</Link>
-                        </li>
-                        <li
-                          className={
-                            activeKey === "basicelements" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="basicelements">Basic Elements</Link>
-                        </li>
-                      </ul>
-                    </li>
-                    <li id="TablesContainer" className="">
-                      <a
-                        href="#!"
-                        className="has-arrow"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.activeMenutabContainer("TablesContainer");
-                        }}
-                      >
-                        <i className="icon-tag"></i> <span>Tables</span>
-                      </a>
-                      <ul className="collapse">
-                        <li
-                          className={
-                            activeKey === "tablenormal" ? "active" : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="tablenormal">Normal Tables</Link>{" "}
-                        </li>
-                      </ul>
-                    </li>
-                    <li id="chartsContainer" className="">
-                      <a
-                        href="#!"
-                        className="has-arrow"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.activeMenutabContainer("chartsContainer");
-                        }}
-                      >
-                        <i className="icon-bar-chart"></i> <span>Charts</span>
-                      </a>
-                      <ul className="collapse">
-                        <li
-                          className={activeKey === "echart" ? "active" : ""}
-                          onClick={() => {}}
-                        >
-                          <Link to="echart">E-chart</Link>{" "}
-                        </li>
-                      </ul>
-                    </li>
-                    <li id="MapsContainer" className="">
-                      <a
-                        href="#!"
-                        className="has-arrow"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          this.activeMenutabContainer("MapsContainer");
-                        }}
-                      >
-                        <i className="icon-map"></i> <span>Maps</span>
-                      </a>
-                      <ul className="collapse">
-                        <li
-                          className={
-                            activeKey === "leafletmap" ||
-                            addClassactiveChildMaps[0]
-                              ? "active"
-                              : ""
-                          }
-                          onClick={() => {}}
-                        >
-                          <Link to="leafletmap">Leaflet Map</Link>
-                        </li>
-                      </ul>
-                    </li>
+                
                   </ul>
                 </Nav>
               </div>
@@ -1530,6 +1084,7 @@ NavbarMenu.propTypes = {
   addClassactiveChildChart: PropTypes.array.isRequired,
   addClassactiveChildMaps: PropTypes.array.isRequired,
   themeColor: PropTypes.string.isRequired,
+  toastMessage: PropTypes.string.isRequired,
   generalSetting: PropTypes.array.isRequired,
   toggleNotification: PropTypes.bool.isRequired,
   toggleEqualizer: PropTypes.bool.isRequired,
@@ -1557,6 +1112,7 @@ const mapStateToProps = ({ navigationReducer }) => {
     menuProfileDropdown,
     sideMenuTab,
     isToastMessage,
+    toastMessage,
   } = navigationReducer;
   return {
     addClassactive,
@@ -1579,6 +1135,7 @@ const mapStateToProps = ({ navigationReducer }) => {
     menuProfileDropdown,
     sideMenuTab,
     isToastMessage,
+    toastMessage,
   };
 };
 

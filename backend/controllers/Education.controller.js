@@ -25,7 +25,11 @@ export async function createEducation(req, res) {
 
   try {
     const result = await Education.create(newAdmission);
-    res.send(result);
+    res.send({
+      message: "education added !",
+      status: "success",
+      inserted_id: result?.id,
+    });
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",
@@ -67,7 +71,7 @@ export async function deleteEducation(req, res) {
 export async function updateEducation(req, res) {
   try {
     const result = await Education?.updateByID(req?.body, req.params.id);
-    res.send({ Message: "education updated!" });
+    res.send({ message: "education updated!", staus: "success" });
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",

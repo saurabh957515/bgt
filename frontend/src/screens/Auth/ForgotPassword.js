@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import Logo from "../../assets/images/logo-white.svg";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 class ForgotPassword extends React.Component {
   render() {
@@ -28,7 +27,7 @@ class ForgotPassword extends React.Component {
                         RESET PASSWORD
                         </button>
                       <div className="bottom">
-                        <span className="helper-text">Know your password? <Link to="/login">Login</Link></span>
+                        <span className="helper-text">Know your password? <a href="login">Login</a></span>
                       </div>
                     </form>
                   </div>

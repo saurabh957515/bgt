@@ -3,7 +3,7 @@ class Inquiry {
   static async create(newInquiry) {
     try {
       const result = await sql("INSERT INTO inquiry SET ?", newInquiry);
-      return { id: result.insertId };
+      return result.insertId;
     } catch (error) {
       throw error;
     }
@@ -22,7 +22,7 @@ class Inquiry {
     try {
       const query = `DELETE FROM inquiry WHERE id = ?`;
       const result = await sql(query, [id]);
-      return result;
+      return result?.afectedRows !== 0;
     } catch (error) {
       throw error;
     }
@@ -74,7 +74,6 @@ class Inquiry {
       `;
 
       const result = await sql(query, values);
-      console.log(result);
       return result;
     } catch (error) {
       throw error;
