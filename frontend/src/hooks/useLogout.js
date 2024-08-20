@@ -7,7 +7,7 @@ const useLogout = () => {
   const logout = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:9000/api/auth/logout", {
+      const res = await fetch("api/auth/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
@@ -15,7 +15,6 @@ const useLogout = () => {
       if (data.error) {
         throw new Error(data.error);
       }
-      console.log(data)
       localStorage.removeItem("login-user");
       return true;
     } catch (error) {

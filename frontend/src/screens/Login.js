@@ -11,12 +11,16 @@ const Login = ({ history }) => {
   const [isLoad, setIsLoad] = useState(true);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isLoggedIn = await login(userName, password);
-    if (isLoggedIn) {
+    if (!isLoggedIn?.error) {
       history.push("/dashboard");
+      setErrorMessage("");
+    } else {
+      setErrorMessage(isLoggedIn?.error);
     }
   };
   useEffect(() => {
@@ -38,7 +42,7 @@ const Login = ({ history }) => {
   }, []);
 
   return (
-    <div className="theme-cyan">
+    <form onSubmit={handleSubmit} className="theme-cyan">
       <div
         className="page-loader-wrapper"
         style={{ display: isLoad ? "block" : "none" }}
@@ -79,9 +83,11 @@ const Login = ({ history }) => {
                         id="signin-email"
                         placeholder="username"
                         value={userName}
+                        required="required"
                         onChange={(val) => setUserName(val.target.value)}
                       />
                     </div>
+                    <p className="text-danger">{errorMessage}</p>
                     <div className="form-group">
                       <label className="sr-only control-label">Password</label>
                       <input
@@ -90,6 +96,7 @@ const Login = ({ history }) => {
                         placeholder="Password"
                         type="password"
                         value={password}
+                        required="required"
                         onChange={(val) => setPassword(val.target.value)}
                       />
                     </div>
@@ -100,7 +107,7 @@ const Login = ({ history }) => {
                       </label>
                     </div>
                     <button
-                      onClick={handleSubmit}
+                      type="submit"
                       className="btn btn-primary btn-lg btn-block"
                     >
                       Login
@@ -108,9 +115,7 @@ const Login = ({ history }) => {
                     <div className="bottom">
                       <span className="helper-text m-b-10">
                         <i className="fa fa-lock"></i>{" "}
-                        <Link to={`/forgotpassword`}>
-                          Forgot password?
-                        </Link>
+                        <Link to={`/forgotpassword`}>Forgot password?</Link>
                       </span>
                       <span>
                         Don't have an account?{" "}
@@ -124,7 +129,7 @@ const Login = ({ history }) => {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

@@ -11,7 +11,7 @@ const Admissions = () => {
   const history = useHistory();
   const { getRoute, deleteById } = useApi();
   const getData = async () => {
-    const admissionData = await getRoute("http://localhost:9000/api/admission");
+    const admissionData = await getRoute("api/admission");
     setAdmissions(admissionData);
   };
 
@@ -23,7 +23,7 @@ const Admissions = () => {
   };
   const handleDeleteAdmission = async (id) => {
     const inquiresData = await deleteById(
-      `http://localhost:9000/api/admission/${id}`
+      `api/admission/${id}`
     );
     if (inquiresData?.status == "success") {
       getData();

@@ -25,7 +25,7 @@ class User {
       const [rows] = await sql(query, [value]);
       if (rows) {
         return rows; // Return the first matching user
-      }
+      } 
       return null; // Return null if no user is found
     } catch (error) {
       throw error; // Propagate the error

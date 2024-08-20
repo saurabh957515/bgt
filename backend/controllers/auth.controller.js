@@ -53,21 +53,24 @@ export const login = async (req, res) => {
 
   try {
     const user = await User.findByUsername(username);
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      user?.password || ""
-    );
-    if (!user || !isPasswordCorrect) {
-      return res.status(400).json({ error: "Invalid username or password" });
+    if (user) {
+      const isPasswordCorrect = await bcrypt.compare(
+        password,
+        user?.password || ""
+      );
+      if (!user || !isPasswordCorrect) {
+        return res.status(400).json({ error: "Invalid username or password" });
+      }
+      generateTokenAndSetCookie(user.id, res);
+      res.status(200).json({
+        id: user.id,
+        full_name: user.fullName,
+        username: user.username,
+        profile_pic: user.profile_pic,
+      });
+    } else {
+      res.json({ error: "No User Found for this name" });
     }
-    generateTokenAndSetCookie(user.id, res);
-
-    res.status(200).json({
-      id: user.id,
-      full_name: user.fullName,
-      username: user.username,
-      profile_pic: user.profile_pic,
-    });
   } catch (error) {
     console.log("Error in login controller", error);
     res.status(500).json({ error: "Internal Server Error" });

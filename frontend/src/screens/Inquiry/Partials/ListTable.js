@@ -18,7 +18,7 @@ const ListTable = () => {
 
   const deleteInquiry = async (id) => {
     const inquiresData = await deleteById(
-      `http://localhost:9000/api/inquiry/${id}`
+      `api/inquiry/${id}`
     );
     if (inquiresData?.status == "success") {
       getData();

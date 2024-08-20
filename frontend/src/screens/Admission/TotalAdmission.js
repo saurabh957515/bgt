@@ -48,9 +48,7 @@ const TotalAdmission = () => {
   useEffect(() => {
     const getData = async () => {
       if (editAdmissionId) {
-        const admissionData = await getRoute(
-          "http://localhost:9000/api/admission"
-        );
+        const admissionData = await getRoute("api/admission");
         const editAdmisson = admissionData?.find(
           (admisson) => admisson?.admissionDetails_id === editAdmissionId
         );
@@ -106,22 +104,22 @@ const TotalAdmission = () => {
     e.preventDefault();
     if (isEdit) {
       const admissionResponse = await editRoute(
-        `http://localhost:9000/api/admission/${admissionDetail?.id}`,
+        `api/admission/${admissionDetail?.id}`,
         admissionDetail
       );
       const educationResponse = await editRoute(
-        `http://localhost:9000/api/education/${educationDetails?.id}`,
+        `api/education/${educationDetails?.id}`,
         { ...educationDetails, admission_id: admissionResponse?.admission_id }
       );
     } else {
       const admissionResponse = await postRoute(
-        `http://localhost:9000/api/admission`,
+        `api/admission`,
         admissionDetail
       );
-      const educationResponse = await postRoute(
-        `http://localhost:9000/api/education`,
-        { ...educationDetails, admission_id: admissionResponse?.admission_id }
-      );
+      const educationResponse = await postRoute(`api/education`, {
+        ...educationDetails,
+        admission_id: admissionResponse?.admission_id,
+      });
     }
     setTimeout(() => {
       history.push("/totalAdmission");

@@ -43,10 +43,10 @@ const Form = ({ inquiryEdit }) => {
       };
       const response = isEdit
         ? await editRoute(
-            `http://localhost:9000/api/inquiry/${newInquiry?.id}`,
+            `/api/inquiry/${newInquiry?.id}`,
             newInquiry
           )
-        : await postRoute("http://localhost:9000/api/inquiry", newInquiry);
+        : await postRoute("/api/inquiry", newInquiry);
 
       if (response?.status) {
         history.push("/inquiry");
