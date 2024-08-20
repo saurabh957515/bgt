@@ -6,8 +6,6 @@ import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 const CreateInquiry = ({ hisotry }) => {
   const location = useLocation();
   const inquiryData = location.state?.inquiryData;
-
-  console.log(inquiryData);
   return (
     <div
       style={{ flex: 1 }}
@@ -17,7 +15,6 @@ const CreateInquiry = ({ hisotry }) => {
     >
       <div>
         <div className="container-fluid">
-          {console.log(inquiryData?.name)}
           <PageHeader
             HeaderText={inquiryData?.name ? "Edit Inquiry" : "Create Inquiry"}
             Breadcrumb={[

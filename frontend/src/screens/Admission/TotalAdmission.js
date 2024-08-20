@@ -13,7 +13,7 @@ const TotalAdmission = () => {
   const [selected, setSelected] = useState(1);
   const [addmissionId, setAdmissionId] = useState("");
   const history = useHistory();
-  const { getRoute, editRoute, postRoute } = useApi();
+  const { getRoute, editRoute, postRoute, deleteById } = useApi();
   const admissionObject = {
     name: "",
     email: "",
@@ -24,7 +24,7 @@ const TotalAdmission = () => {
     is_acknowledged: false,
   };
   const education_Details = {
-    admission_id: 8,
+    admission_id: "",
     highest_qualification: "s's Degree",
     passing_year: 2012,
     name_of_institute: "XYZ University",
@@ -45,6 +45,7 @@ const TotalAdmission = () => {
   const [admissionDetail, setAdmissionDetail] = useState(admissionObject);
   const location = useLocation();
   const editAdmissionId = location.state?.admissionId;
+  const createAdmission = location.state?.makeAdmission;
   useEffect(() => {
     const getData = async () => {
       if (editAdmissionId) {
@@ -94,11 +95,24 @@ const TotalAdmission = () => {
         }
         setIsEdit(true);
       } else {
+        if (createAdmission) {
+          setAdmissionDetail({
+            name: createAdmission?.name,
+            email: createAdmission?.email,
+            contact_no: createAdmission?.contact_no,
+            alternate_no: createAdmission?.alternate_no,
+            address: createAdmission?.address,
+            date_of_birth: moment(createAdmission?.date_of_birth).format(
+              "YYYY-MM-DD"
+            ),
+            is_acknowledged: false,
+          });
+        }
         setIsEdit(false);
       }
     };
     getData();
-  }, [editAdmissionId]);
+  }, [editAdmissionId, createAdmission]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -120,6 +134,11 @@ const TotalAdmission = () => {
         ...educationDetails,
         admission_id: admissionResponse?.admission_id,
       });
+      if (createAdmission) {
+        const inquiresData = await deleteById(
+          `api/inquiry/${createAdmission?.id}`
+        );
+      }
     }
     setTimeout(() => {
       history.push("/totalAdmission");
@@ -144,7 +163,12 @@ const TotalAdmission = () => {
           />
           <ul className="nav nav-tabs">
             {["Admission Details", "Education Details"]?.map((tab, index) => (
-              <li onClick={() => setSelected(index + 1)} className="nav-item">
+              <li
+                key={index}
+                // onClick={() => {
+                //   setSelected(index + 1)}}
+                className="nav-item"
+              >
                 <div
                   className={`nav-link  ${selected === index + 1 && "active"}`}
                 >

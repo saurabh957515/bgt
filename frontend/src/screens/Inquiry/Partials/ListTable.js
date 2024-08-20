@@ -17,14 +17,17 @@ const ListTable = () => {
   }, []);
 
   const deleteInquiry = async (id) => {
-    const inquiresData = await deleteById(
-      `api/inquiry/${id}`
-    );
+    const inquiresData = await deleteById(`api/inquiry/${id}`);
     if (inquiresData?.status == "success") {
       getData();
     }
   };
-  console.log(inquiryList);
+  const makeAdmission = (inquiry) => {
+    history.push({
+      pathname: "/admission",
+      state: { makeAdmission: inquiry },
+    });
+  };
   return (
     <div className="col-lg-12">
       <div className="card">
@@ -48,7 +51,7 @@ const ListTable = () => {
             </thead>
             <tbody>
               {inquiryList?.map((inquiry, index) => (
-                <tr>
+                <tr key={inquiry?.id}>
                   <th scope="row">{index + 1}</th>
                   <td>{inquiry?.name}</td>
                   <td>{inquiry?.email}</td>
@@ -74,7 +77,9 @@ const ListTable = () => {
                         Delete
                       </span>
                       <span
-                        onClick={() => {}}
+                        onClick={() => {
+                          makeAdmission(inquiry);
+                        }}
                         className="cursor-pointer text-success"
                       >
                         Confirm
