@@ -30,9 +30,8 @@ const useApi = () => {
         headers,
         params,
       });
-      if (data?.errors) {
-        return getErrors(data.errors);
-      }
+      dispatch(tostMessageLoad(true));
+      dispatch(setToastMessage(data?.message));
       return data;
     } catch (err) {
       return handleError(err);
@@ -47,11 +46,10 @@ const useApi = () => {
       const { data } = await axios.post(url, postData, {
         headers,
       });
-      if (data?.errors) {
-        return getErrors(data.errors);
-      }
+
       dispatch(tostMessageLoad(true));
       dispatch(setToastMessage(data?.message));
+
       return data;
     } catch (err) {
       return handleError(err);
@@ -66,10 +64,6 @@ const useApi = () => {
       const { data } = await axios.delete(url, {
         headers,
       });
-
-      if (data?.errors) {
-        return getErrors(data.errors);
-      }
 
       dispatch(tostMessageLoad(true));
       dispatch(setToastMessage(data?.message));
@@ -88,9 +82,6 @@ const useApi = () => {
         params,
         headers,
       });
-      if (data?.errors) {
-        return getErrors(data.errors);
-      }
       dispatch(tostMessageLoad(true));
       dispatch(setToastMessage(data?.message));
       return data;

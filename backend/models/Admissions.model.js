@@ -3,8 +3,11 @@ class Admission {
   static async create(newAdmission) {
     try {
       const result = await sql("INSERT INTO admission SET ?", newAdmission);
-      return { id: result.insertId };
-      //  const education_result= await sql("INSERT INTO admission SET ?", newAdmission)
+      if (result?.error) {
+        return { error: result?.error };
+      } else {
+        return { id: result.insertId };
+      }
     } catch (error) {
       throw error;
     }
@@ -75,7 +78,11 @@ class Admission {
         total_amount,
         id,
       ]);
-      return result;
+      if (result?.error) {
+        return { error: result?.error };
+      } else {
+        return result;
+      }
     } catch (error) {
       throw error;
     }
@@ -104,7 +111,11 @@ class Admission {
       `;
 
       const result = await sql(query, values);
-      return result;
+      if (result?.error) {
+        return { error: result?.error };
+      } else {
+        return result;
+      }
     } catch (error) {
       throw error;
     }

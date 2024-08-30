@@ -116,7 +116,7 @@ const TotalAdmission = () => {
             ),
             is_acknowledged: false,
             institute_name: createAdmission?.institute_name,
-            country: createAdmission?.interesetd_country,
+            country: createAdmission?.interested_country,
             city: createAdmission?.city,
             paid_amount: createAdmission?.paid_amount,
             remaining_amount: createAdmission?.remaining_amount,
@@ -131,33 +131,47 @@ const TotalAdmission = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (isEdit) {
       const admissionResponse = await editRoute(
         `api/admission/${admissionDetail?.id}`,
         admissionDetail
       );
-      const educationResponse = await editRoute(
-        `api/education/${educationDetails?.id}`,
-        { ...educationDetails, admission_id: admissionResponse?.admission_id }
-      );
+      if (admissionResponse?.status === "success") {
+        const educationResponse = await editRoute(
+          `api/education/${educationDetails?.id}`,
+          { ...educationDetails, admission_id: admissionResponse?.admission_id }
+        );
+      console.log(educationResponse)
+
+        if (educationResponse?.status === "success") {
+          setTimeout(() => {
+            history.push("/totalAdmission");
+          }, 1000);
+        }
+      }
     } else {
       const admissionResponse = await postRoute(
         `api/admission`,
         admissionDetail
       );
-      const educationResponse = await postRoute(`api/education`, {
-        ...educationDetails,
-        admission_id: admissionResponse?.admission_id,
-      });
-      if (createAdmission) {
-        const inquiresData = await deleteById(
-          `api/inquiry/${createAdmission?.id}`
-        );
+      if (admissionResponse?.status === "success") {
+        const educationResponse = await postRoute(`api/education`, {
+          ...educationDetails,
+          admission_id: admissionResponse?.admission_id,
+        });
+        if (educationResponse?.status === "success") {
+          if (createAdmission) {
+            const inquiresData = await deleteById(
+              `api/inquiry/${createAdmission?.id}`
+            );
+          }
+          setTimeout(() => {
+            history.push("/totalAdmission");
+          }, 1000);
+        }
       }
     }
-    setTimeout(() => {
-      history.push("/totalAdmission");
-    }, 1000);
   };
 
   const getComponent = (type) => {

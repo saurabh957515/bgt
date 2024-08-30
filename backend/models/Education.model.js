@@ -3,7 +3,11 @@ class Education {
   static async create(newEducation) {
     try {
       const result = await sql("INSERT INTO education SET ?", newEducation);
-      return { id: result.insertId };
+      if (result?.error) {
+        return { error: result?.error };
+      } else {
+        return { id: result.insertId };
+      }
     } catch (error) {
       throw error;
     }
@@ -30,7 +34,7 @@ class Education {
   }
   static async updateByID(newEducation, id) {
     try {
-        const query = `
+      const query = `
             UPDATE education 
             SET total_experience_years = ?, 
                 country_interested = ?, 
@@ -48,46 +52,50 @@ class Education {
                 current_designation = ?
             WHERE id = ?
         `;
-        const {
-            total_experience_years,
-            country_interested,
-            visa_type,
-            past_rejection_country_name,
-            ielts_score,
-            telecaller_name,
-            current_monthly_salary,
-            highest_qualification,
-            passing_year,
-            name_of_institute,
-            percentage_cgpa,
-            is_employed,
-            current_company,
-            current_designation,
-        } = newEducation;
-        
-        // Ensure 'id' is included in the parameters for the WHERE clause
-        const result = await sql(query, [
-            total_experience_years,
-            country_interested,
-            visa_type,
-            past_rejection_country_name,
-            ielts_score,
-            telecaller_name,
-            current_monthly_salary,
-            highest_qualification,
-            passing_year,
-            name_of_institute,
-            percentage_cgpa,
-            is_employed,
-            current_company,
-            current_designation,
-            id // This should be added to the end of the parameters array
-        ]);
+      const {
+        total_experience_years,
+        country_interested,
+        visa_type,
+        past_rejection_country_name,
+        ielts_score,
+        telecaller_name,
+        current_monthly_salary,
+        highest_qualification,
+        passing_year,
+        name_of_institute,
+        percentage_cgpa,
+        is_employed,
+        current_company,
+        current_designation,
+      } = newEducation;
+
+      // Ensure 'id' is included in the parameters for the WHERE clause
+      const result = await sql(query, [
+        total_experience_years,
+        country_interested,
+        visa_type,
+        past_rejection_country_name,
+        ielts_score,
+        telecaller_name,
+        current_monthly_salary,
+        highest_qualification,
+        passing_year,
+        name_of_institute,
+        percentage_cgpa,
+        is_employed,
+        current_company,
+        current_designation,
+        id,
+      ]);
+      if (result?.error) {
+        return { error: result?.error };
+      } else {
         return result;
+      }
     } catch (error) {
-        throw error;
+      console.log(error);
     }
-}
+  }
 
   static async findByFields(fields, sortDirection = "DESC") {
     try {
@@ -110,9 +118,12 @@ class Education {
         ${conditions.length ? "WHERE " + conditions.join(" AND ") : ""}
         ORDER BY created_at ${direction}
       `;
-
       const result = await sql(query, values);
-      return result;
+      if (result?.error) {
+        return { error: result?.error };
+      } else {
+        return result;
+      }
     } catch (error) {
       throw error;
     }

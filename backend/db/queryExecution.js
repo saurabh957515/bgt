@@ -21,9 +21,9 @@ async function executeQuery(query, params, callback) {
     }
     return results;
   } catch (error) {
-    if (callback) callback({ error: error });
-    console.log("Database error occurred", error);
-    throw error;
+    if (callback) callback({ error });
+    console.log("Database error occurred", error?.message);
+    return {error:error?.message};
   } finally {
     if (connection) connection.release();
   }
