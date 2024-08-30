@@ -13,6 +13,7 @@ export async function createInquiry(req, res) {
     alternate_no: req?.body.alternate_no,
     address: req?.body.address,
     date_of_birth: req?.body.date_of_birth,
+    interested_country: req?.body.interested_country,
   };
 
   try {
@@ -65,7 +66,7 @@ export async function deleteInquiry(req, res) {
 export async function updateInquiry(req, res) {
   try {
     const result = await Inquiry?.updateByID(req?.body, req.params.id);
-    res.send({ message: "Inquiry Updated!" ,status:"success" });
+    res.send({ message: "Inquiry Updated!", status: "success" });
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",

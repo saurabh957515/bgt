@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import useApi from "../../../utils/UseApi";
 import moment from "moment";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { countries } from "../../../helper";
 
 const ListTable = () => {
   const { getRoute, deleteById } = useApi();
@@ -28,6 +29,7 @@ const ListTable = () => {
       state: { makeAdmission: inquiry },
     });
   };
+
   return (
     <div className="col-lg-12">
       <div className="card">
@@ -41,22 +43,32 @@ const ListTable = () => {
           <table className="table table-hover">
             <thead>
               <tr>
-                <th>#</th>
-                <th>NAME</th>
-                <th>EMAIL</th>
-                <th>COTACT NO</th>
-                <th>DATE</th>
-                <th>ACTION</th>
+                <th style={{ textAlign: "center" }}>#</th>
+                <th style={{ textAlign: "center" }}>Country</th>
+                <th style={{ textAlign: "center" }}>NAME</th>
+                <th style={{ textAlign: "center" }}>EMAIL</th>
+                <th style={{ textAlign: "center" }}>COTACT NO</th>
+                <th style={{ textAlign: "center" }}>DATE</th>
+                <th style={{ textAlign: "center" }}>ACTION</th>
               </tr>
             </thead>
             <tbody>
               {inquiryList?.map((inquiry, index) => (
                 <tr key={inquiry?.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{inquiry?.name}</td>
-                  <td>{inquiry?.email}</td>
-                  <td>{inquiry?.contact_no}</td>
-                  <td>{moment(inquiry?.date).format("YYYY-MM-DD")}</td>
+                  <th style={{ textAlign: "center" }} scope="row">
+                    {index + 1}
+                  </th>
+                  <td style={{ textAlign: "center" }}>
+                    {" "}
+                    {countries[inquiry?.interested_country] || "-"}
+                  </td>
+                  <td style={{ textAlign: "center" }}>{inquiry?.name}</td>
+                  <td style={{ textAlign: "center" }}>{inquiry?.email}</td>
+                  <td style={{ textAlign: "center" }}>{inquiry?.contact_no}</td>
+                  <td style={{ textAlign: "center" }}>
+                    {moment(inquiry?.date).format("YYYY-MM-DD")}
+                  </td>
+
                   <td>
                     <div className="flex ">
                       <span

@@ -4,7 +4,8 @@ import "flatpickr/dist/flatpickr.css";
 import moment from "moment/moment";
 import useApi from "../../../utils/UseApi";
 import { useHistory } from "react-router-dom";
-
+import ReactSelect from "../../../components/ReactSelect";
+import { countries } from "../../../helper.js";
 const inquiryObject = {
   name: "john cena",
   email: "cena@123",
@@ -12,6 +13,7 @@ const inquiryObject = {
   alternate_no: "69523652",
   address: "jimsd@132",
   date_of_birth: "2001-09-03",
+  interested_country: "USA",
 };
 
 const Form = ({ inquiryEdit }) => {
@@ -23,6 +25,7 @@ const Form = ({ inquiryEdit }) => {
   useEffect(() => {
     if (inquiryEdit?.id) {
       setIsEdit(true);
+      console.log(inquiryEdit);
       setInquiry(inquiryEdit);
     } else {
       setInquiry(inquiryObject);
@@ -33,7 +36,6 @@ const Form = ({ inquiryEdit }) => {
   const handleInquiry = (name, value) => {
     setInquiry((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -42,10 +44,7 @@ const Form = ({ inquiryEdit }) => {
         date_of_birth: moment(inquiry?.date_of_birth).format("YYYY-MM-DD"),
       };
       const response = isEdit
-        ? await editRoute(
-            `/api/inquiry/${newInquiry?.id}`,
-            newInquiry
-          )
+        ? await editRoute(`/api/inquiry/${newInquiry?.id}`, newInquiry)
         : await postRoute("/api/inquiry", newInquiry);
 
       if (response?.status) {
@@ -66,89 +65,98 @@ const Form = ({ inquiryEdit }) => {
             </div>
             <div className="body">
               <div className="row">
-                <div className="col-md-6">
-                  {/* Name */}
-                  <div className="form-group">
-                    <label>Name</label>
-                    <input
-                      className="form-control"
-                      value={inquiry?.name}
-                      required
-                      onChange={(e) => handleInquiry("name", e.target.value)}
-                    />
-                  </div>
-
-                  {/* Contact No */}
-                  <div className="form-group">
-                    <label>Contact No</label>
-                    <input
-                      className="form-control"
-                      value={inquiry?.contact_no}
-                      required
-                      type="number"
-                      onChange={(e) =>
-                        handleInquiry("contact_no", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  {/* Address */}
-                  <div className="form-group">
-                    <label>Address</label>
-                    <textarea
-                      className="form-control"
-                      value={inquiry?.address}
-                      required
-                      onChange={(e) => handleInquiry("address", e.target.value)}
-                    />
-                  </div>
+                {/* Name */}
+                <div className="form-group col-md-6">
+                  <label>Name</label>
+                  <input
+                    className="form-control"
+                    value={inquiry?.name}
+                    required
+                    onChange={(e) => handleInquiry("name", e.target.value)}
+                  />
                 </div>
 
-                <div className="col-md-6">
-                  {/* Email */}
-                  <div className="form-group">
-                    <label>Email</label>
-                    <input
-                      className="form-control"
-                      value={inquiry?.email}
-                      required
-                      type="email"
-                      onChange={(e) => handleInquiry("email", e.target.value)}
-                    />
-                  </div>
+                {/* Contact No */}
+                <div className="form-group col-md-6">
+                  <label>Contact No</label>
+                  <input
+                    className="form-control"
+                    value={inquiry?.contact_no}
+                    required
+                    type="number"
+                    onChange={(e) =>
+                      handleInquiry("contact_no", e.target.value)
+                    }
+                  />
+                </div>
 
-                  {/* Alternate No */}
-                  <div className="form-group">
-                    <label>Alternate No</label>
-                    <input
-                      className="form-control"
-                      value={inquiry?.alternate_no}
-                      required
-                      type="number"
-                      onChange={(e) =>
-                        handleInquiry("alternate_no", e.target.value)
-                      }
-                    />
-                  </div>
+                {/* Address */}
+                <div className="form-group col-md-6">
+                  <label>Address</label>
+                  <textarea
+                    className="form-control"
+                    value={inquiry?.address}
+                    required
+                    onChange={(e) => handleInquiry("address", e.target.value)}
+                  />
+                </div>
 
-                  {/* Date of Birth */}
-                  <div className="form-group">
-                    <label>Date Of Birth</label>
-                    <Flatpickr
-                      style={{
-                        border: "1px solid #d1d5db",
-                        borderRadius: "1rem",
-                        width: "100%",
-                        boxSizing: "border-box",
-                        padding: "0.5rem",
-                      }}
-                      value={inquiry?.date_of_birth}
-                      onChange={(data) => {
-                        const newDate = moment(data[0]).format("YYYY-MM-DD");
-                        handleInquiry("date_of_birth", newDate);
-                      }}
-                    />
-                  </div>
+                {/* Email */}
+                <div className="form-group col-md-6">
+                  <label>Email</label>
+                  <input
+                    className="form-control"
+                    value={inquiry?.email}
+                    required
+                    type="email"
+                    onChange={(e) => handleInquiry("email", e.target.value)}
+                  />
+                </div>
+
+                {/* Alternate No */}
+                <div className="form-group col-md-6">
+                  <label>Alternate No</label>
+                  <input
+                    className="form-control"
+                    value={inquiry?.alternate_no}
+                    required
+                    type="number"
+                    onChange={(e) =>
+                      handleInquiry("alternate_no", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="form-group col-md-6">
+                  <label>Country Interested</label>
+                  <ReactSelect
+                    options={Object.entries(countries)?.map(([key, value]) => ({
+                      label: value,
+                      value: key,
+                    }))}
+                    value={inquiry?.interested_country || ""}
+                    onChange={(e) =>
+                      handleInquiry("interested_country", e.value)
+                    }
+                  />
+                </div>
+
+                {/* Date of Birth */}
+                <div className="form-group col-md-6">
+                  <label>Date Of Birth</label>
+                  <Flatpickr
+                    style={{
+                      border: "1px solid #d1d5db",
+                      borderRadius: "0.35rem",
+                      width: "100%",
+                      boxSizing: "border-box",
+                      padding: "0.5rem",
+                    }}
+                    value={inquiry?.date_of_birth}
+                    onChange={(data) => {
+                      const newDate = moment(data[0]).format("YYYY-MM-DD");
+                      handleInquiry("date_of_birth", newDate);
+                    }}
+                  />
                 </div>
               </div>
               <button className="btn btn-primary" type="submit">

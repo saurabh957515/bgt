@@ -152,23 +152,22 @@ class NavbarMenu extends React.Component {
     return (
       <div>
         {isToastMessage ? (
-         <Toast
-         id="toast-container"
-         show={isToastMessage}
-         onClose={() => {
-           this.props.tostMessageLoad(false);
-         }}
-         className="toast-info toast-top-right"
-         autohide={true}
-         delay={5000}
-       >
-         <Toast.Header className="mb-0 toast-info justify-content-between">
-           <strong className="me-auto">
-             {toastMessage ? toastMessage : "Welcome to RR Overseas"}
-           </strong>
-         </Toast.Header>
-       </Toast>
-       
+          <Toast
+            id="toast-container"
+            show={isToastMessage}
+            onClose={() => {
+              this.props.tostMessageLoad(false);
+            }}
+            className="toast-info toast-top-right"
+            autohide={true}
+            delay={5000}
+          >
+            <Toast.Header className="mb-0 toast-info justify-content-between">
+              <strong className="me-auto">
+                {toastMessage ? toastMessage : "Welcome to RR Overseas"}
+              </strong>
+            </Toast.Header>
+          </Toast>
         ) : null}
         <nav className="navbar navbar-fixed-top">
           <div className="container-fluid">
@@ -211,7 +210,7 @@ class NavbarMenu extends React.Component {
 
               <div id="navbar-menu">
                 <ul className="nav navbar-nav">
-                  <li>
+                  {/* <li>
                     <Link
                       to="/filedocuments"
                       className="icon-menu d-none d-sm-block d-md-none d-lg-block"
@@ -237,8 +236,8 @@ class NavbarMenu extends React.Component {
                       <i className="icon-envelope"></i>
                       <span className="notification-dot"></span>
                     </Link>
-                  </li>
-                  <li
+                  </li> */}
+                  {/* <li
                     className={
                       toggleNotification ? "show dropdown" : "dropdown"
                     }
@@ -334,7 +333,7 @@ class NavbarMenu extends React.Component {
                         </Link>
                       </li>
                     </ul>
-                  </li>
+                  </li> */}
                   <li
                     className={toggleEqualizer ? "show dropdown" : "dropdown"}
                   >
@@ -349,7 +348,7 @@ class NavbarMenu extends React.Component {
                     >
                       <i className="icon-equalizer"></i>
                     </a>
-                    <ul
+                    {/* <ul
                       className={
                         toggleEqualizer
                           ? "dropdown-menu user-menu menu-icon show"
@@ -396,7 +395,7 @@ class NavbarMenu extends React.Component {
                           <i className="icon-refresh"></i> <span>Renewals</span>
                         </Link>
                       </li>
-                    </ul>
+                    </ul> */}
                   </li>
                   <li>
                     <Logout history={this.props.history} />
@@ -427,7 +426,7 @@ class NavbarMenu extends React.Component {
                   <strong>Alizee Thomas</strong>
                 </Dropdown.Toggle>
 
-                <Dropdown.Menu className="dropdown-menu-right account">
+                {/* <Dropdown.Menu className="dropdown-menu-right account">
                   <Dropdown.Item as="div">
                     <Link to="/profilev2page" className="dropdown-item">
                       <i className="icon-user"></i> My Profile
@@ -449,7 +448,7 @@ class NavbarMenu extends React.Component {
                       <i className="icon-power"></i> Logout
                     </button>
                   </Dropdown.Item>
-                </Dropdown.Menu>
+                </Dropdown.Menu> */}
               </Dropdown>
             </div>
             <ul className="nav nav-tabs">
@@ -463,42 +462,6 @@ class NavbarMenu extends React.Component {
                   }}
                 >
                   Menu
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="#"
-                  className={sideMenuTab[1] ? "nav-link active" : "nav-link"}
-                  data-toggle="tab"
-                  onClick={() => {
-                    this.props.onPressSideMenuTab(1);
-                  }}
-                >
-                  <i className="icon-book-open"></i>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="#"
-                  className={sideMenuTab[2] ? "nav-link active" : "nav-link"}
-                  data-toggle="tab"
-                  onClick={() => {
-                    this.props.onPressSideMenuTab(2);
-                  }}
-                >
-                  <i className="icon-settings"></i>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="#"
-                  className={sideMenuTab[3] ? "nav-link active" : "nav-link"}
-                  data-toggle="tab"
-                  onClick={() => {
-                    this.props.onPressSideMenuTab(3);
-                  }}
-                >
-                  <i className="icon-question"></i>
                 </Link>
               </li>
             </ul>
@@ -670,12 +633,11 @@ class NavbarMenu extends React.Component {
                         <span>Fees </span>
                       </a>
                       <ul className="collapse">
-                        <li className={activeKey === "inquiry" ? "active" : ""}>
-                          <Link to="dashboard">Analytical</Link>
+                        <li className={activeKey === "fees" ? "active" : ""}>
+                          <Link to="fees">Fee Details</Link>
                         </li>
                       </ul>
                     </li>
-                
                   </ul>
                 </Nav>
               </div>

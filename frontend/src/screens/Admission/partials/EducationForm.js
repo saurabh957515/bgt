@@ -3,13 +3,17 @@ import React, { useEffect, useState } from "react";
 const EducationForm = ({
   educationDetails,
   setEducationDetail,
-  handleSubmit,
+  setSelected
 }) => {
   const handleAdmission = (name, value) => {
     setEducationDetail((pre) => ({
       ...pre,
       [name]: value,
     }));
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSelected(3);
   };
 
   const { textInput, emailInput, areaInput, submeet } = educationDetails;
@@ -381,7 +385,7 @@ const EducationForm = ({
                 </div>
               </div>
               <button className="btn btn-primary" type="submit">
-                Submit
+                Next
               </button>
             </div>
           </div>

@@ -13,6 +13,12 @@ export async function createAdmission(req, res) {
     address: req?.body.address,
     date_of_birth: req?.body.date_of_birth,
     is_acknowledged: req?.body?.is_acknowledged,
+    institute_name: req?.body?.institute_name,
+    country: req?.body?.country,
+    city: req?.body?.city,
+    paid_amount: req?.body?.paid_amount,
+    remaining_amount: req?.body?.remaining_amount,
+    total_amount: req?.body?.total_amount,
   };
 
   try {

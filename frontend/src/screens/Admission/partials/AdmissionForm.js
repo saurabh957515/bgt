@@ -4,8 +4,12 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.css";
 import useApi from "../../../utils/UseApi";
 
-const AdmissionForm = ({ setAdmissionId, setSelected,admissionDetail,setAdmissionDetail }) => {
- 
+const AdmissionForm = ({
+  setAdmissionId,
+  setSelected,
+  admissionDetail,
+  setAdmissionDetail,
+}) => {
   const { postRoute, editRoute } = useApi();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +51,7 @@ const AdmissionForm = ({ setAdmissionId, setSelected,admissionDetail,setAdmissio
                     <input
                       className={`form-control`}
                       value={admissionDetail?.email || ""}
-                       required="required"
+                      required="required"
                       type="email"
                       onChange={(e) => handleAdmission("email", e.target.value)}
                     />
@@ -61,7 +65,7 @@ const AdmissionForm = ({ setAdmissionId, setSelected,admissionDetail,setAdmissio
                     <input
                       className={`form-control`}
                       value={admissionDetail?.contact_no || ""}
-                       required="required"
+                      required="required"
                       type="number"
                       onChange={(e) =>
                         handleAdmission("contact_no", e.target.value)
@@ -75,7 +79,7 @@ const AdmissionForm = ({ setAdmissionId, setSelected,admissionDetail,setAdmissio
                     <input
                       className={`form-control`}
                       value={admissionDetail?.alternate_no || ""}
-                       required="required"
+                      required="required"
                       type="number"
                       onChange={(e) =>
                         handleAdmission("alternate_no", e.target.value)
@@ -140,7 +144,7 @@ const AdmissionForm = ({ setAdmissionId, setSelected,admissionDetail,setAdmissio
                 </div>
               </div>
               <button className="btn btn-primary" type="submit">
-                Next & Save
+                Next
               </button>
             </div>
           </div>

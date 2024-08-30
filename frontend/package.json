@@ -52,6 +52,7 @@
     "react-redux": "^7.1.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
+    "react-select": "^5.8.0",
     "react-simple-maps": "^2.1.2",
     "react-sparklines": "^1.7.0",
     "react-syntax-highlighter": "^12.2.1",
@@ -84,6 +85,5 @@
   "devDependencies": {
     "tailwindcss": "^3.4.10"
   },
-  "proxy":"http://localhost:9000"
-
+  "proxy": "http://localhost:9000"
 }

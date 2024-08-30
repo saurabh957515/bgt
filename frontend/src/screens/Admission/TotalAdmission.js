@@ -8,6 +8,8 @@ import {
 } from "react-router-dom/cjs/react-router-dom.min";
 import useApi from "../../utils/UseApi";
 import moment from "moment";
+import UniversityDetails from "./partials/UniversityDetails";
+import FeePayment from "./partials/FeePayment";
 
 const TotalAdmission = () => {
   const [selected, setSelected] = useState(1);
@@ -22,6 +24,12 @@ const TotalAdmission = () => {
     address: "",
     date_of_birth: "",
     is_acknowledged: false,
+    institute_name: "",
+    country: "",
+    city: "",
+    paid_amount: "",
+    remaining_amount: "",
+    total_amount: "",
   };
   const education_Details = {
     admission_id: "",
@@ -40,6 +48,7 @@ const TotalAdmission = () => {
     ielts_score: "7.5",
     telecaller_name: "mate dameon",
   };
+
   const [isEdit, setIsEdit] = useState(false);
   const [educationDetails, setEducationDetail] = useState(education_Details);
   const [admissionDetail, setAdmissionDetail] = useState(admissionObject);
@@ -106,6 +115,12 @@ const TotalAdmission = () => {
               "YYYY-MM-DD"
             ),
             is_acknowledged: false,
+            institute_name: createAdmission?.institute_name,
+            country: createAdmission?.interesetd_country,
+            city: createAdmission?.city,
+            paid_amount: createAdmission?.paid_amount,
+            remaining_amount: createAdmission?.remaining_amount,
+            total_amount: createAdmission?.total_amount,
           });
         }
         setIsEdit(false);
@@ -145,6 +160,51 @@ const TotalAdmission = () => {
     }, 1000);
   };
 
+  const getComponent = (type) => {
+    switch (type) {
+      case 1:
+        return (
+          <AdmissionForm
+            admissionDetail={admissionDetail}
+            setAdmissionDetail={setAdmissionDetail}
+            setSelected={setSelected}
+            setAdmissionId={setAdmissionId}
+          />
+        );
+      case 2:
+        return (
+          <EducationForm
+            handleSubmit={handleSubmit}
+            setEducationDetail={setEducationDetail}
+            educationDetails={educationDetails}
+            addmissionId={addmissionId}
+            setSelected={setSelected}
+          />
+        );
+      case 3:
+        return (
+          <UniversityDetails
+            universityDetails={admissionDetail}
+            setUniversityDetails={setAdmissionDetail}
+            setSelected={setSelected}
+            setAdmissionId={setAdmissionId}
+          />
+        );
+      case 4:
+        return (
+          <FeePayment
+            handleSubmit={handleSubmit}
+            feePaymentDetails={admissionDetail}
+            setFeePaymentDetails={setAdmissionDetail}
+            setSelected={setSelected}
+            setAdmissionId={setAdmissionId}
+          />
+        );
+      default:
+        break;
+    }
+  };
+
   return (
     <div
       style={{ flex: 1 }}
@@ -162,11 +222,17 @@ const TotalAdmission = () => {
             ]}
           />
           <ul className="nav nav-tabs">
-            {["Admission Details", "Education Details"]?.map((tab, index) => (
+            {[
+              "Admission Details",
+              "Education Details",
+              "University Details",
+              "Fee Payment",
+            ]?.map((tab, index) => (
               <li
                 key={index}
-                // onClick={() => {
-                //   setSelected(index + 1)}}
+                onClick={() => {
+                  setSelected(index + 1);
+                }}
                 className="nav-item"
               >
                 <div
@@ -177,21 +243,7 @@ const TotalAdmission = () => {
               </li>
             ))}
           </ul>
-          {selected === 1 ? (
-            <AdmissionForm
-              admissionDetail={admissionDetail}
-              setAdmissionDetail={setAdmissionDetail}
-              setSelected={setSelected}
-              setAdmissionId={setAdmissionId}
-            />
-          ) : (
-            <EducationForm
-              handleSubmit={handleSubmit}
-              setEducationDetail={setEducationDetail}
-              educationDetails={educationDetails}
-              addmissionId={addmissionId}
-            />
-          )}
+          {getComponent(selected)}
         </div>
       </div>
     </div>

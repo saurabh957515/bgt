@@ -21,7 +21,7 @@ class Admission {
       FROM admission
       LEFT JOIN education ON admission.id = education.admission_id
     `;
-    
+
       const result = await sql(query);
       return result;
     } catch (error) {
@@ -43,11 +43,23 @@ class Admission {
     try {
       const query = `
         UPDATE admission 
-        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?
+        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,institute_name = ?,country = ?,city = ?,paid_amount = ?,remaining_amount = ?,total_amount = ?
         WHERE id = ?
       `;
-      const { name, email, contact_no, alternate_no, address, date_of_birth } =
-        newInquiry;
+      const {
+        name,
+        email,
+        contact_no,
+        alternate_no,
+        address,
+        date_of_birth,
+        institute_name,
+        country,
+        city,
+        paid_amount,
+        remaining_amount,
+        total_amount,
+      } = newInquiry;
       const result = await sql(query, [
         name,
         email,
@@ -55,6 +67,12 @@ class Admission {
         alternate_no,
         address,
         date_of_birth,
+        institute_name,
+        country,
+        city,
+        paid_amount,
+        remaining_amount,
+        total_amount,
         id,
       ]);
       return result;

@@ -64,6 +64,7 @@ import CreateInquiry from "./screens/Inquiry/CreateInquiry";
 import Inquires from "./screens/Inquiry/Inquires";
 import TotalAdmission from "./screens/Admission/TotalAdmission";
 import Admissions from "./screens/Admission/partials/Admissions";
+import Fee from "./screens/Fees/Fee";
 
 window.__DEV__ = true;
 const App = ({ isLoggedin, history }) => {
@@ -200,6 +201,11 @@ const App = ({ isLoggedin, history }) => {
                 exact
                 path={`${process.env.PUBLIC_URL}/totalAdmission`}
                 component={Admissions}
+              />
+                   <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/fees`}
+                component={Fee}
               />
               <Route
                 exact

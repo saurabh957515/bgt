@@ -31,11 +31,18 @@ class Inquiry {
     try {
       const query = `
         UPDATE inquiry 
-        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?
+        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?, interested_country = ?
         WHERE id = ?
       `;
-      const { name, email, contact_no, alternate_no, address, date_of_birth } =
-        newInquiry;
+      const {
+        name,
+        email,
+        contact_no,
+        alternate_no,
+        address,
+        date_of_birth,
+        interested_country,
+      } = newInquiry;
       const result = await sql(query, [
         name,
         email,
@@ -43,6 +50,7 @@ class Inquiry {
         alternate_no,
         address,
         date_of_birth,
+        interested_country,
         id,
       ]);
       return result;
