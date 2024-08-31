@@ -46,19 +46,17 @@ function validateAdmissionAndEducation(admissionObject, education_Details) {
     errors.amounts =
       "Paid amount, remaining amount, and total amount must be valid numbers.";
   } else {
-    // Ensure total amount is not less than the sum of paid amount and remaining amount
     if (totalAmount < paidAmount + remainingAmount) {
       errors.amounts =
         "Total amount cannot be less than the sum of paid amount and remaining amount.";
     }
-    // Ensure remaining amount is the subtraction of total amount minus paid amount
+
     if (remainingAmount !== totalAmount - paidAmount) {
       errors.remaining_amount =
         "Remaining amount must be equal to the total amount minus the paid amount.";
     }
   }
 
-  // Education Details Validation
   if (!education_Details.highest_qualification.trim())
     errors.highest_qualification = "Highest qualification is required.";
   if (
@@ -77,7 +75,6 @@ function validateAdmissionAndEducation(admissionObject, education_Details) {
     errors.percentage_cgpa = "Percentage or CGPA must be between 0 and 100.";
   }
 
-  // Validate current_monthly_salary
   const currentMonthlySalary = parseFloat(
     education_Details.current_monthly_salary
   );
@@ -89,7 +86,6 @@ function validateAdmissionAndEducation(admissionObject, education_Details) {
       "Current monthly salary must be greater than zero.";
   }
 
-  // Validate total_experience_years
   const totalExperienceYears = parseFloat(
     education_Details.total_experience_years
   );
@@ -147,8 +143,6 @@ function validateAdmissionAndEducation(admissionObject, education_Details) {
   return errors;
 }
 
-// Usage on form submission
-
 const TotalAdmission = () => {
   const [selected, setSelected] = useState(1);
   const [addmissionId, setAdmissionId] = useState("");
@@ -161,7 +155,7 @@ const TotalAdmission = () => {
     alternate_no: "",
     address: "",
     date_of_birth: "",
-    is_acknowledged: false,
+    is_acknowledged: 0,
     institute_name: "",
     country: "",
     city: "",
@@ -169,6 +163,7 @@ const TotalAdmission = () => {
     remaining_amount: "",
     total_amount: "",
     course_detail: "",
+    bank_detail_id: "",
   };
   const education_Details = {
     admission_id: "",
@@ -176,17 +171,18 @@ const TotalAdmission = () => {
     passing_year: 2012,
     name_of_institute: "",
     percentage_cgpa: "",
-    is_employed: false,
+    is_employed: 0,
     current_company: "",
     current_designation: "",
-    current_monthly_salary: "",
-    total_experience_years: "",
+    current_monthly_salary: 0,
+    total_experience_years: 0,
     country_interested: "",
     visa_type: "",
     past_rejection_country_name: "",
     ielts_score: "",
     telecaller_name: "",
   };
+  const [bankOptions, setBankOptions] = useState([]);
 
   const [isEdit, setIsEdit] = useState(false);
   const [educationDetails, setEducationDetail] = useState(education_Details);
@@ -195,6 +191,18 @@ const TotalAdmission = () => {
   const location = useLocation();
   const editAdmissionId = location.state?.admissionId;
   const createAdmission = location.state?.makeAdmission;
+  useEffect(() => {
+    const getBankOption = async () => {
+      const data = await getRoute("/api/bank", "", false);
+      setBankOptions(
+        data?.map((bank) => ({
+          label: bank?.bank_name,
+          value: bank?.id,
+        }))
+      );
+    };
+    getBankOption();
+  }, []);
   useEffect(() => {
     const getData = async () => {
       if (editAdmissionId) {
@@ -214,8 +222,8 @@ const TotalAdmission = () => {
               is_employed: editAdmisson?.is_employed,
               current_company: editAdmisson?.current_company,
               current_designation: editAdmisson?.current_designation,
-              current_monthly_salary: editAdmisson?.current_monthly_salary,
-              total_experience_years: editAdmisson?.total_experience_years,
+              current_monthly_salary: editAdmisson?.current_monthly_salary || 0,
+              total_experience_years: editAdmisson?.total_experience_years || 0,
               country_interested: editAdmisson?.country_interested,
               visa_type: editAdmisson?.visa_type,
               past_rejection_country_name:
@@ -248,6 +256,7 @@ const TotalAdmission = () => {
             total_amount: editAdmisson?.total_amount,
             course_detail: editAdmisson?.course_detail,
             city: editAdmisson?.city,
+            bank_detail_id: editAdmisson?.bank_detail_id,
           });
         }
         setIsEdit(true);
@@ -271,6 +280,9 @@ const TotalAdmission = () => {
             total_amount: createAdmission?.total_amount,
             course_detail: createAdmission?.course_detail,
             city: createAdmission?.city,
+            bank_detail: "",
+            institute_name: "",
+            bank_detail_id: "",
           });
         }
         setIsEdit(false);
@@ -291,13 +303,11 @@ const TotalAdmission = () => {
     } else {
       setErrors({});
       if (isEdit) {
-        
         const admissionResponse = await editRoute(
           `api/admission/${admissionDetail?.id}`,
           admissionDetail
         );
         if (admissionResponse?.status === "success") {
-          
           const educationResponse = await editRoute(
             `api/education/${educationDetails?.id}`,
             {
@@ -372,6 +382,7 @@ const TotalAdmission = () => {
       case 4:
         return (
           <FeePayment
+            bankOptions={bankOptions}
             handleSubmit={handleSubmit}
             feePaymentDetails={admissionDetail}
             setFeePaymentDetails={setAdmissionDetail}
@@ -451,7 +462,6 @@ const TotalAdmission = () => {
                 className="nav-item"
               >
                 <div
-                  //  text-danger
                   className={`nav-link ${
                     isErrorPresent(index + 1) && "text-danger"
                   } ${selected === index + 1 && "active"}`}

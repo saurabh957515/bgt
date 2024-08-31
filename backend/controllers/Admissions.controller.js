@@ -20,6 +20,7 @@ export async function createAdmission(req, res) {
     remaining_amount: req?.body?.remaining_amount,
     total_amount: req?.body?.total_amount,
     course_detail:req?.body?.course_detail,
+    bank_detail_id:req?.body?.bank_detail_id,
   };
 
   try {

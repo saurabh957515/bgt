@@ -17,11 +17,10 @@ const useApi = () => {
 
   const handleError = (err) => {
     console.error(err);
-    // Trigger a toast message or handle error globally
     return err;
   };
 
-  const getRoute = useCallback(async (url, params) => {
+  const getRoute = useCallback(async (url, params, toast = true) => {
     const headers = {
       "Content-Type": "application/json",
     };
@@ -30,8 +29,10 @@ const useApi = () => {
         headers,
         params,
       });
-      dispatch(tostMessageLoad(true));
-      dispatch(setToastMessage(data?.message));
+      if (toast) {
+        dispatch(tostMessageLoad(true));
+        dispatch(setToastMessage(data?.message));
+      }
       return data;
     } catch (err) {
       return handleError(err);

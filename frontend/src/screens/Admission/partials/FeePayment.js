@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.css";
 import useApi from "../../../utils/UseApi";
@@ -11,9 +11,10 @@ const FeePayment = ({
   feePaymentDetails,
   setFeePaymentDetails,
   handleSubmit,
-  errors
+  errors,
+  bankOptions,
 }) => {
-  const { postRoute, editRoute } = useApi();
+  const { postRoute, editRoute, getRoute } = useApi();
 
   const handleFeePayment = (name, value) => {
     setFeePaymentDetails((prev) => ({
@@ -83,12 +84,12 @@ const FeePayment = ({
                   <div className="form-group">
                     <label>Select BankAccount</label>
                     <ReactSelect
-                      value={feePaymentDetails?.bank_detail || ""}
-                      // required="required"
-                      type="number"
+                      value={feePaymentDetails?.bank_detail_id || ""}
+                      required="required"
                       onChange={(e) =>
-                        handleFeePayment("bank_detail", e.target.value)
+                        handleFeePayment("bank_detail_id", e.value)
                       }
+                      options={bankOptions}
                     />
                     <p className="mt-2 text-danger">{errors["bank_detail"]}</p>
                   </div>

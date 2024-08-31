@@ -65,6 +65,8 @@ import Inquires from "./screens/Inquiry/Inquires";
 import TotalAdmission from "./screens/Admission/TotalAdmission";
 import Admissions from "./screens/Admission/partials/Admissions";
 import Fee from "./screens/Fees/Fee";
+import BankList from "./Bank/BankList";
+import CreateBanks from "./Bank/CreateBanks";
 
 window.__DEV__ = true;
 const App = ({ isLoggedin, history }) => {
@@ -171,6 +173,16 @@ const App = ({ isLoggedin, history }) => {
                 exact
                 path={`${process.env.PUBLIC_URL}/dashboard`}
                 component={dashboard}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/createBank`}
+                component={CreateBanks}
+              />
+              <Route
+                exact
+                path={`${process.env.PUBLIC_URL}/bankList`}
+                component={BankList}
               />
               <Route
                 exact

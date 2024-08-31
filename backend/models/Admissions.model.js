@@ -2,6 +2,7 @@ import sql from "../db/queryExecution.js";
 class Admission {
   static async create(newAdmission) {
     try {
+      console.log(newAdmission)
       const result = await sql("INSERT INTO admission SET ?", newAdmission);
       if (result?.error) {
         return { error: result?.error };
@@ -46,7 +47,7 @@ class Admission {
     try {
       const query = `
         UPDATE admission 
-        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,institute_name = ?,country = ?,city = ?,paid_amount = ?,remaining_amount = ?,total_amount = ?,course_detail = ?
+        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,institute_name = ?,country = ?,city = ?,paid_amount = ?,remaining_amount = ?,total_amount = ?,course_detail = ? ,bank_detail_id = ?
         WHERE id = ?
       `;
       const {
@@ -62,7 +63,8 @@ class Admission {
         paid_amount,
         remaining_amount,
         total_amount,
-        course_detail
+        course_detail,
+        bank_detail_id,
       } = newInquiry;
       const result = await sql(query, [
         name,
@@ -78,6 +80,7 @@ class Admission {
         remaining_amount,
         total_amount,
         course_detail,
+        bank_detail_id,
         id,
       ]);
       if (result?.error) {
