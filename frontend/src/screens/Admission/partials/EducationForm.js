@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 const EducationForm = ({
   educationDetails,
   setEducationDetail,
-  setSelected
+  setSelected,errors
 }) => {
   const handleAdmission = (name, value) => {
     setEducationDetail((pre) => ({
@@ -16,8 +16,6 @@ const EducationForm = ({
     setSelected(3);
   };
 
-  const { textInput, emailInput, areaInput, submeet } = educationDetails;
-  const reg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   return (
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">
@@ -34,7 +32,7 @@ const EducationForm = ({
                     <input
                       className={`form-control`}
                       value={educationDetails?.highest_qualification}
-                      name="contact_no"
+                      name="highest_qualification"
                       required="required"
                       type="text"
                       onChange={(e) => {
@@ -44,16 +42,9 @@ const EducationForm = ({
                         );
                       }}
                     />
-                    {submeet && !reg.test(emailInput) ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    <p className="mt-2 text-danger">
+                      {errors["highest_qualification"]}
+                    </p>
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -67,17 +58,10 @@ const EducationForm = ({
                       onChange={(e) => {
                         handleAdmission("name_of_institute", e.target.value);
                       }}
-                    ></input>
-                    {areaInput === "" && submeet ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["name_of_institute"]}
+                    </p>
                   </div>
                 </div>
                 <div className="col-md-4">
@@ -85,9 +69,12 @@ const EducationForm = ({
                     <div className="fancy-checkbox">
                       <label>
                         <input
-                          value={educationDetails?.is_employed}
+                          checked={educationDetails?.is_employed === 1}
                           onChange={(e) => {
-                            handleAdmission("is_employed", e.target.checked);
+                            handleAdmission(
+                              "is_employed",
+                              e.target.checked ? 1 : 0
+                            );
                           }}
                           type="checkbox"
                         />
@@ -102,26 +89,16 @@ const EducationForm = ({
                     <input
                       className={`form-control`}
                       value={educationDetails?.passing_year}
-                      name="alternate_no"
+                      name="passing_year"
                       required="required"
                       type="number"
                       onChange={(e) => {
                         handleAdmission("passing_year", e.target.value);
                       }}
                     />
-                    {submeet && !reg.test(emailInput) ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    <p className="mt-2 text-danger">{errors["passing_year"]}</p>
                   </div>
                 </div>
-
                 <div className="col-md-4">
                   <div className="form-group">
                     <label>Percentage/CGPA</label>
@@ -129,29 +106,21 @@ const EducationForm = ({
                       className={`form-control`}
                       value={educationDetails?.percentage_cgpa}
                       name="percentage_cgpa"
-                      type="number"
                       required="required"
+                      type="number"
                       onChange={(e) => {
                         handleAdmission("percentage_cgpa", e.target.value);
                       }}
-                    ></input>
-                    {areaInput === "" && submeet ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["percentage_cgpa"]}
+                    </p>
                   </div>
                 </div>
-
                 <div className="col-md-6">
                   <div className="form-group">
                     <label>Current Company</label>
-                    <textarea
+                    <input
                       className={`form-control`}
                       value={educationDetails?.current_company}
                       name="current_company"
@@ -159,17 +128,10 @@ const EducationForm = ({
                       onChange={(e) => {
                         handleAdmission("current_company", e.target.value);
                       }}
-                    ></textarea>
-                    {areaInput === "" && submeet ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["current_company"]}
+                    </p>
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -185,16 +147,9 @@ const EducationForm = ({
                         handleAdmission("current_designation", e.target.value);
                       }}
                     />
-                    {submeet && !reg.test(emailInput) ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    <p className="mt-2 text-danger">
+                      {errors["current_designation"]}
+                    </p>
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -213,25 +168,18 @@ const EducationForm = ({
                         );
                       }}
                     />
-                    {submeet && !reg.test(emailInput) ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    <p className="mt-2 text-danger">
+                      {errors["current_monthly_salary"]}
+                    </p>
                   </div>
                 </div>
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label>Total Experience </label>
+                    <label>Total Experience (In Years)</label>
                     <input
                       className={`form-control`}
                       value={educationDetails?.total_experience_years}
-                      name="alternate_no"
+                      name="total_experience_years"
                       required="required"
                       type="number"
                       onChange={(e) => {
@@ -241,16 +189,9 @@ const EducationForm = ({
                         );
                       }}
                     />
-                    {submeet && !reg.test(emailInput) ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    <p className="mt-2 text-danger">
+                      {errors["total_experience_years"]}
+                    </p>
                   </div>
                 </div>
                 <div className="col-md-4">
@@ -266,16 +207,9 @@ const EducationForm = ({
                         handleAdmission("country_interested", e.target.value);
                       }}
                     />
-                    {submeet && !reg.test(emailInput) ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    <p className="mt-2 text-danger">
+                      {errors["country_interested"]}
+                    </p>
                   </div>
                 </div>
                 <div className="col-md-4">
@@ -291,16 +225,7 @@ const EducationForm = ({
                         handleAdmission("visa_type", e.target.value);
                       }}
                     />
-                    {submeet && !reg.test(emailInput) ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    <p className="mt-2 text-danger">{errors["visa_type"]}</p>
                   </div>
                 </div>
                 <div className="col-md-4">
@@ -316,19 +241,9 @@ const EducationForm = ({
                         handleAdmission("ielts_score", e.target.value);
                       }}
                     />
-                    {submeet && !reg.test(emailInput) ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    <p className="mt-2 text-danger">{errors["ielts_score"]}</p>
                   </div>
                 </div>
-
                 <div className="col-md-6">
                   <div className="form-group">
                     <label>Past Rejection Country Name</label>
@@ -345,19 +260,11 @@ const EducationForm = ({
                         );
                       }}
                     />
-                    {submeet && !reg.test(emailInput) ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    <p className="mt-2 text-danger">
+                      {errors["past_rejection_country_name"]}
+                    </p>
                   </div>
                 </div>
-
                 <div className="col-md-6">
                   <div className="form-group">
                     <label>TeleCaller Name</label>
@@ -371,16 +278,9 @@ const EducationForm = ({
                         handleAdmission("telecaller_name", e.target.value);
                       }}
                     />
-                    {submeet && !reg.test(emailInput) ? (
-                      <ul
-                        className="parsley-errors-list filled"
-                        id="parsley-id-29"
-                      >
-                        <li className="parsley-required">
-                          This value is required.
-                        </li>
-                      </ul>
-                    ) : null}
+                    <p className="mt-2 text-danger">
+                      {errors["telecaller_name"]}
+                    </p>
                   </div>
                 </div>
               </div>

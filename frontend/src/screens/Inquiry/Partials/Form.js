@@ -14,6 +14,8 @@ const inquiryObject = {
   address: "jimsd@132",
   date_of_birth: "2001-09-03",
   interested_country: "USA",
+  course_detail: "",
+  city:''
 };
 
 const Form = ({ inquiryEdit }) => {
@@ -124,6 +126,28 @@ const Form = ({ inquiryEdit }) => {
                     onChange={(e) =>
                       handleInquiry("alternate_no", e.target.value)
                     }
+                  />
+                </div>
+                <div className="form-group col-md-6">
+                  <label>Course Detail</label>
+                  <input
+                    className="form-control"
+                    value={inquiry?.course_detail}
+                    required
+                    type="text"
+                    onChange={(e) =>
+                      handleInquiry("course_detail", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="form-group col-md-6">
+                  <label>City</label>
+                  <input
+                    className="form-control"
+                    value={inquiry?.city}
+                    required
+                    type="text"
+                    onChange={(e) => handleInquiry("city", e.target.value)}
                   />
                 </div>
                 <div className="form-group col-md-6">

@@ -46,7 +46,7 @@ class Admission {
     try {
       const query = `
         UPDATE admission 
-        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,institute_name = ?,country = ?,city = ?,paid_amount = ?,remaining_amount = ?,total_amount = ?
+        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,institute_name = ?,country = ?,city = ?,paid_amount = ?,remaining_amount = ?,total_amount = ?,course_detail = ?
         WHERE id = ?
       `;
       const {
@@ -62,6 +62,7 @@ class Admission {
         paid_amount,
         remaining_amount,
         total_amount,
+        course_detail
       } = newInquiry;
       const result = await sql(query, [
         name,
@@ -76,6 +77,7 @@ class Admission {
         paid_amount,
         remaining_amount,
         total_amount,
+        course_detail,
         id,
       ]);
       if (result?.error) {

@@ -11,6 +11,7 @@ const UniversityDetails = ({
   setSelected,
   universityDetails,
   setUniversityDetails,
+  errors,
 }) => {
   const { postRoute, editRoute } = useApi();
   const handleSubmit = async (e) => {
@@ -31,7 +32,7 @@ const UniversityDetails = ({
         <div className="col-md-12">
           <div className="card">
             <div className="header">
-              <h2>Basic Information</h2>
+              <h2>University Information</h2>
             </div>
             <div className="body">
               {/* Removed the inner form tag */}
@@ -47,6 +48,37 @@ const UniversityDetails = ({
                         handleUniversity("institute_name", e.target.value)
                       }
                     />
+                    <p className="mt-2 text-danger">
+                      {errors["institute_name"]}
+                    </p>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label>Course Detail</label>
+                    <input
+                      className={`form-control`}
+                      value={universityDetails?.course_detail || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleUniversity("course_detail", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["course_detail"]}
+                    </p>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label>City</label>
+                    <input
+                      className={`form-control`}
+                      value={universityDetails?.city || ""}
+                      required="required"
+                      onChange={(e) => handleUniversity("city", e.target.value)}
+                    />
+                    <p className="mt-2 text-danger">{errors["city"]}</p>
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -62,6 +94,7 @@ const UniversityDetails = ({
                       value={universityDetails?.country || ""}
                       onChange={(e) => handleUniversity("country", e.value)}
                     />
+                    <p className="mt-2 text-danger">{errors["country"]}</p>
                   </div>
                 </div>
               </div>

@@ -89,7 +89,7 @@ export async function updateEducation(req, res) {
         status: "Failed",
       });
     } else {
-      res.send({ message: "education updated!", staus: "success" });
+      res.send({ message: "education updated!", status: "success" });
     }
   } catch (err) {
     res.status(500).send({

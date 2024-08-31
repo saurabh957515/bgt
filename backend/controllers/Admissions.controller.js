@@ -19,6 +19,7 @@ export async function createAdmission(req, res) {
     paid_amount: req?.body?.paid_amount,
     remaining_amount: req?.body?.remaining_amount,
     total_amount: req?.body?.total_amount,
+    course_detail:req?.body?.course_detail,
   };
 
   try {

@@ -14,6 +14,8 @@ export async function createInquiry(req, res) {
     address: req?.body.address,
     date_of_birth: req?.body.date_of_birth,
     interested_country: req?.body.interested_country,
+    course_detail: req?.body?.course_detail,
+    city: req?.body?.city,
   };
 
   try {

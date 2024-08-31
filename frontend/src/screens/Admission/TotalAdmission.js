@@ -10,6 +10,144 @@ import useApi from "../../utils/UseApi";
 import moment from "moment";
 import UniversityDetails from "./partials/UniversityDetails";
 import FeePayment from "./partials/FeePayment";
+function validateAdmissionAndEducation(admissionObject, education_Details) {
+  const errors = {};
+  // Admission Object Validation
+  if (!admissionObject.name.trim()) errors.name = "Name is required.";
+  if (!admissionObject.email.trim()) errors.email = "Email is required.";
+  if (!admissionObject.contact_no.trim())
+    errors.contact_no = "Contact number is required.";
+  if (
+    admissionObject.alternate_no &&
+    admissionObject.alternate_no.trim().length > 20
+  ) {
+    errors.alternate_no = "Alternate number must be less than 20 characters.";
+  }
+  if (!admissionObject.address.trim()) errors.address = "Address is required.";
+  if (!admissionObject.date_of_birth.trim())
+    errors.date_of_birth = "Date of birth is required.";
+  if (!admissionObject.institute_name.trim())
+    errors.institute_name = "Institute name is required.";
+  if (!admissionObject.country.trim()) errors.country = "Country is required.";
+  if (!admissionObject.city.trim()) errors.city = "City is required.";
+  if (!admissionObject.paid_amount.trim())
+    errors.paid_amount = "Paid amount is required.";
+  if (!admissionObject.remaining_amount.trim())
+    errors.remaining_amount = "Remaining amount is required.";
+  if (!admissionObject.total_amount.trim())
+    errors.total_amount = "Total amount is required.";
+
+  // Validate Numeric Fields
+  const paidAmount = parseFloat(admissionObject.paid_amount);
+  const remainingAmount = parseFloat(admissionObject.remaining_amount);
+  const totalAmount = parseFloat(admissionObject.total_amount);
+
+  if (isNaN(paidAmount) || isNaN(remainingAmount) || isNaN(totalAmount)) {
+    errors.amounts =
+      "Paid amount, remaining amount, and total amount must be valid numbers.";
+  } else {
+    // Ensure total amount is not less than the sum of paid amount and remaining amount
+    if (totalAmount < paidAmount + remainingAmount) {
+      errors.amounts =
+        "Total amount cannot be less than the sum of paid amount and remaining amount.";
+    }
+    // Ensure remaining amount is the subtraction of total amount minus paid amount
+    if (remainingAmount !== totalAmount - paidAmount) {
+      errors.remaining_amount =
+        "Remaining amount must be equal to the total amount minus the paid amount.";
+    }
+  }
+
+  // Education Details Validation
+  if (!education_Details.highest_qualification.trim())
+    errors.highest_qualification = "Highest qualification is required.";
+  if (
+    !education_Details.passing_year ||
+    !Number.isInteger(education_Details.passing_year)
+  )
+    errors.passing_year = "Passing year must be a valid year.";
+  if (!education_Details.name_of_institute.trim())
+    errors.name_of_institute = "Name of institute is required.";
+
+  // Validate percentage_cgpa
+  const percentageCgpa = parseFloat(education_Details.percentage_cgpa);
+  if (isNaN(percentageCgpa)) {
+    errors.percentage_cgpa = "Percentage or CGPA must be a valid number.";
+  } else if (percentageCgpa < 0 || percentageCgpa > 100) {
+    errors.percentage_cgpa = "Percentage or CGPA must be between 0 and 100.";
+  }
+
+  // Validate current_monthly_salary
+  const currentMonthlySalary = parseFloat(
+    education_Details.current_monthly_salary
+  );
+  if (education_Details.is_employed && isNaN(currentMonthlySalary)) {
+    errors.current_monthly_salary =
+      "Current monthly salary must be a valid number.";
+  } else if (education_Details.is_employed && currentMonthlySalary <= 0) {
+    errors.current_monthly_salary =
+      "Current monthly salary must be greater than zero.";
+  }
+
+  // Validate total_experience_years
+  const totalExperienceYears = parseFloat(
+    education_Details.total_experience_years
+  );
+  if (education_Details.is_employed && isNaN(totalExperienceYears)) {
+    errors.total_experience_years =
+      "Total experience in years must be a valid number.";
+  } else if (
+    education_Details.is_employed &&
+    (totalExperienceYears < 0 || totalExperienceYears > 99)
+  ) {
+    errors.total_experience_years =
+      "Total experience in years must be between 0 and 99.";
+  }
+
+  // Validate ielts_score
+  const ieltsScore = parseFloat(education_Details.ielts_score);
+  if (isNaN(ieltsScore)) {
+    errors.ielts_score = "IELTS score must be a valid number.";
+  } else if (ieltsScore < 0 || ieltsScore > 9) {
+    errors.ielts_score = "IELTS score must be between 0 and 9.";
+  }
+
+  if (
+    education_Details.is_employed &&
+    !education_Details.current_company.trim()
+  )
+    errors.current_company = "Current company is required when employed.";
+  if (
+    education_Details.is_employed &&
+    !education_Details.current_designation.trim()
+  )
+    errors.current_designation =
+      "Current designation is required when employed.";
+  if (
+    education_Details.is_employed &&
+    !education_Details.current_monthly_salary.trim()
+  )
+    errors.current_monthly_salary =
+      "Current monthly salary is required when employed.";
+  if (
+    education_Details.is_employed &&
+    !education_Details.total_experience_years.trim()
+  )
+    errors.total_experience_years =
+      "Total experience in years is required when employed.";
+  if (!education_Details.country_interested.trim())
+    errors.country_interested = "Country interested is required.";
+  if (!education_Details.visa_type.trim())
+    errors.visa_type = "Visa type is required.";
+  if (!education_Details.ielts_score.trim())
+    errors.ielts_score = "IELTS score is required.";
+  if (!education_Details.telecaller_name.trim())
+    errors.telecaller_name = "Telecaller name is required.";
+
+  return errors;
+}
+
+// Usage on form submission
 
 const TotalAdmission = () => {
   const [selected, setSelected] = useState(1);
@@ -30,28 +168,30 @@ const TotalAdmission = () => {
     paid_amount: "",
     remaining_amount: "",
     total_amount: "",
+    course_detail: "",
   };
   const education_Details = {
     admission_id: "",
-    highest_qualification: "s's Degree",
+    highest_qualification: "",
     passing_year: 2012,
-    name_of_institute: "XYZ University",
-    percentage_cgpa: "3.80",
-    is_employed: 1,
-    current_company: "ABC Corp",
-    current_designation: "Software Engineer",
-    current_monthly_salary: "5000.00",
-    total_experience_years: "5.0",
-    country_interested: "USA",
-    visa_type: "H-1B",
-    past_rejection_country_name: "None",
-    ielts_score: "7.5",
-    telecaller_name: "mate dameon",
+    name_of_institute: "",
+    percentage_cgpa: "",
+    is_employed: false,
+    current_company: "",
+    current_designation: "",
+    current_monthly_salary: "",
+    total_experience_years: "",
+    country_interested: "",
+    visa_type: "",
+    past_rejection_country_name: "",
+    ielts_score: "",
+    telecaller_name: "",
   };
 
   const [isEdit, setIsEdit] = useState(false);
   const [educationDetails, setEducationDetail] = useState(education_Details);
   const [admissionDetail, setAdmissionDetail] = useState(admissionObject);
+  const [errors, setErrors] = useState({});
   const location = useLocation();
   const editAdmissionId = location.state?.admissionId;
   const createAdmission = location.state?.makeAdmission;
@@ -100,6 +240,14 @@ const TotalAdmission = () => {
               "YYYY-MM-DD"
             ),
             is_acknowledged: editAdmisson?.is_acknowledged,
+            institute_name: editAdmisson?.institute_name,
+            country: editAdmisson?.country,
+            city: editAdmisson?.city,
+            paid_amount: editAdmisson?.paid_amount,
+            remaining_amount: editAdmisson?.remaining_amount,
+            total_amount: editAdmisson?.total_amount,
+            course_detail: editAdmisson?.course_detail,
+            city: editAdmisson?.city,
           });
         }
         setIsEdit(true);
@@ -121,6 +269,8 @@ const TotalAdmission = () => {
             paid_amount: createAdmission?.paid_amount,
             remaining_amount: createAdmission?.remaining_amount,
             total_amount: createAdmission?.total_amount,
+            course_detail: createAdmission?.course_detail,
+            city: createAdmission?.city,
           });
         }
         setIsEdit(false);
@@ -131,44 +281,56 @@ const TotalAdmission = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errors = validateAdmissionAndEducation(
+      admissionDetail,
+      educationDetails
+    );
 
-    if (isEdit) {
-      const admissionResponse = await editRoute(
-        `api/admission/${admissionDetail?.id}`,
-        admissionDetail
-      );
-      if (admissionResponse?.status === "success") {
-        const educationResponse = await editRoute(
-          `api/education/${educationDetails?.id}`,
-          { ...educationDetails, admission_id: admissionResponse?.admission_id }
-        );
-      console.log(educationResponse)
-
-        if (educationResponse?.status === "success") {
-          setTimeout(() => {
-            history.push("/totalAdmission");
-          }, 1000);
-        }
-      }
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
     } else {
-      const admissionResponse = await postRoute(
-        `api/admission`,
-        admissionDetail
-      );
-      if (admissionResponse?.status === "success") {
-        const educationResponse = await postRoute(`api/education`, {
-          ...educationDetails,
-          admission_id: admissionResponse?.admission_id,
-        });
-        if (educationResponse?.status === "success") {
-          if (createAdmission) {
-            const inquiresData = await deleteById(
-              `api/inquiry/${createAdmission?.id}`
-            );
+      setErrors({});
+      if (isEdit) {
+        
+        const admissionResponse = await editRoute(
+          `api/admission/${admissionDetail?.id}`,
+          admissionDetail
+        );
+        if (admissionResponse?.status === "success") {
+          
+          const educationResponse = await editRoute(
+            `api/education/${educationDetails?.id}`,
+            {
+              ...educationDetails,
+              admission_id: admissionResponse?.admission_id,
+            }
+          );
+          if (educationResponse?.status === "success") {
+            setTimeout(() => {
+              history.push("/totalAdmission");
+            }, 1000);
           }
-          setTimeout(() => {
-            history.push("/totalAdmission");
-          }, 1000);
+        }
+      } else {
+        const admissionResponse = await postRoute(
+          `api/admission`,
+          admissionDetail
+        );
+        if (admissionResponse?.status === "success") {
+          const educationResponse = await postRoute(`api/education`, {
+            ...educationDetails,
+            admission_id: admissionResponse?.admission_id,
+          });
+          if (educationResponse?.status === "success") {
+            if (createAdmission) {
+              const inquiresData = await deleteById(
+                `api/inquiry/${createAdmission?.id}`
+              );
+            }
+            setTimeout(() => {
+              history.push("/totalAdmission");
+            }, 1000);
+          }
         }
       }
     }
@@ -183,6 +345,7 @@ const TotalAdmission = () => {
             setAdmissionDetail={setAdmissionDetail}
             setSelected={setSelected}
             setAdmissionId={setAdmissionId}
+            errors={errors}
           />
         );
       case 2:
@@ -193,6 +356,7 @@ const TotalAdmission = () => {
             educationDetails={educationDetails}
             addmissionId={addmissionId}
             setSelected={setSelected}
+            errors={errors}
           />
         );
       case 3:
@@ -202,6 +366,7 @@ const TotalAdmission = () => {
             setUniversityDetails={setAdmissionDetail}
             setSelected={setSelected}
             setAdmissionId={setAdmissionId}
+            errors={errors}
           />
         );
       case 4:
@@ -212,13 +377,49 @@ const TotalAdmission = () => {
             setFeePaymentDetails={setAdmissionDetail}
             setSelected={setSelected}
             setAdmissionId={setAdmissionId}
+            errors={errors}
           />
         );
       default:
         break;
     }
   };
-
+  const validationFiels = {
+    1: [
+      "name",
+      "email",
+      "contact_no",
+      "alternate_no",
+      "address",
+      "date_of_birth",
+    ],
+    2: [
+      "highest_qualification",
+      "passing_year",
+      "name_of_institute",
+      "percentage_cgpa",
+      "is_employed",
+      "current_company",
+      "current_designation",
+      "current_monthly_salary",
+      "total_experience_years",
+      "country_interested",
+      "visa_type",
+      "past_rejection_country_name",
+      "ielts_score",
+      "telecaller_name",
+    ],
+    3: ["institute_name", "course_detail", "city", "country"],
+    4: [
+      "total_amount",
+      "bank_detail",
+      "remaining_amount",
+      "paid_amount",
+      "amounts",
+    ],
+  };
+  const isErrorPresent = (field) =>
+    validationFiels[field].some((key) => Object.keys(errors).includes(key));
   return (
     <div
       style={{ flex: 1 }}
@@ -250,7 +451,10 @@ const TotalAdmission = () => {
                 className="nav-item"
               >
                 <div
-                  className={`nav-link  ${selected === index + 1 && "active"}`}
+                  //  text-danger
+                  className={`nav-link ${
+                    isErrorPresent(index + 1) && "text-danger"
+                  } ${selected === index + 1 && "active"}`}
                 >
                   {tab}
                 </div>
