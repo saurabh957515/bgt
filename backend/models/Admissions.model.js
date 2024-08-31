@@ -43,7 +43,7 @@ class Admission {
       throw error;
     }
   }
-  static async updateByID(newInquiry, id) {
+  static async updateByID(newAdmission, id) {
     try {
       const query = `
         UPDATE admission 
@@ -65,7 +65,7 @@ class Admission {
         total_amount,
         course_detail,
         bank_detail_id,
-      } = newInquiry;
+      } = newAdmission;
       const result = await sql(query, [
         name,
         email,

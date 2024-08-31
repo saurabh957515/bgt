@@ -1,5 +1,6 @@
 import React from "react";
 import PageHeader from "../../components/PageHeader";
+import FeeLists from "./partials/FeeLists";
 
 const Fee = () => {
   return (
@@ -10,7 +11,7 @@ const Fee = () => {
       }}
     >
       <div>
-        <div className="container-fluid">
+        <div className="sticky container-fluid">
           <PageHeader
             HeaderText="Fees"
             Breadcrumb={[
@@ -18,7 +19,7 @@ const Fee = () => {
               { name: "Show", navigate: "" },
             ]}
           />
-          <ul className="nav nav-tabs"></ul>
+          <FeeLists/>
         </div>
       </div>
     </div>
