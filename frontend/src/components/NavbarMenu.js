@@ -164,7 +164,7 @@ class NavbarMenu extends React.Component {
           >
             <Toast.Header className="mb-0 toast-info justify-content-between">
               <strong className="me-auto">
-                {toastMessage ? toastMessage : "Welcome to RR Overseas"}
+                {toastMessage ? toastMessage : "Welcome to Inquiry Manager"}
               </strong>
             </Toast.Header>
           </Toast>
