@@ -1,96 +1,193 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/logo-white.svg";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import useSignup from "../../hooks/useSignup";
 
-class Registration extends React.Component {
-  componentDidMount(){
-    document.body.classList.remove("theme-cyan");
-    document.body.classList.remove("theme-purple");
-    document.body.classList.remove("theme-blue");
-    document.body.classList.remove("theme-green");
-    document.body.classList.remove("theme-orange");
-    document.body.classList.remove("theme-blush");
+const Registration = () => {
+  const history = useHistory();
+  const [data, setData] = useState({
+    full_name: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+    email: "",
+  });
+  const [errorMessage, setErrorMessage] = useState([]);
+  const [errors, setErrors] = useState({});
+  const { signup, loading } = useSignup();
+  useEffect(() => {
+    document.body.classList.remove(
+      "theme-cyan",
+      "theme-purple",
+      "theme-blue",
+      "theme-green",
+      "theme-orange",
+      "theme-blush"
+    );
+  }, []);
+
+  function handleInputErrors({
+    password,
+    confirmPassword,
+    email,
+  }) {
+    const error = {};
+    if (password !== confirmPassword) {
+      error["confirmPassword"] = "Passwords do not match";
+    }
+
+    if (password.length < 6) {
+      error["password"] = "Password must be at least 6 characters";
+    }
+    return error;
   }
-  render() {
-    return (
-      <div className="theme-cyan">
-        <div >
-          <div className="vertical-align-wrap">
-            <div className="vertical-align-middle auth-main">
-              <div className="auth-box">
-                <div className="top">
-                  <img src={Logo} alt="Lucid" style={{ height: "40px", margin: "10px" }} />
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    const isError = handleInputErrors(data);
+    if (Object?.keys(isError)?.length > 0) {
+      setErrors(isError);
+      return;
+    }
+    setErrors({});
+    const isSignup = await signup(data);
+    if (!isSignup?.error) {
+      history.push("/login");
+      setErrorMessage("");
+    } else {
+      setErrorMessage(isSignup?.error);
+    }
+  };
+  return (
+    <div className="theme-cyan">
+      <div>
+        <div className="vertical-align-wrap">
+          <div className="vertical-align-middle auth-main">
+            <div className="auth-box">
+              <div className="top">
+                <img
+                  src={Logo}
+                  alt="Lucid"
+                  style={{ height: "40px", margin: "10px" }}
+                />
+              </div>
+              <div className="card">
+                <div className="header">
+                  <p className="lead">Create an account</p>
                 </div>
-                <div className="card">
-                  <div className="header">
-                    <p className="lead">Create an account</p>
-                  </div>
-                  <div className="body">
-                    <form
-                      className="form-auth-small ng-untouched ng-pristine ng-valid"
-                      
-                    >
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Email
-                            </label>
-                        <input
-                          className="form-control"
-                          id="signup-email"
-                          placeholder="Your email"
-                          type="email"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="control-label sr-only" >
-                          Password
-                            </label>
-                        <input
-                          className="form-control"
-                          id="signup-password"
-                          placeholder="Password"
-                          type="password"
-                        />
-                      </div>
-                      <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={() => { this.props.history.push("login") }}>
-                        REGISTER
-                        </button>
-                      <div className="bottom">
-                        <span className="helper-text">
-                          Already have an account?{" "}
-                          <a href="login">Login</a>
-                        </span>
-                      </div>
-                    </form>
-                    <div className="separator-linethrough">
-                      <span>OR</span>
+                <div className="body">
+                  <form
+                    className="form-auth-small ng-untouched ng-pristine ng-valid"
+                    onSubmit={handleRegister}
+                  >
+                    <div className="form-group">
+                      <label className="sr-only control-label">username</label>
+                      <input
+                        className="form-control"
+                        id="signup-email"
+                        placeholder="Full name"
+                        type="text"
+                        required="required"
+                        value={data?.full_name}
+                        onChange={(e) =>
+                          setData((pre) => ({
+                            ...pre,
+                            full_name: e.target.value,
+                          }))
+                        }
+                      />
                     </div>
-                    <button className="btn btn-signin-social">
-                      <i className="fa fa-facebook-official facebook-color"></i> Sign in with
-                        Facebook
-                        </button>
-                    <button className="btn btn-signin-social">
-                      <i className="fa fa-twitter twitter-color"></i> Sign in with Twitter
-                        </button>
-                  </div>
+                    <div className="form-group">
+                      <label className="sr-only control-label">username</label>
+                      <input
+                        className="form-control"
+                        id="signup-email"
+                        placeholder="Username"
+                        type="text"
+                        required="required"
+                        value={data?.username}
+                        onChange={(e) =>
+                          setData((pre) => ({
+                            ...pre,
+                            username: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="sr-only control-label">Email</label>
+                      <input
+                        className="form-control"
+                        id="signup-email"
+                        placeholder="Your email"
+                        type="email"
+                        required="required"
+                        value={data?.email}
+                        onChange={(e) =>
+                          setData((pre) => ({ ...pre, email: e.target.value }))
+                        }
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="sr-only control-label">passowrd</label>
+                      <input
+                        className="form-control"
+                        id="signup-email"
+                        placeholder="Passowrd"
+                        type="text"
+                        required="required"
+                        value={data?.password}
+                        onChange={(e) =>
+                          setData((pre) => ({
+                            ...pre,
+                            password: e.target.value,
+                          }))
+                        }
+                      />
+                      <p className="mt-2 text-danger">{errors["passowrd"]}</p>
+                    </div>
+                    <div className="form-group">
+                      <label className="sr-only control-label">
+                        confirm password
+                      </label>
+                      <input
+                        className="form-control"
+                        id="signup-password"
+                        placeholder="Password"
+                        type="password"
+                        required="required"
+                        value={data?.confirmPassword}
+                        onChange={(e) =>
+                          setData((pre) => ({
+                            ...pre,
+                            confirmPassword: e.target.value,
+                          }))
+                        }
+                      />
+                      <p className="mt-2 text-danger">
+                        {errors["confirmPassword"]}
+                      </p>
+                    </div>
+                    <button
+                      className="btn btn-primary btn-lg btn-block"
+                      type="submit"
+                    >
+                      REGISTER
+                    </button>
+                    <div className="bottom">
+                      <span className="helper-text">
+                        Already have an account? <Link to="/login">Login</Link>
+                      </span>
+                    </div>
+                  </form>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
       </div>
-    );
-  }
-}
-
-Registration.propTypes = {
+    </div>
+  );
 };
 
-const mapStateToProps = ({ loginReducer }) => ({
-  email: loginReducer.email,
-  password: loginReducer.password
-});
-
-export default connect(mapStateToProps, {
-})(Registration);
+export default Registration;

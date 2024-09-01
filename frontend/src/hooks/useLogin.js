@@ -28,7 +28,6 @@ const useLogin = () => {
       dispatch(onLoggedin(true));
       return true;
     } catch (error) {
-      toast.error(error.message);
       return error;
     } finally {
       setLoading(false);

@@ -60,3 +60,20 @@ export async function sendMassMessage(req, res) {
       .send({ success: false, message: "Failed to send mass messages" });
   }
 }
+
+export async function getMessages(req, res) {
+    const { phoneNumber } = req.params; // The phone number to filter messages by
+  
+    try {
+      const messages = await client.messages.list({
+        to: `whatsapp:${phoneNumber}`, // Filter messages to a specific number
+        // You can also filter by 'from' if needed
+        // from: `whatsapp:${phoneNumber}`
+      });
+  
+      res.status(200).send({ success: true, messages });
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      res.status(500).send({ success: false, message: 'Failed to fetch messages' });
+    }
+  }
