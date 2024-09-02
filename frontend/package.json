@@ -30,6 +30,7 @@
     "font-awesome": "^4.7.0",
     "globalize": "^1.4.2",
     "heroicons": "^2.1.5",
+    "inquiry-management": "file:..",
     "jodit-react": "^1.0.74",
     "leaflet": "^1.6.0",
     "lodash": "^4.17.21",
