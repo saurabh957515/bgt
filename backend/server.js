@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
-import messageRoutes from './routes/message.routes.js'
+import messageRoutes from "./routes/message.routes.js";
 import admissionRoutes from "./routes/admission.routes.js";
 import inquiryRoutes from "./routes/inquiry.routes.js";
 import bankRoutes from "./routes/bank.routes.js";
@@ -16,16 +16,16 @@ const PORT = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-app.use('/api/message', messageRoutes);
+app.use("/api/message", messageRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/inquiry", inquiryRoutes);
 app.use("/api/bank", bankRoutes);
 app.use("/api/admission", admissionRoutes);
 app.use("/api/education", educationRoutes);
-// app.use(express.static(path.join(__dirname, "/frontend/build")));
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
-// });
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
+});
 app.listen(PORT, async () => {
   console.log(`Server Running on port ${PORT}`);
 });
