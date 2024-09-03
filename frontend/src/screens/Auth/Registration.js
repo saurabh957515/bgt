@@ -13,7 +13,6 @@ const Registration = () => {
     confirmPassword: "",
     email: "",
   });
-  const [errorMessage, setErrorMessage] = useState([]);
   const [errors, setErrors] = useState({});
   const { signup, loading } = useSignup();
   useEffect(() => {
@@ -27,11 +26,7 @@ const Registration = () => {
     );
   }, []);
 
-  function handleInputErrors({
-    password,
-    confirmPassword,
-    email,
-  }) {
+  function handleInputErrors({ password, confirmPassword, email }) {
     const error = {};
     if (password !== confirmPassword) {
       error["confirmPassword"] = "Passwords do not match";
@@ -49,13 +44,13 @@ const Registration = () => {
       setErrors(isError);
       return;
     }
-    setErrors({});
+
     const isSignup = await signup(data);
     if (!isSignup?.error) {
       history.push("/login");
-      setErrorMessage("");
+      setErrors({});
     } else {
-      setErrorMessage(isSignup?.error);
+      setErrors(isSignup?.error);
     }
   };
   return (
@@ -113,6 +108,7 @@ const Registration = () => {
                           }))
                         }
                       />
+                      <p className="mt-2 text-danger">{errors["username"]}</p>
                     </div>
                     <div className="form-group">
                       <label className="sr-only control-label">Email</label>
@@ -127,6 +123,7 @@ const Registration = () => {
                           setData((pre) => ({ ...pre, email: e.target.value }))
                         }
                       />
+                      <p className="mt-2 text-danger">{errors["email"]}</p>
                     </div>
                     <div className="form-group">
                       <label className="sr-only control-label">passowrd</label>

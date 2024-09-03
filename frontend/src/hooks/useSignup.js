@@ -10,13 +10,6 @@ const useSignup = () => {
     confirmPassword,
     email,
   }) => {
-console.log(
-  full_name,
-  username,
-  password,
-  confirmPassword,
-  email,
-)
     setLoading(true);
     try {
       const res = await fetch("api/auth/signup", {
@@ -32,10 +25,7 @@ console.log(
       });
 
       const data = await res.json();
-      if (data.error) {
-        return data.error;
-      }
-      return true;
+      return data
     } catch (error) {
     } finally {
       setLoading(false);

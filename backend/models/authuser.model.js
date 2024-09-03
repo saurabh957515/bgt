@@ -24,11 +24,11 @@ class User {
       const query = `SELECT * FROM users WHERE ${field} = ?`;
       const [rows] = await sql(query, [value]);
       if (rows) {
-        return rows; // Return the first matching user
-      } 
-      return null; // Return null if no user is found
+        return rows;
+      }
+      return null;
     } catch (error) {
-      throw error; // Propagate the error
+      throw error;
     }
   }
 

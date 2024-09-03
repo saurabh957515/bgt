@@ -8,11 +8,20 @@ export const signup = async (req, res) => {
     if (password !== confirmPassword) {
       return res.status(400).json({ error: "Passwords don't match" });
     }
-    const users = await User.findByUsername(username);
+    const errors = {};
+    const users = await User.findBy("username", username);
+    const emailUser = await User.findBy("email", email);
+
     if (users) {
-      return res.status(400).json({ error: "Username already exists" });
+      errors["username"] = "Username already exists";
     }
-    // HASH PASSWORD HERE
+
+    if (emailUser) {
+      errors["email"] = "Email already exists";
+    }
+    if (users || emailUser) {
+      return res.status(400).json({ error: errors });
+    }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
