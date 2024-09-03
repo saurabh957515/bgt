@@ -8,9 +8,8 @@ export const signup = async (req, res) => {
     const users = await User.findBy("username", username);
     const emailUser = await User.findBy("email", email);
     if (password !== confirmPassword) {
-      errors["password"] = "Passwords don't match";
-    }
-    if (password?.length < 7) {
+      errors["confirmPassword"] = "Passwords don't match";
+    } else if (password?.length < 7) {
       errors["password"] = "Password must be at least 6 characters";
     }
     if (users) {
@@ -20,6 +19,7 @@ export const signup = async (req, res) => {
     if (emailUser) {
       errors["email"] = "Email already exists";
     }
+    console.log(password, errors);
     if (Object.keys(errors)?.length > 0) {
       return res.status(400).json({ error: errors });
     }

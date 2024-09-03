@@ -124,7 +124,7 @@ const Registration = () => {
                           }))
                         }
                       />
-                      <p className="mt-2 text-danger">{errors["passowrd"]}</p>
+                      <p className="mt-2 text-danger">{errors["password"]}</p>
                     </div>
                     <div className="form-group">
                       <label className="sr-only control-label">
