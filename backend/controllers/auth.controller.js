@@ -9,7 +9,7 @@ export const signup = async (req, res) => {
     const emailUser = await User.findBy("email", email);
     if (password !== confirmPassword) {
       errors["confirmPassword"] = "Passwords don't match";
-    } else if (password?.length < 7) {
+    } else if (password?.length < 6) {
       errors["password"] = "Password must be at least 6 characters";
     }
     if (users) {
