@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Logo from "../../assets/images/logo-white.svg";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import useSignup from "../../hooks/useSignup";
@@ -26,25 +26,8 @@ const Registration = () => {
     );
   }, []);
 
-  function handleInputErrors({ password, confirmPassword, email }) {
-    const error = {};
-    if (password !== confirmPassword) {
-      error["confirmPassword"] = "Passwords do not match";
-    }
-
-    if (password.length < 6) {
-      error["password"] = "Password must be at least 6 characters";
-    }
-    return error;
-  }
   const handleRegister = async (e) => {
     e.preventDefault();
-    const isError = handleInputErrors(data);
-    if (Object?.keys(isError)?.length > 0) {
-      setErrors(isError);
-      return;
-    }
-
     const isSignup = await signup(data);
     if (!isSignup?.error) {
       history.push("/login");

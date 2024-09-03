@@ -1,17 +1,18 @@
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 import User from "../models/authuser.model.js";
-// check const uesr = new user() why not working;
 export const signup = async (req, res) => {
   const { password, username, confirmPassword, email, full_name } = req.body;
   try {
-    if (password !== confirmPassword) {
-      return res.status(400).json({ error: "Passwords don't match" });
-    }
     const errors = {};
     const users = await User.findBy("username", username);
     const emailUser = await User.findBy("email", email);
-
+    if (password !== confirmPassword) {
+      errors["password"] = "Passwords don't match";
+    }
+    if (password?.length < 7) {
+      errors["password"] = "Password must be at least 6 characters";
+    }
     if (users) {
       errors["username"] = "Username already exists";
     }
@@ -19,7 +20,7 @@ export const signup = async (req, res) => {
     if (emailUser) {
       errors["email"] = "Email already exists";
     }
-    if (users || emailUser) {
+    if (Object.keys(errors)?.length > 0) {
       return res.status(400).json({ error: errors });
     }
     const salt = await bcrypt.genSalt(10);
