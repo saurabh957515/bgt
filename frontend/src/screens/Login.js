@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import Logo from "../assets/images/logo-white.svg";
 import { updateEmail, updatePassword, onLoggedin } from "../actions";
@@ -12,11 +12,16 @@ const Login = ({ history }) => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isLoggedIn = await login(userName, password);
     if (!isLoggedIn?.error) {
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: { user: isLoggedIn?.username, token: isLoggedIn?.id },
+      });
       history.push("/dashboard");
       setErrorMessage("");
     } else {

@@ -24,6 +24,7 @@ import Avatar2 from "../assets/images/xs/avatar2.jpg";
 import Avatar1 from "../assets/images/xs/avatar1.jpg";
 import Avatar3 from "../assets/images/xs/avatar3.jpg";
 import Logout from "../screens/Logout";
+import AuthUser from "./AuthUser";
 
 class NavbarMenu extends React.Component {
   state = {
@@ -423,7 +424,8 @@ class NavbarMenu extends React.Component {
                   id="dropdown-basic"
                   className="user-name"
                 >
-                  <strong>Alizee Thomas</strong>
+                  <AuthUser/>
+               
                 </Dropdown.Toggle>
 
                 {/* <Dropdown.Menu className="dropdown-menu-right account">

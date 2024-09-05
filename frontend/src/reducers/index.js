@@ -6,6 +6,7 @@ import demographicReducer from "./demographicReducer";
 import ioTReducer from "./ioTReducer";
 import mailInboxReducer from "./mailInboxReducer";
 import UIElementsReducer from "./UIElementsReducer";
+import authReducer from "./authReducer";
 
 export default combineReducers({
   loginReducer,
@@ -15,4 +16,5 @@ export default combineReducers({
   ioTReducer: ioTReducer,
   mailInboxReducer: mailInboxReducer,
   UIElementsReducer: UIElementsReducer,
+  auth: authReducer
 });

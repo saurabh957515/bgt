@@ -26,7 +26,7 @@ const useLogin = () => {
       }
       localStorage.setItem("login-user", JSON.stringify(data));
       dispatch(onLoggedin(true));
-      return true;
+      return data;
     } catch (error) {
       return error;
     } finally {
