@@ -15,7 +15,7 @@ const inquiryObject = {
   date_of_birth: "2001-09-03",
   interested_country: "USA",
   course_detail: "",
-  city:''
+  city: "",
 };
 
 const Form = ({ inquiryEdit }) => {
@@ -48,10 +48,10 @@ const Form = ({ inquiryEdit }) => {
       const response = isEdit
         ? await editRoute(`/api/inquiry/${newInquiry?.id}`, newInquiry)
         : await postRoute("/api/inquiry", newInquiry);
-
-      if (response?.status) {
-        history.push("/inquiry");
-      }
+     console.log(response)
+      // if (response?.status) {
+      //   history.push("/inquiry");
+      // }
     } catch (error) {
       console.error("Submission error:", error);
     }
@@ -73,7 +73,6 @@ const Form = ({ inquiryEdit }) => {
                   <input
                     className="form-control"
                     value={inquiry?.name}
-                    required
                     onChange={(e) => handleInquiry("name", e.target.value)}
                   />
                 </div>
@@ -84,7 +83,6 @@ const Form = ({ inquiryEdit }) => {
                   <input
                     className="form-control"
                     value={inquiry?.contact_no}
-                    required
                     type="number"
                     onChange={(e) =>
                       handleInquiry("contact_no", e.target.value)
@@ -98,7 +96,6 @@ const Form = ({ inquiryEdit }) => {
                   <textarea
                     className="form-control"
                     value={inquiry?.address}
-                    required
                     onChange={(e) => handleInquiry("address", e.target.value)}
                   />
                 </div>
@@ -109,7 +106,6 @@ const Form = ({ inquiryEdit }) => {
                   <input
                     className="form-control"
                     value={inquiry?.email}
-                    required
                     type="email"
                     onChange={(e) => handleInquiry("email", e.target.value)}
                   />
@@ -121,7 +117,6 @@ const Form = ({ inquiryEdit }) => {
                   <input
                     className="form-control"
                     value={inquiry?.alternate_no}
-                    required
                     type="number"
                     onChange={(e) =>
                       handleInquiry("alternate_no", e.target.value)
@@ -133,7 +128,6 @@ const Form = ({ inquiryEdit }) => {
                   <input
                     className="form-control"
                     value={inquiry?.course_detail}
-                    required
                     type="text"
                     onChange={(e) =>
                       handleInquiry("course_detail", e.target.value)
@@ -145,7 +139,6 @@ const Form = ({ inquiryEdit }) => {
                   <input
                     className="form-control"
                     value={inquiry?.city}
-                    required
                     type="text"
                     onChange={(e) => handleInquiry("city", e.target.value)}
                   />

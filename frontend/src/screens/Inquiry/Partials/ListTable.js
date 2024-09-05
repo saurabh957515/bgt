@@ -10,7 +10,7 @@ const ListTable = () => {
   const history = useHistory();
   const getData = async () => {
     const inquiresData = await getRoute("/api/inquiry");
-    setInquiryList(inquiresData);
+    setInquiryList(inquiresData?.data)
   };
 
   useEffect(() => {
