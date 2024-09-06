@@ -11,6 +11,7 @@ const maxDateOfBirth = new Date(
   currentDate.getMonth(),
   currentDate.getDate()
 ); // At least 10 years ago
+
 const inquirySchema = Joi.object({
   name: Joi.string().max(255).required().messages({
     "string.empty": "Name is required.",
@@ -21,27 +22,27 @@ const inquirySchema = Joi.object({
     "string.email": "Invalid email format.",
   }),
   contact_no: Joi.string()
-    .pattern(/^[0-9]+$/)
+    .pattern(/^[0-9]+$/) // Ensure only digits
     .max(12)
     .required()
     .messages({
       "string.empty": "Contact number is required.",
-      "string.pattern.base": "Invalid contact number (must be numeric).",
+      "string.pattern.base": "Invalid contact number (must be numeric and not negative).",
       "string.max": "Contact number cannot exceed 12 characters.",
     }),
   alternate_no: Joi.string()
-    .pattern(/^[0-9]*$/)
+    .pattern(/^[0-9]*$/) // Ensure only digits or empty
     .max(12)
     .optional()
     .messages({
       "string.empty": "Alternate number is required.",
-      "string.pattern.base": "Invalid alternate number (must be numeric).",
+      "string.pattern.base": "Invalid alternate number (must be numeric and not negative).",
       "string.max": "Alternate number cannot exceed 12 characters.",
     }),
-    address: Joi.string().max(500).required().messages({
-      "string.empty": "Address is required.",
-      "string.max": "Address cannot exceed 500 characters.",
-    }),
+  address: Joi.string().max(500).required().messages({
+    "string.empty": "Address is required.",
+    "string.max": "Address cannot exceed 500 characters.",
+  }),
   date_of_birth: Joi.date()
     .min(minDateOfBirth)
     .max(maxDateOfBirth)
@@ -52,18 +53,18 @@ const inquirySchema = Joi.object({
       "date.max": "Date of birth must be at least 10 years ago.",
       "any.required": "Date of birth is required.",
     }),
-    interested_country: Joi.string().max(255).required().messages({
-      "string.empty": "Interested country is required.",
-      "string.max": "Interested country cannot exceed 255 characters.",
-    }),
-    course_detail: Joi.string().max(255).required().messages({
-      "string.empty": "Course detail is required.",
-      "string.max": "Course detail cannot exceed 255 characters.",
-    }),
-    city: Joi.string().max(100).required().messages({
-      "string.empty": "City is required.",
-      "string.max": "City cannot exceed 100 characters.",
-    }),
+  interested_country: Joi.string().max(255).required().messages({
+    "string.empty": "Interested country is required.",
+    "string.max": "Interested country cannot exceed 255 characters.",
+  }),
+  course_detail: Joi.string().max(255).required().messages({
+    "string.empty": "Course detail is required.",
+    "string.max": "Course detail cannot exceed 255 characters.",
+  }),
+  city: Joi.string().max(100).required().messages({
+    "string.empty": "City is required.",
+    "string.max": "City cannot exceed 100 characters.",
+  }),
 });
 
 export async function createInquiry(req, res) {

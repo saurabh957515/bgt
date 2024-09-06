@@ -10,6 +10,7 @@ const ListTable = () => {
   const history = useHistory();
   const getData = async () => {
     const inquiresData = await getRoute("/api/inquiry");
+    console.log(inquiresData?.data)
     setInquiryList(inquiresData?.data)
   };
 
@@ -44,7 +45,7 @@ const ListTable = () => {
             <table className="table table-hover">
               <thead>
                 <tr>
-                  <th style={{ textAlign: "center" }}>#</th>
+                  <th style={{ textAlign: "center" }}>No</th>
                   <th style={{ textAlign: "center" }}>Country</th>
                   <th style={{ textAlign: "center" }}>NAME</th>
                   <th style={{ textAlign: "center" }}>EMAIL</th>

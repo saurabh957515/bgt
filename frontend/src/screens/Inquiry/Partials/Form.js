@@ -23,6 +23,7 @@ const Form = ({ inquiryEdit }) => {
   const history = useHistory();
   const [inquiry, setInquiry] = useState(inquiryObject);
   const [isEdit, setIsEdit] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (inquiryEdit?.id) {
@@ -48,10 +49,11 @@ const Form = ({ inquiryEdit }) => {
       const response = isEdit
         ? await editRoute(`/api/inquiry/${newInquiry?.id}`, newInquiry)
         : await postRoute("/api/inquiry", newInquiry);
-     console.log(response)
-      // if (response?.status) {
-      //   history.push("/inquiry");
-      // }
+      if (response?.errors) {
+        setErrors(response?.errors);
+      } else if (response?.data) {
+        history.push("/inquiry");
+      }
     } catch (error) {
       console.error("Submission error:", error);
     }
@@ -68,97 +70,125 @@ const Form = ({ inquiryEdit }) => {
             <div className="body">
               <div className="row">
                 {/* Name */}
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-4">
                   <label>Name</label>
                   <input
+                    required
                     className="form-control"
                     value={inquiry?.name}
                     onChange={(e) => handleInquiry("name", e.target.value)}
                   />
+                  <p className="mt-2 text-danger">{errors["name"]}</p>
                 </div>
-
-                {/* Contact No */}
-                <div className="form-group col-md-6">
-                  <label>Contact No</label>
-                  <input
-                    className="form-control"
-                    value={inquiry?.contact_no}
-                    type="number"
-                    onChange={(e) =>
-                      handleInquiry("contact_no", e.target.value)
-                    }
-                  />
-                </div>
-
-                {/* Address */}
-                <div className="form-group col-md-6">
-                  <label>Address</label>
-                  <textarea
-                    className="form-control"
-                    value={inquiry?.address}
-                    onChange={(e) => handleInquiry("address", e.target.value)}
-                  />
-                </div>
-
-                {/* Email */}
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-4">
                   <label>Email</label>
                   <input
+                    required
                     className="form-control"
                     value={inquiry?.email}
                     type="email"
                     onChange={(e) => handleInquiry("email", e.target.value)}
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["email"]}</p>
+                </div>
+                {/* Contact No */}
+                <div className="form-group col-md-4">
+                  <label>Contact No</label>
+                  <input
+                    required
+                    className="form-control"
+                    value={inquiry?.contact_no}
+                    type="number"
+                    min="1"
+                    maxLength="12"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\+?[0-9]*$/.test(value)) {
+                        handleInquiry("contact_no", value.slice(0, 12));
+                      }
+                    }}
                   />
+                  <p className="mt-2 text-danger">{errors["contact_no"]}</p>
                 </div>
 
+                {/* Address */}
+                <div className="form-group col-md-4">
+                  <label>Address</label>
+                  <textarea
+                    required
+                    className="form-control"
+                    value={inquiry?.address}
+                    onChange={(e) => handleInquiry("address", e.target.value)}
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["address"]}</p>
+                </div>
+
+                {/* Email */}
+
                 {/* Alternate No */}
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-4">
                   <label>Alternate No</label>
                   <input
+                    required
                     className="form-control"
                     value={inquiry?.alternate_no}
-                    type="number"
-                    onChange={(e) =>
-                      handleInquiry("alternate_no", e.target.value)
-                    }
-                  />
+                    type="text"
+                    maxLength="12"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\+?[0-9]*$/.test(value)) {
+                        handleInquiry("alternate_no", value.slice(0, 12));
+                      }
+                    }}
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["alternate_no"]}</p>
                 </div>
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-4">
                   <label>Course Detail</label>
                   <input
+                    required
                     className="form-control"
                     value={inquiry?.course_detail}
                     type="text"
                     onChange={(e) =>
                       handleInquiry("course_detail", e.target.value)
                     }
-                  />
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["course_detail"]}</p>
                 </div>
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-4">
                   <label>City</label>
                   <input
+                    required
                     className="form-control"
                     value={inquiry?.city}
                     type="text"
                     onChange={(e) => handleInquiry("city", e.target.value)}
-                  />
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["city"]}</p>
                 </div>
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-4">
                   <label>Country Interested</label>
                   <ReactSelect
                     options={Object.entries(countries)?.map(([key, value]) => ({
                       label: value,
                       value: key,
                     }))}
+                    required
                     value={inquiry?.interested_country || ""}
                     onChange={(e) =>
-                      handleInquiry("interested_country", e.value)
+                      
+                      {
+                        handleInquiry("interested_country", e.value)}
                     }
-                  />
+                  />{" "}
+                  <p className="mt-2 text-danger">
+                    {errors["interested_country"]}
+                  </p>
                 </div>
 
                 {/* Date of Birth */}
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-4">
                   <label>Date Of Birth</label>
                   <Flatpickr
                     style={{
@@ -168,12 +198,14 @@ const Form = ({ inquiryEdit }) => {
                       boxSizing: "border-box",
                       padding: "0.5rem",
                     }}
+                    required
                     value={inquiry?.date_of_birth}
                     onChange={(data) => {
                       const newDate = moment(data[0]).format("YYYY-MM-DD");
                       handleInquiry("date_of_birth", newDate);
                     }}
-                  />
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["date_of_birth"]}</p>
                 </div>
               </div>
               <button className="btn btn-primary" type="submit">
