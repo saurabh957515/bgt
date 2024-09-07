@@ -16,6 +16,7 @@ const CreateInquiry = ({ hisotry }) => {
       <div>
         <div className="container-fluid">
           <PageHeader
+          
             HeaderText={inquiryData?.name ? "Edit Inquiry" : "Create Inquiry"}
             Breadcrumb={[
               { name: "Inquiry", navigate: "" },

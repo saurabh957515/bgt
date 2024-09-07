@@ -193,7 +193,7 @@ const TotalAdmission = () => {
   const createAdmission = location.state?.makeAdmission;
   useEffect(() => {
     const getBankOption = async () => {
-      const data = await getRoute("/api/bank", "", false);
+      const { data ,error } = await getRoute("/api/bank", "", false);
       setBankOptions(
         data?.map((bank) => ({
           label: bank?.bank_name,

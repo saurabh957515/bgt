@@ -12,7 +12,7 @@ class MailInbox extends React.Component {
   render() {
     const { isTagDropDown, isMoreDropDown } = this.props;
     return (
-      <div className="row clearfix">
+      <div className="clearfix row">
         <div className="col-lg-12">
           <div className="card">
             <div className="mobile-left">
@@ -49,7 +49,7 @@ class MailInbox extends React.Component {
                     <li className="active">
                       <Link to="#">
                         <i className="icon-envelope"></i>Inbox
-                        <span className="badge badge-primary float-right">
+                        <span className="float-right badge badge-primary">
                           6
                         </span>
                       </Link>
@@ -62,7 +62,7 @@ class MailInbox extends React.Component {
                     <li>
                       <Link to="#">
                         <i className="icon-envelope-open"></i>Draft
-                        <span className="badge badge-info float-right">3</span>
+                        <span className="float-right badge badge-info">3</span>
                       </Link>
                     </li>
                     <li>
@@ -73,7 +73,7 @@ class MailInbox extends React.Component {
                     <li>
                       <Link to="#">
                         <i className="icon-star"></i>Starred
-                        <span className="badge badge-warning float-right">
+                        <span className="float-right badge badge-warning">
                           6
                         </span>
                       </Link>
@@ -81,7 +81,7 @@ class MailInbox extends React.Component {
                     <li>
                       <Link to="#">
                         <i className="icon-trash"></i>Trash
-                        <span className="badge badge-danger float-right">
+                        <span className="float-right badge badge-danger">
                           9
                         </span>
                       </Link>
@@ -97,7 +97,7 @@ class MailInbox extends React.Component {
                     <li className="active">
                       <Link to="#">
                         <i className="fa fa-circle text-danger"></i>Web Design
-                        <span className="badge badge-primary float-right">
+                        <span className="float-right badge badge-primary">
                           5
                         </span>
                       </Link>
@@ -140,7 +140,7 @@ class MailInbox extends React.Component {
                     </div>
                   </form>
                 </div>
-                <div className="mail-action clearfix">
+                <div className="clearfix mail-action">
                   <div className="pull-left">
                     <div className="fancy-checkbox d-inline-block">
                       <label>
@@ -152,7 +152,7 @@ class MailInbox extends React.Component {
                         <span></span>
                       </label>
                     </div>
-                    <div className="btn-group mr-1">
+                    <div className="mr-1 btn-group">
                       <Link to="#" className="btn btn-outline-secondary btn-sm hidden-sm">
                         Refresh
                       </Link>
@@ -265,7 +265,7 @@ class MailInbox extends React.Component {
                       </Dropdown>
                     </div>
                   </div>
-                  <div className="pull-right ml-auto">
+                  <div className="ml-auto pull-right">
                     <div className="pagination-email d-flex">
                       <p>1-50/295</p>
                       <div className="btn-group m-l-20">
@@ -304,7 +304,7 @@ class MailInbox extends React.Component {
                       <div className="mail-detail-right">
                         <h6 className="sub">
                           <Link to="#" className="mail-detail-expand">Herman Beck</Link>{" "}
-                          <span className="badge badge-default mb-0">
+                          <span className="mb-0 badge badge-default">
                             Marketing
                           </span>
                         </h6>
@@ -316,7 +316,7 @@ class MailInbox extends React.Component {
                         <span className="time">23 Jun</span>
                       </div>
                       <div className="hover-action">
-                        <Link to="#" className="btn btn-warning mr-2">
+                        <Link to="#" className="mr-2 btn btn-warning">
                           <i className="fa fa-archive"></i>
                         </Link>
                         <button
@@ -357,7 +357,7 @@ class MailInbox extends React.Component {
                         </span>
                       </div>
                       <div className="hover-action">
-                        <Link to="#" className="btn btn-warning mr-2">
+                        <Link to="#" className="mr-2 btn btn-warning">
                           <i className="fa fa-archive"></i>
                         </Link>
                         <button
@@ -397,7 +397,7 @@ class MailInbox extends React.Component {
                         <span className="time">20 Jun</span>
                       </div>
                       <div className="hover-action">
-                        <Link to="#" className="btn btn-warning mr-2">
+                        <Link to="#" className="mr-2 btn btn-warning">
                           <i className="fa fa-archive"></i>
                         </Link>
                         <button
@@ -436,7 +436,7 @@ class MailInbox extends React.Component {
                         <span className="time">14 Jun</span>
                       </div>
                       <div className="hover-action">
-                        <Link to="#" className="btn btn-warning mr-2">
+                        <Link to="#" className="mr-2 btn btn-warning">
                           <i className="fa fa-archive"></i>
                         </Link>
                         <button
@@ -480,7 +480,7 @@ class MailInbox extends React.Component {
                         </span>
                       </div>
                       <div className="hover-action">
-                        <Link to="#" className="btn btn-warning mr-2">
+                        <Link to="#" className="mr-2 btn btn-warning">
                           <i className="fa fa-archive"></i>
                         </Link>
                         <button
@@ -520,7 +520,7 @@ class MailInbox extends React.Component {
                         <span className="time">29 May</span>
                       </div>
                       <div className="hover-action">
-                        <Link to="#" className="btn btn-warning mr-2">
+                        <Link to="#" className="mr-2 btn btn-warning">
                           <i className="fa fa-archive"></i>
                         </Link>
                         <button
@@ -536,7 +536,7 @@ class MailInbox extends React.Component {
                   </ul>
                 </div>
                 <div className="mail-detail-full d-none" id="mail-detail-open">
-                  <div className="mail-action clearfix">
+                  <div className="clearfix mail-action">
                     <div className="pull-left">
                       <div className="fancy-checkbox d-inline-block">
                         <label>
@@ -595,7 +595,7 @@ class MailInbox extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <div className="pull-right ml-auto">
+                    <div className="ml-auto pull-right">
                       <Link to="#" className="mail-back btn btn-outline-secondary btn-sm">
                         <i className="fa fa-close"></i>
                       </Link>
@@ -617,13 +617,13 @@ class MailInbox extends React.Component {
                           <Link to="#" className="text-default">
                             info@thememakker.com
                           </Link>{" "}
-                          <span className="text-muted text-sm float-right">
+                          <span className="float-right text-sm text-muted">
                             12:48, 23.06.2018
                           </span>
                         </p>
                         <p className="mb-0">
                           <strong className="text-muted m-r-5">To:</strong>Me{" "}
-                          <small className="text-muted float-right">
+                          <small className="float-right text-muted">
                             <i className="zmdi zmdi-attachment m-r-5"></i>(2
                             files, 89.2 KB)
                           </small>

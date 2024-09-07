@@ -31,7 +31,7 @@ class Inquiry {
     try {
       const query = `
         UPDATE inquiry 
-        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,course_detail = ?,city = ?, interested_country = ?
+        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,course_detail = ?,city = ?, interested_country = ? ,telecaller_name = ? , visa_type = ? ,gender = ? 
         WHERE id = ?
       `;
       const {
@@ -41,9 +41,12 @@ class Inquiry {
         alternate_no,
         address,
         date_of_birth,
-        interested_country,
         course_detail,
-        city
+        city,
+        interested_country,
+        telecaller_name,
+        visa_type,
+        gender,
       } = newInquiry;
       const result = await sql(query, [
         name,
@@ -52,9 +55,12 @@ class Inquiry {
         alternate_no,
         address,
         date_of_birth,
-        interested_country,
         course_detail,
         city,
+        interested_country,
+        telecaller_name,
+        visa_type,
+        gender,
         id,
       ]);
       return result;
@@ -73,24 +79,57 @@ class Inquiry {
       )
         ? sortDirection.toUpperCase()
         : "DESC";
-      for (const [field, value] of Object.entries(fields)) {
-        if (value !== undefined && value !== null) {
-          conditions.push(`${field} = ?`);
-          values.push(value);
+
+      // Iterate through fields to build SQL query with LIKE
+      if (fields) {
+        if (Object?.keys(fields)) {
+          for (const [field, value] of Object.entries(fields)) {
+            if (value !== undefined && value !== null) {
+              // Use LIKE for partial matches and add wildcard characters
+              conditions.push(`${field} LIKE ?`);
+              values.push(`%${value}%`);
+            }
+          }
         }
       }
+
       const query = `
         SELECT * FROM inquiry 
         ${conditions.length ? "WHERE " + conditions.join(" AND ") : ""}
         ORDER BY created_at ${direction}
       `;
-
       const result = await sql(query, values);
       return result;
     } catch (error) {
       throw error;
     }
   }
-}
 
+  static async getEnum(table, column) {
+    try {
+      const query = `
+        SELECT COLUMN_TYPE 
+        FROM INFORMATION_SCHEMA.COLUMNS 
+        WHERE TABLE_NAME = ? 
+        AND TABLE_SCHEMA = ? 
+        AND COLUMN_NAME = ?`;
+
+      const [result] = await sql(query, [table, "states", column]);
+
+      if (!result.COLUMN_TYPE) {
+        throw new Error("Column not found or it is not of ENUM type");
+      }
+
+      // Extract ENUM values from the result
+      const enumValues = result["COLUMN_TYPE"]
+        .match(/enum\((.*)\)/)[1]
+        .split(",")
+        .map((value) => value.replace(/'/g, ""));
+
+      return enumValues;
+    } catch (error) {
+      throw error;
+    }
+  }
+}
 export default Inquiry;

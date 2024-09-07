@@ -11,8 +11,8 @@ const Admissions = () => {
   const history = useHistory();
   const { getRoute, deleteById } = useApi();
   const getData = async () => {
-    const admissionData = await getRoute("api/admission");
-    setAdmissions(admissionData);
+    const { data } = await getRoute("api/admission");
+    setAdmissions(data);
   };
 
   useEffect(() => {
@@ -22,9 +22,7 @@ const Admissions = () => {
     setActiveIndex(activeIndex === index ? null : index);
   };
   const handleDeleteAdmission = async (id) => {
-    const inquiresData = await deleteById(
-      `api/admission/${id}`
-    );
+    const inquiresData = await deleteById(`api/admission/${id}`);
     if (inquiresData?.status == "success") {
       getData();
     }
@@ -55,7 +53,7 @@ const Admissions = () => {
           <div className="accordion-wrap">
             {admissions?.map((admission, index) => (
               <div
-              key={index}
+                key={index}
                 className={`accordion ${
                   activeIndex === index ? "" : "collapsed"
                 }`}

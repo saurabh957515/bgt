@@ -4,19 +4,22 @@ import moment from "moment";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { countries } from "../../../helper";
 
-const ListTable = () => {
+const ListTable = ({ filterField }) => {
   const { getRoute, deleteById } = useApi();
   const [inquiryList, setInquiryList] = useState([]);
   const history = useHistory();
-  const getData = async () => {
-    const inquiresData = await getRoute("/api/inquiry");
-    console.log(inquiresData?.data)
-    setInquiryList(inquiresData?.data)
+  const getData = async (filterField) => {
+    const inquiresData = await getRoute(
+      "/api/inquiry/filter",
+      filterField,
+      false
+    );
+    setInquiryList(inquiresData?.data);
   };
 
   useEffect(() => {
-    getData();
-  }, []);
+    getData(filterField);
+  }, [filterField]);
 
   const deleteInquiry = async (id) => {
     const inquiresData = await deleteById(`api/inquiry/${id}`);
@@ -46,11 +49,11 @@ const ListTable = () => {
               <thead>
                 <tr>
                   <th style={{ textAlign: "center" }}>No</th>
-                  <th style={{ textAlign: "center" }}>Country</th>
-                  <th style={{ textAlign: "center" }}>NAME</th>
-                  <th style={{ textAlign: "center" }}>EMAIL</th>
-                  <th style={{ textAlign: "center" }}>CONTACT NO</th>
                   <th style={{ textAlign: "center" }}>DATE</th>
+                  <th style={{ textAlign: "center" }}>NAME</th>
+                  <th style={{ textAlign: "center" }}>CONTACT NO</th>
+                  <th style={{ textAlign: "center" }}>Country</th>
+                  <th style={{ textAlign: "center" }}>TYPE</th>
                   <th style={{ textAlign: "center" }}>ACTION</th>
                 </tr>
               </thead>
@@ -61,16 +64,19 @@ const ListTable = () => {
                       {index + 1}
                     </th>
                     <td style={{ textAlign: "center" }}>
-                      {countries[inquiry?.interested_country] || "-"}
+                      {moment(inquiry?.date).format("YYYY-MM-DD")}
                     </td>
                     <td style={{ textAlign: "center" }}>{inquiry?.name}</td>
-                    <td style={{ textAlign: "center" }}>{inquiry?.email}</td>
                     <td style={{ textAlign: "center" }}>
                       {inquiry?.contact_no}
                     </td>
                     <td style={{ textAlign: "center" }}>
-                      {moment(inquiry?.date).format("YYYY-MM-DD")}
+                      {countries[inquiry?.interested_country] || "-"}
                     </td>
+                    <td style={{ textAlign: "center" }}>
+                      {inquiry?.visa_type?.replace(/visa/gi, "Type")}
+                    </td>
+
                     <td>
                       <div className="d-flex justify-content-center">
                         <span

@@ -13,6 +13,7 @@ import "./assets/assets/scss/main.scss";
 import "./assets/assets/scss/color_skins.scss";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "./index.css";
+import "flatpickr/dist/flatpickr.css";
 
 const store = configureStore({reducer: reducers, middleware: () => {return [thunk]}});
 

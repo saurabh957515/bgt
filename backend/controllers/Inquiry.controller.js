@@ -27,7 +27,8 @@ const inquirySchema = Joi.object({
     .required()
     .messages({
       "string.empty": "Contact number is required.",
-      "string.pattern.base": "Invalid contact number (must be numeric and not negative).",
+      "string.pattern.base":
+        "Invalid contact number (must be numeric and not negative).",
       "string.max": "Contact number cannot exceed 12 characters.",
     }),
   alternate_no: Joi.string()
@@ -36,7 +37,8 @@ const inquirySchema = Joi.object({
     .optional()
     .messages({
       "string.empty": "Alternate number is required.",
-      "string.pattern.base": "Invalid alternate number (must be numeric and not negative).",
+      "string.pattern.base":
+        "Invalid alternate number (must be numeric and not negative).",
       "string.max": "Alternate number cannot exceed 12 characters.",
     }),
   address: Joi.string().max(500).required().messages({
@@ -65,6 +67,32 @@ const inquirySchema = Joi.object({
     "string.empty": "City is required.",
     "string.max": "City cannot exceed 100 characters.",
   }),
+  telecaller_name: Joi.string().max(255).required().messages({
+    "string.empty": "Telecaller name is required.",
+    "string.max": "Telecaller name cannot exceed 255 characters.",
+  }),
+  gender: Joi.string().valid("male", "female", "others").required().messages({
+    "any.only": "Gender must be one of 'male', 'female', or 'others'.",
+    "string.empty": "Gender is required.",
+  }),
+  visa_type: Joi.string()
+    .valid(
+      "Tourist Visa",
+      "Student Visa",
+      "Work Visa",
+      "Employment Visa",
+      "Business Visa",
+      "Project Visa",
+      "Research Visa",
+      "Transit Visa",
+      "Conference Visa",
+      "Medical Visa"
+    )
+    .required()
+    .messages({
+      "any.only": "Visa type must be one of the specified options.",
+      "string.empty": "Visa type is required.",
+    }),
 });
 
 export async function createInquiry(req, res) {
@@ -92,6 +120,9 @@ export async function createInquiry(req, res) {
     interested_country: req?.body.interested_country,
     course_detail: req?.body?.course_detail,
     city: req?.body?.city,
+    telecaller_name: req?.body?.telecaller_name,
+    gender: req?.body?.gender,
+    visa_type: req?.body?.visa_type,
   };
 
   try {
@@ -118,8 +149,9 @@ export async function getInquiry(req, res) {
   }
 }
 export async function getByFilter(req, res) {
+  const { order, ...goodQuery } = req?.query;
   try {
-    const result = await Inquiry?.findByFields({});
+    const result = await Inquiry?.findByFields(goodQuery, order);
     res.send(result);
   } catch (err) {
     res.status(500).send({
@@ -157,6 +189,18 @@ export async function updateInquiry(req, res) {
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",
+    });
+  }
+}
+export async function getEnums(req, res) {
+  const { table, column } = req.params;
+  try {
+    const enumValues = await Inquiry.getEnum(table, column);
+    res.send(enumValues);
+  } catch (err) {
+    res.status(400).send({
+      message:
+        err.message || "Some error occurred while retrieving ENUM values.",
     });
   }
 }

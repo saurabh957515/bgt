@@ -19,10 +19,8 @@ const useApi = () => {
   const handleError = (err) => {
     let errors = {};
     if (err.response) {
-      // Errors from the server response
       const status = err.response.status;
       if (status === 400) {
-        // Extract validation errors if present
         errors = getErrors(err.response.data.errors || {});
       } else {
         // General server-side error
