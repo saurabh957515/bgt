@@ -90,9 +90,12 @@ const BankForm = ({ bankDetails }) => {
                     value={details?.account_number}
                     required
                     type="number"
-                    onChange={(e) =>
-                      handleBankDetails("account_number", e.target.value)
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\+?[0-9]*$/.test(value)) {
+                        handleBankDetails("account_number", value.slice(0, 17));
+                      }
+                    }}
                   />
                 </div>
 
@@ -117,9 +120,12 @@ const BankForm = ({ bankDetails }) => {
                     value={details?.ifsc_code}
                     required
                     type="text"
-                    onChange={(e) =>
-                      handleBankDetails("ifsc_code", e.target.value)
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\+?[0-9]*$/.test(value)) {
+                        handleBankDetails("ifsc_code", value.slice(0, 17));
+                      }
+                    }}
                   />
                 </div>
 

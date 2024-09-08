@@ -11,8 +11,8 @@ const FeeLists = () => {
   const [errors, setErrors] = useState({});
   const [bankOptions, setBankOptions] = useState([]);
   const getAdmissions = async () => {
-    const admissionsData = await getRoute("/api/admission");
-    setAdmissions(admissionsData?.filter((data) => +data?.remaining_amount));
+    const {data} = await getRoute("/api/admission");
+    setAdmissions(data?.filter((admission) => +admission?.remaining_amount));
   };
   const [remainingAmount, setRemainingAmount] = useState(0);
   const handleFeePayment = (name, value) => {
@@ -24,7 +24,7 @@ const FeeLists = () => {
   useEffect(() => {
     getAdmissions();
     const getBankOption = async () => {
-      const data = await getRoute("/api/bank", "", false);
+      const { data } = await getRoute("/api/bank", "", false);
       setBankOptions(
         data?.map((bank) => ({
           label: bank?.bank_name,

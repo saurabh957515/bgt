@@ -1,6 +1,7 @@
 import Education from "../models/Education.model.js";
 import { v4 as uuidv4 } from "uuid";
 import { educationSchema } from "../validation/education.js";
+import Inquiry from "../models/Inquiry.model.js";
 export async function createEducation(req, res) {
   if (!req.body) {
     return res.status(400).send({
@@ -59,6 +60,10 @@ export async function createEducation(req, res) {
         status: "Failed",
       });
     } else {
+      const updateInquiry = await Inquiry.updateProgressCountByID(
+        newEducation?.inquiry_id,
+        "2"
+      );
       res.send({
         message: "education added !",
         status: "success",
@@ -82,8 +87,9 @@ export async function getEducationDetails(req, res) {
   }
 }
 export async function getByFilter(req, res) {
+  const { order, ...goodQuery } = req?.query;
   try {
-    const result = await Education?.findByFields(req?.query);
+    const result = await Education?.findByFields(goodQuery);
     if (result?.error) {
       res.send({
         message: result?.error,

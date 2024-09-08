@@ -4,33 +4,44 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.css";
 import useApi from "../../../utils/UseApi";
 import ReactSelect from "../../../components/ReactSelect";
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom.min";
 
 const FeePayment = ({
-  setAdmissionId,
   setSelected,
   feePaymentDetails,
   setFeePaymentDetails,
   bankOptions,
 }) => {
+  const [admissionId, setAdmissionId] = useState("");
   const { postRoute, editRoute, getRoute } = useApi();
   const location = useLocation();
-  const editAdmissionId = location.state?.admissionId;
-  const createAdmission = location.state?.makeAdmission;
+  const [editAdmissionId, setEditAdmissionId] = useState(
+    location.state?.admissionId
+  );
+  const [createAdmission, setCreateAdmission] = useState(
+    location.state?.makeAdmission
+  );
+  const history= useHistory()
   const [isEdit, setIsEdit] = useState(false);
   const [errors, setErrors] = useState({});
-  // feepayment
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { errors, data } = await postRoute(
-      `api/feepayment`,
-      feePaymentDetails
-    );
+    const { errors, data } = isEdit
+      ? await editRoute(
+          `/api/feepayment/${feePaymentDetails?.id}`,
+          feePaymentDetails
+        )
+      : await postRoute(`api/feepayment`, feePaymentDetails);
     if (errors) {
       setErrors(errors);
     } else {
+      setTimeout(() => {
+        history.push({
+          pathname: "/totalAdmission",
+        });
+      }, 1500);
+
       setAdmissionId(data?.admission_id);
-      // setSelected(2);
     }
   };
 
@@ -43,30 +54,37 @@ const FeePayment = ({
 
   useEffect(() => {
     const getData = async () => {
-      if (false) {
-        const editAdmisson = await getRoute(
-          "/api/admission/filter",
-          { id: editAdmissionId },
+      if (editAdmissionId) {
+        const { data, errors } = await getRoute(
+          "/api/feepayment/filter",
+          { admission_id: editAdmissionId },
           false
         );
+        const editAdmisson = data[0];
         if (editAdmisson) {
           setFeePaymentDetails({
             id: editAdmisson?.id,
-            inquiry_id: createAdmission?.inquiry_id || null,
-            name: editAdmisson?.name,
-            email: editAdmisson?.email,
-            contact_no: editAdmisson?.contact_no,
-            alternate_no: editAdmisson?.alternate_no,
-            address: editAdmisson?.address,
-            date_of_birth: moment(editAdmisson?.date_of_birth).format(
-              "YYYY-MM-DD"
-            ),
-            current_city: editAdmisson?.current_city,
-            visa_type: editAdmisson?.visa_type,
-            telecaller_name: editAdmisson?.telecaller_name,
+            inquiry_id: editAdmisson?.id,
+            remaining_amount: editAdmisson?.remaining_amount,
+            bank_details_id: editAdmisson?.bank_details_id,
+            total_amount: editAdmisson?.total_amount,
+            current_amount: editAdmisson?.current_amount,
+            inquiry_id: editAdmisson?.inquiry_id,
+            admission_id: admissionId,
           });
+          setIsEdit(true);
+        } else {
+          setFeePaymentDetails({
+            inquiry_id: createAdmission?.id,
+            remaining_amount: createAdmission?.remaining_amount,
+            bank_details_id: createAdmission?.bank_details_id,
+            total_amount: createAdmission?.total_amount,
+            current_amount: createAdmission?.current_amount,
+            inquiry_id: createAdmission?.id,
+            admission_id: admissionId,
+          });
+          setIsEdit(false);
         }
-        setIsEdit(true);
       } else {
         if (createAdmission) {
           setFeePaymentDetails({
@@ -75,16 +93,32 @@ const FeePayment = ({
             bank_details_id: createAdmission?.bank_details_id,
             total_amount: createAdmission?.total_amount,
             current_amount: createAdmission?.current_amount,
-            inquiry_id: createAdmission?.inquiry_id,
-            admission_id: "008ee915-e006-4a47-87ee-121686479f62",
+            inquiry_id: createAdmission?.id,
+            admission_id: admissionId,
           });
         }
         setIsEdit(false);
       }
     };
     getData();
-  }, [editAdmissionId, createAdmission]);
+  }, [editAdmissionId, createAdmission, admissionId]);
 
+  useEffect(() => {
+    const getAdmission = async () => {
+      if (!editAdmissionId) {
+        const { data, errors } = await getRoute(
+          "/api/admission/filter",
+          { inquiry_id: createAdmission?.id },
+          false
+        );
+        if (!errors && data?.length === 1) {
+          setAdmissionId(data[0]?.id);
+          setEditAdmissionId(data[0]?.id);
+        }
+      }
+    };
+    getAdmission();
+  }, []);
   return (
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">
@@ -160,9 +194,21 @@ const FeePayment = ({
                 </div>
               </div>
               <p className="mt-2 text-danger">{errors["amounts"]}</p>
-              <button className="btn btn-primary" type="submit">
-                Save
-              </button>
+              <div>
+                <button
+                  onClick={() => {
+                    setSelected(3);
+                  }}
+                  className="btn btn-outline-info "
+                  type="button"
+                >
+                  Back
+                </button>
+                <button className="ml-2 btn btn-outline-primary" type="submit">
+                  Save
+                </button>
+               
+              </div>
             </div>
           </div>
         </div>

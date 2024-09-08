@@ -85,7 +85,7 @@ class FeePayment {
       const query = `
         SELECT * FROM fee_details 
         ${conditions.length ? "WHERE " + conditions.join(" AND ") : ""}
-        ORDER BY created_at ${direction}
+        ORDER BY updated_at ${direction}
       `;
       const result = await sql(query, values);
       return result;

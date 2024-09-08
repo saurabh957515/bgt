@@ -1,6 +1,7 @@
 import University from "../models/University.model.js";
 import { v4 as uuidv4 } from "uuid";
 import universitySchema from "../validation/universtity.js";
+import Inquiry from "../models/Inquiry.model.js";
 export async function createUniversity(req, res) {
   if (!req.body) {
     return res.status(400).send({
@@ -49,6 +50,10 @@ export async function createUniversity(req, res) {
         status: "Failed",
       });
     } else {
+      const updateInquiry = await Inquiry.updateProgressCountByID(
+        newUniversity?.inquiry_id,
+        "3"
+      );
       res.send({
         message: "University Added !",
         status: "success",
@@ -71,8 +76,10 @@ export async function getUniversityDetails(req, res) {
   }
 }
 export async function getByFilter(req, res) {
+  const { order, ...goodQuery } = req?.query;
   try {
-    const result = await University?.findByFields({});
+    const result = await University?.findByFields(goodQuery);
+
     if (result?.error) {
       res.send({
         message: result?.error,

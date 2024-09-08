@@ -138,7 +138,7 @@ class Dashbord extends React.Component {
               <div className="col-lg-3 col-md-6">
                 <div className="card">
                   <div className="header">
-                    <h2>Total Revenue</h2>
+                    <h2>Total OverView</h2>
                     <Dropdown as="ul" className="header-dropdown">
                       <Dropdown.Toggle
                         variant="success"
@@ -163,7 +163,7 @@ class Dashbord extends React.Component {
                     </Dropdown>
                   </div>
                   <div className="text-center body">
-                    <h4 className="margin-0">Total Sale</h4>
+                    <h4 className="margin-0">Total Overview</h4>
                     <div
                       id="topsaleDonut"
                       style={{ height: 125, width: "100%" }}
@@ -179,7 +179,7 @@ class Dashbord extends React.Component {
                         top: 0,
                       }} // use svg to render the chart.
                     />
-                    <h6 className="p-b-15">Weekly Earnings</h6>
+                    <h6 className="p-b-15">Weekly</h6>
                     <div className="sparkline">
                       <ReactEcharts
                         option={topRevenueMonthlyOption}
@@ -193,7 +193,7 @@ class Dashbord extends React.Component {
                         }}
                       />
                     </div>
-                    <h6>Monthly Earnings</h6>
+                    <h6>Monthly </h6>
                   </div>
                 </div>
               </div>

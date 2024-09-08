@@ -1,5 +1,6 @@
 import Admission from "../models/Admissions.model.js";
 import Joi from "joi";
+import Inquiry from "../models/Inquiry.model.js";
 import { v4 as uuidv4 } from "uuid";
 const currentDate = new Date();
 const minDateOfBirth = new Date(
@@ -109,12 +110,20 @@ export async function createAdmission(req, res) {
     contact_no: req?.body.contact_no,
     alternate_no: req?.body.alternate_no,
     address: req?.body.address,
-    date_of_birth: req?.body.date_of_birth,
+    date_of_birth: req?.body?.date_of_birth,
     current_city: req?.body?.current_city,
     telecaller_name: req?.body?.telecaller_name,
     visa_type: req?.body?.visa_type,
   };
+  const email_exists = await Admission.findByFields({
+    email: newAdmission?.email,
+  });
 
+  if (email_exists?.length > 0) {
+    return res
+      .status(400)
+      .send({ errors: { email: "This Email Already Exists" } });
+  }
   try {
     const admissionExists = await Admission?.findByFields({
       inquiry_id: newAdmission?.inquiry_id,
@@ -134,6 +143,10 @@ export async function createAdmission(req, res) {
         status: "Failed",
       });
     } else {
+      const updateInquiry = await Inquiry.updateProgressCountByID(
+        newAdmission?.inquiry_id,
+        "1"
+      );
       res.send({
         message: "admission completed !",
         status: "success",

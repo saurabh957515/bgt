@@ -16,7 +16,7 @@ const BankList = () => {
   };
   useEffect(() => {
     getBanks();
-  }, []);
+}, []);
   const handleDelete = async (bank) => {
     const admissionData = await getRoute("api/admission");
     const isBankAdded = admissionData?.find(

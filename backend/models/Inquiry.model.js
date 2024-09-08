@@ -104,6 +104,19 @@ class Inquiry {
       throw error;
     }
   }
+  static async updateProgressCountByID(id, progress_count) {
+    try {
+      const query = `
+        UPDATE inquiry 
+        SET progress_count = ? 
+        WHERE id = ?
+      `;
+      const result = await sql(query, [progress_count, id]);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   static async getEnum(table, column) {
     try {

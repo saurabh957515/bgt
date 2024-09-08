@@ -1,0 +1,39 @@
+/* ProgressBarComponent.css */
+.progress-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.progress-step {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  line-height: 20px;
+  text-align: center;
+  font-weight: bold;
+  border: 2px solid blue;
+  color: blue;
+  background-color: white;
+  margin: 0px;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.progress-step.completed {
+  background-color: rgb(21, 137, 21);
+  color: white;
+  border-color: green;
+}
+
+.progress-line {
+  height: 4px;
+  background-color: lightgray;
+  margin: 0px;
+  width: 100%; /* Make line take full width of its container */
+}
+
+.progress-line.completed {
+  background-color: green;
+}

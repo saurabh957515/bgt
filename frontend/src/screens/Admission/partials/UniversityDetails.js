@@ -18,30 +18,35 @@ const universityObject = {
   admission_id: "",
 };
 const UniversityDetails = ({
-  setAdmissionId,
   setSelected,
   universityDetails,
   setUniversityDetails,
-  addmissionId,
   stayInOptions,
+  progressCount
 }) => {
+  const [admissionId, setAdmissionId] = useState("");
   const { postRoute, editRoute, getRoute } = useApi();
   const location = useLocation();
-  const editAdmissionId = location.state?.admissionId;
-  const createAdmission = location.state?.makeAdmission;
+  const [editAdmissionId, setEditAdmissionId] = useState(
+    location.state?.admissionId
+  );
+  const [createAdmission, setCreateAdmission] = useState(
+    location.state?.makeAdmission
+  );
   const [isEdit, setIsEdit] = useState(false);
   const [errors, setErrors] = useState({});
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { errors, data } = await postRoute(
-      `api/university`,
-      universityDetails
-    );
+    const { errors, data } = isEdit
+      ? await editRoute(
+          `api/university/${universityDetails?.id}`,
+          universityDetails
+        )
+      : await postRoute(`api/university`, universityDetails);
     if (errors) {
       setErrors(errors);
     } else {
-      setAdmissionId(data?.admission_id);
-      // setSelected(2);
+      setSelected(4);
     }
   };
 
@@ -53,48 +58,65 @@ const UniversityDetails = ({
   };
   useEffect(() => {
     const getData = async () => {
-      if (false) {
-        const editAdmisson = await getRoute(
-          "/api/admission/filter",
-          { id: editAdmissionId },
+      if (editAdmissionId) {
+        const { data, errors } = await getRoute(
+          "/api/university/filter",
+          { admission_id: editAdmissionId },
           false
         );
+        const editAdmisson = data?.[0];
         if (editAdmisson) {
           setUniversityDetails({
             id: editAdmisson?.id,
-            inquiry_id: createAdmission?.inquiry_id || null,
-            name: editAdmisson?.name,
-            email: editAdmisson?.email,
-            contact_no: editAdmisson?.contact_no,
-            alternate_no: editAdmisson?.alternate_no,
-            address: editAdmisson?.address,
-            date_of_birth: moment(editAdmisson?.date_of_birth).format(
-              "YYYY-MM-DD"
-            ),
-            current_city: editAdmisson?.current_city,
-            visa_type: editAdmisson?.visa_type,
-            telecaller_name: editAdmisson?.telecaller_name,
+            inquiry_id: editAdmisson?.inquiry_id,
+            institute_name: editAdmisson?.institute_name,
+            country: editAdmisson?.country,
+            course_detail: editAdmisson?.course_detail,
+            city: editAdmisson?.city,
+            stay_in_type: editAdmisson?.stay_in_type,
+            admission_id: editAdmisson?.admission_id,
+            stay_in_address: editAdmisson?.stay_in_address,
+          });
+          setIsEdit(true);
+        } else {
+          setUniversityDetails({
+            inquiry_id: createAdmission?.id,
+            country: createAdmission?.interested_country,
+            course_detail: createAdmission?.course_detail,
+            admission_id: admissionId,
           });
         }
-        setIsEdit(true);
       } else {
         if (createAdmission) {
           setUniversityDetails({
             inquiry_id: createAdmission?.id,
-            institute_name: createAdmission?.institute_name,
-            country: createAdmission?.country,
+            country: createAdmission?.interested_country,
             course_detail: createAdmission?.course_detail,
-            city: createAdmission?.city,
-            stay_in_type: createAdmission?.stay_in_type,
-            inquiry_id: createAdmission?.inquiry_id,
-            admission_id: "008ee915-e006-4a47-87ee-121686479f62",
+            admission_id: admissionId,
           });
         }
         setIsEdit(false);
       }
     };
     getData();
-  }, [editAdmissionId, createAdmission]);
+  }, [editAdmissionId, createAdmission, admissionId]);
+
+  useEffect(() => {
+    const getAdmission = async () => {
+      if (!editAdmissionId) {
+        const { data, errors } = await getRoute(
+          "/api/admission/filter",
+          { inquiry_id: createAdmission?.id },
+          false
+        );
+        if (!errors && data?.length === 1) {
+          setAdmissionId(data[0]?.id);
+          setEditAdmissionId(data[0]?.id);
+        }
+      }
+    };
+    getAdmission();
+  }, []);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -168,8 +190,6 @@ const UniversityDetails = ({
                     <p className="mt-2 text-danger">{errors["stay_in_type"]}</p>
                   </div>
                 </div>{" "}
-               
-            
                 <div className="col-md-4">
                   <div className="form-group">
                     <label>Living Address</label>
@@ -199,9 +219,30 @@ const UniversityDetails = ({
                   </div>
                 </div>
               </div>
-              <button className="btn btn-primary" type="submit">
-                Next
-              </button>
+              <div>
+                <button
+                  onClick={() => {
+                    setSelected(2);
+                  }}
+                  className="btn btn-outline-info"
+                  type="button"
+                >
+                  Back
+                </button>
+                <button className="mx-2 btn btn-outline-primary" type="submit">
+                  Save
+                </button>
+                <button
+                  disabled={progressCount < 3}
+                  onClick={() => {
+                    setSelected(4);
+                  }}
+                  className="btn btn-outline-secondary "
+                  type="button"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>

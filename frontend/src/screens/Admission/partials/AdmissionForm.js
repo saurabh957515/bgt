@@ -5,6 +5,7 @@ import useApi from "../../../utils/UseApi";
 import ReactSelect from "../../../components/ReactSelect";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 const admissionObject = {
+  id: "",
   inquiry_id: "",
   name: "",
   email: "",
@@ -16,27 +17,29 @@ const admissionObject = {
   visa_type: "",
   telecaller_name: "",
 };
-const AdmissionForm = ({
-  setAdmissionId,
-  setSelected,
-  admissionDetail,
-  setAdmissionDetail,
-  visaOptions,
-}) => {
+const AdmissionForm = ({ setAdmissionId, setSelected, visaOptions,progressCount }) => {
+  const [admissionDetail, setAdmissionDetail] = useState(admissionObject);
   const [errors, setErrors] = useState({});
   const { postRoute, editRoute, getRoute } = useApi();
   const location = useLocation();
-  const editAdmissionId = location.state?.admissionId;
-  const createAdmission = location.state?.makeAdmission;
+  const [editAdmissionId, setEditAdmissionId] = useState(
+    location.state?.admissionId
+  );
+  const [createAdmission, setCreateAdmission] = useState(
+    location.state?.makeAdmission
+  );
+
   const [isEdit, setIsEdit] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { errors, data } = await postRoute(`api/admission`, admissionDetail);
+    const { errors, data } = isEdit
+      ? await editRoute(`api/admission/${admissionDetail?.id}`, admissionDetail)
+      : await postRoute(`api/admission`, admissionDetail);
     if (errors) {
       setErrors(errors);
     } else {
       setAdmissionId(data?.admission_id);
-      // setSelected(2);
+      setSelected(2);
     }
   };
 
@@ -46,18 +49,20 @@ const AdmissionForm = ({
       [name]: value,
     }));
   };
+
   useEffect(() => {
     const getData = async () => {
       if (editAdmissionId) {
-        const editAdmisson = await getRoute(
+        const { data } = await getRoute(
           "/api/admission/filter",
           { id: editAdmissionId },
           false
         );
+        const editAdmisson = data[0];
         if (editAdmisson) {
           setAdmissionDetail({
             id: editAdmisson?.id,
-            inquiry_id: createAdmission?.inquiry_id || null,
+            inquiry_id: editAdmisson?.inquiry_id,
             name: editAdmisson?.name,
             email: editAdmisson?.email,
             contact_no: editAdmisson?.contact_no,
@@ -95,6 +100,22 @@ const AdmissionForm = ({
     getData();
   }, [editAdmissionId, createAdmission]);
 
+  useEffect(() => {
+    const getAdmission = async () => {
+      if (!editAdmissionId) {
+        const { data, errors } = await getRoute(
+          "/api/admission/filter",
+          { inquiry_id: createAdmission?.id },
+          false
+        );
+        if (!errors && data?.length === 1) {
+          setEditAdmissionId(data[0]?.id);
+          setIsEdit(true);
+        }
+      }
+    };
+    getAdmission();
+  }, []);
   return (
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">
@@ -255,7 +276,15 @@ const AdmissionForm = ({
                 <button className="mr-2 btn btn-outline-primary" type="submit">
                   Save
                 </button>
-                <button className="btn btn-outline-secondary " type="submit">
+                {console.log(createAdmission?.progress_count)}
+                <button
+                 disabled={progressCount<1}
+                  onClick={() => {
+                    setSelected(2);
+                  }}
+                  className="btn btn-outline-secondary "
+                  type="button"
+                >
                   Next
                 </button>
               </div>

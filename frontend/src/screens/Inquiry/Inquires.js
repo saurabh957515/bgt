@@ -8,7 +8,7 @@ const Inquires = () => {
     date: moment().format("YYYY-MM-DD"),
     name: "",
     order: "asc",
-    telecaller_name:'',
+    telecaller_name: "",
   });
 
   return (

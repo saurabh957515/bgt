@@ -6,7 +6,7 @@ import moment from "moment";
 import RadioGroup from "../../../components/RadioGroup";
 import ReactSelect from "../../../components/ReactSelect";
 const education_Object = {
-  admission_id: "008ee915-e006-4a47-87ee-121686479f62",
+  admission_id: "",
   highest_qualification: "",
   passing_year: 2012,
   name_of_institute: "",
@@ -27,16 +27,21 @@ const EducationForm = ({
   educationDetails,
   setEducationDetail,
   setSelected,
-  addmissionId,
   genderOptions,
   employedOptions,
+  progressCount,
 }) => {
   const location = useLocation();
+  const [admissionId, setAdmissionId] = useState("");
   const [errors, setErrors] = useState({});
   const [isEdit, setIsEdit] = useState(false);
   const { postRoute, editRoute, getRoute } = useApi();
-  const editAdmissionId = location.state?.admissionId;
-  const createAdmission = location.state?.makeAdmission;
+  const [editAdmissionId, setEditAdmissionId] = useState(
+    location.state?.admissionId
+  );
+  const [createAdmission, setCreateAdmission] = useState(
+    location.state?.makeAdmission
+  );
   const handleEducation = (name, value) => {
     const newEducation = { ...educationDetails };
     newEducation[name] = value;
@@ -55,46 +60,67 @@ const EducationForm = ({
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { errors, data } = await postRoute(`api/education`, educationDetails);
+    const { errors, data } = isEdit
+      ? await editRoute(
+          `api/education/${educationDetails?.id}`,
+          educationDetails
+        )
+      : await postRoute(`api/education`, educationDetails);
 
-    console.log(errors, data);
     if (errors) {
       setErrors(errors);
     } else {
-      // setSelected(3);
+      setSelected(3);
     }
   };
+
   useEffect(() => {
     const getData = async () => {
       if (editAdmissionId) {
-        const editAdmisson = await getRoute(
+        const { data } = await getRoute(
           "/api/education/filter",
           { admission_id: editAdmissionId },
           false
         );
-        setEducationDetail({
-          id: editAdmisson?.id,
-          admission_id: editAdmisson?.admission_id,
-          inquiry_id: editAdmisson?.inquiry_id || null,
-          highest_qualification: editAdmisson?.highest_qualification,
-          passing_year: editAdmisson?.passing_year,
-          name_of_institute: editAdmisson?.name_of_institute,
-          percentage_cgpa: editAdmisson?.percentage_cgpa,
-          is_employed: editAdmisson?.is_employed,
-          current_company: editAdmisson?.current_company,
-          current_designation: editAdmisson?.current_designation,
-          current_monthly_salary: editAdmisson?.current_monthly_salary || 0,
-          total_experience_years: editAdmisson?.total_experience_years || 0,
-          past_rejection_country_name:
-            editAdmisson?.past_rejection_country_name,
-          ielts_score: editAdmisson?.ielts_score,
-        });
-        setIsEdit(true);
+        const editAdmisson = data[0];
+        if (editAdmisson) {
+          setEducationDetail({
+            id: editAdmisson?.id,
+            admission_id: editAdmisson?.admission_id,
+            inquiry_id: editAdmisson?.inquiry_id || null,
+            highest_qualification: editAdmisson?.highest_qualification,
+            passing_year: editAdmisson?.passing_year,
+            name_of_institute: editAdmisson?.name_of_institute,
+            percentage_cgpa: editAdmisson?.percentage_cgpa,
+            is_employed: editAdmisson?.is_employed,
+            current_company: editAdmisson?.current_company,
+            current_designation: editAdmisson?.current_designation,
+            current_monthly_salary: editAdmisson?.current_monthly_salary || 0,
+            total_experience_years: editAdmisson?.total_experience_years || 0,
+            past_rejection_country_name:
+              editAdmisson?.past_rejection_country_name,
+            ielts_score: editAdmisson?.ielts_score,
+            business_name: editAdmisson?.business_name,
+            business_type: editAdmisson?.business_type,
+            business_start_date: editAdmisson?.business_start_date,
+            employed_type: editAdmisson?.employed_type,
+            gender: editAdmisson?.gender,
+            place_of_birth: editAdmisson?.place_of_birth,
+            current_nationality: editAdmisson?.current_nationality,
+          });
+          setIsEdit(true);
+        } else {
+          setEducationDetail({
+            ...education_Object,
+            admission_id: admissionId,
+            inquiry_id: createAdmission?.id,
+          });
+        }
       } else {
         if (createAdmission) {
           setEducationDetail({
             ...education_Object,
-            admission_id: "008ee915-e006-4a47-87ee-121686479f62",
+            admission_id: admissionId,
             inquiry_id: createAdmission?.id,
           });
         }
@@ -102,8 +128,40 @@ const EducationForm = ({
       }
     };
     getData();
-  }, [editAdmissionId, createAdmission]);
+  }, [editAdmissionId, createAdmission, admissionId]);
 
+  // useEffect(() => {
+  //   if (!admissionId) {
+  //     const getEducation = async () => {
+  //       const { data, errors } = await getRoute(
+  //         "/api/admission/filter",
+  //         { inquiry_id: createAdmission?.id },
+  //         false
+  //       );
+  //       if (!errors && data?.length === 1) {
+  //         setAdmissionId(data[0]?.id);
+  //       }
+  //     };
+  //     getEducation();
+  //   }
+  // }, [admissionId]);
+
+  useEffect(() => {
+    const getAdmission = async () => {
+      if (!editAdmissionId) {
+        const { data, errors } = await getRoute(
+          "/api/admission/filter",
+          { inquiry_id: createAdmission?.id },
+          false
+        );
+        if (!errors && data?.length === 1) {
+          setAdmissionId(data[0]?.id);
+          setEditAdmissionId(data[0]?.id);
+        }
+      }
+    };
+    getAdmission();
+  }, []);
   return (
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">
@@ -207,7 +265,10 @@ const EducationForm = ({
                       type="number"
                       max={2024}
                       onChange={(e) => {
-                        handleEducation("passing_year", e.target.value);
+                        const value = e.target.value;
+                        if (/^\+?[0-9]*$/.test(value)) {
+                          handleEducation("passing_year", value.slice(0, 4));
+                        }
                       }}
                     />
                     <p className="mt-2 text-danger">{errors["passing_year"]}</p>
@@ -223,7 +284,10 @@ const EducationForm = ({
                       required="required"
                       type="number"
                       onChange={(e) => {
-                        handleEducation("percentage_cgpa", e.target.value);
+                        const value = e.target.value;
+                        if (/^\+?[0-9]*$/.test(value)) {
+                          handleEducation("percentage_cgpa", value.slice(0, 4));
+                        }
                       }}
                     />
                     <p className="mt-2 text-danger">
@@ -239,9 +303,13 @@ const EducationForm = ({
                       value={educationDetails?.ielts_score}
                       name="ielts_score"
                       required="required"
-                      type="text"
+                      type="number"
+                      maxlength="4"
                       onChange={(e) => {
-                        handleEducation("ielts_score", e.target.value);
+                        const value = e.target.value;
+                        if (/^\+?[0-9]*$/.test(value)) {
+                          handleEducation("ielts_score", value.slice(0, 4));
+                        }
                       }}
                     />
                     <p className="mt-2 text-danger">{errors["ielts_score"]}</p>
@@ -465,9 +533,30 @@ const EducationForm = ({
                   </>
                 ) : null}
               </div>
-              <button className="btn btn-primary" type="submit">
-                Next
-              </button>
+              <div>
+                <button
+                  onClick={() => {
+                    setSelected(1);
+                  }}
+                  className="btn btn-outline-info "
+                  type="button"
+                >
+                  Back
+                </button>
+                <button className="mx-2 btn btn-outline-primary" type="submit">
+                  Save
+                </button>
+                <button
+                  disabled={progressCount < 2}
+                  onClick={() => {
+                    setSelected(3);
+                  }}
+                  className="btn btn-outline-secondary "
+                  type="button"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import useApi from "../../../utils/UseApi";
 import moment from "moment";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { countries } from "../../../helper";
+import ProgressBarComponent from "../../../components/ProgressBarComponent";
 
 const ListTable = ({ filterField }) => {
   const { getRoute, deleteById } = useApi();
@@ -55,6 +56,7 @@ const ListTable = ({ filterField }) => {
                   <th style={{ textAlign: "center" }}>Country</th>
                   <th style={{ textAlign: "center" }}>TYPE</th>
                   <th style={{ textAlign: "center" }}>ACTION</th>
+                  <th style={{ textAlign: "center" }}>PROGRESS</th>
                 </tr>
               </thead>
               <tbody>
@@ -76,6 +78,7 @@ const ListTable = ({ filterField }) => {
                     <td style={{ textAlign: "center" }}>
                       {inquiry?.visa_type?.replace(/visa/gi, "Type")}
                     </td>
+                  
 
                     <td>
                       <div className="d-flex justify-content-center">
@@ -105,6 +108,10 @@ const ListTable = ({ filterField }) => {
                           Confirm
                         </span>
                       </div>
+                    </td>
+                    <td style={{ textAlign: "center" }}>
+                    <ProgressBarComponent completedPhases={inquiry?.progress_count} />
+
                     </td>
                   </tr>
                 ))}

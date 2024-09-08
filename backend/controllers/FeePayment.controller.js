@@ -1,6 +1,7 @@
 import FeePayment from "../models/FeePayment.model.js";
 import { v4 as uuidv4 } from "uuid";
 import feePaymentSchema from "../validation/feepayment.js";
+import Inquiry from "../models/Inquiry.model.js";
 export async function createFeePayment(req, res) {
   if (!req.body) {
     return res.status(400).send({
@@ -17,7 +18,7 @@ export async function createFeePayment(req, res) {
     }, {});
     return res.status(400).send({ errors });
   }
-  const newUniversity = {
+  const newFeePayment = {
     id: uuidv4(),
     current_amount: req?.body?.current_amount,
     remaining_amount: req?.body?.remaining_amount,
@@ -29,7 +30,7 @@ export async function createFeePayment(req, res) {
 
   try {
     const admissionExists = await FeePayment?.findByFields({
-      inquiry_id: newEducation?.inquiry_id,
+      inquiry_id: newFeePayment?.inquiry_id,
     });
 
     if (admissionExists?.length > 0) {
@@ -38,7 +39,7 @@ export async function createFeePayment(req, res) {
       });
     }
 
-    const result = await FeePayment.create(newUniversity);
+    const result = await FeePayment.create(newFeePayment);
 
     if (result?.error) {
       res.send({
@@ -46,6 +47,7 @@ export async function createFeePayment(req, res) {
         status: "Failed",
       });
     } else {
+      await Inquiry.deleteByID(req?.body?.inquiry_id);
       res.send({
         message: "Fee Details Added !",
         status: "success",
@@ -68,8 +70,9 @@ export async function getFeePaymentDetails(req, res) {
   }
 }
 export async function getByFilter(req, res) {
+  const { order, ...goodQuery } = req?.query;
   try {
-    const result = await FeePayment?.findByFields({});
+    const result = await FeePayment?.findByFields(goodQuery);
     if (result?.error) {
       res.send({
         message: result?.error,

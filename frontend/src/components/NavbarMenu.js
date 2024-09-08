@@ -578,15 +578,15 @@ class NavbarMenu extends React.Component {
                           <Link to="appchat">Chat</Link>
                         </li>
 
-                        <li
+                        {/* <li
                           className={activeKey === "appcontact" ? "active" : ""}
                           onClick={() => {}}
                         >
                           <Link to="appcontact">Contact Card</Link>
-                        </li>
+                        </li> */}
                       </ul>
                     </li>
-                    <li id="FileManagerContainer" className="">
+                    {/* <li id="FileManagerContainer" className="">
                       <a
                         href="#!"
                         className="has-arrow"
@@ -616,7 +616,7 @@ class NavbarMenu extends React.Component {
                           <Link to="filedocuments">Documents</Link>
                         </li>
                       </ul>
-                    </li>
+                    </li> */}
 
                     <li className="" id="feesContainer">
                       <a
@@ -675,7 +675,7 @@ class NavbarMenu extends React.Component {
                               marginTop:'-8px'
                             }}
                             fill="currentColor"
-                            stroke-width="0"
+                            strokeWidth="0"
                             viewBox="0 0 1024 1024"
                             xmlns="http://www.w3.org/2000/svg"
                           >
