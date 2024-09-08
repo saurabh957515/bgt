@@ -1,22 +1,48 @@
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.css";
 import useApi from "../../../utils/UseApi";
 import { countries } from "../../../helper";
 import ReactSelect from "../../../components/ReactSelect";
-
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import RadioGroup from "../../../components/RadioGroup";
+const universityObject = {
+  institute_name: "",
+  country: "",
+  course_detail: "",
+  city: "",
+  stay_in_type: "",
+  stay_in_address: "",
+  inquiry_id: "",
+  admission_id: "",
+};
 const UniversityDetails = ({
   setAdmissionId,
   setSelected,
   universityDetails,
   setUniversityDetails,
-  errors,
+  addmissionId,
+  stayInOptions,
 }) => {
-  const { postRoute, editRoute } = useApi();
+  const { postRoute, editRoute, getRoute } = useApi();
+  const location = useLocation();
+  const editAdmissionId = location.state?.admissionId;
+  const createAdmission = location.state?.makeAdmission;
+  const [isEdit, setIsEdit] = useState(false);
+  const [errors, setErrors] = useState({});
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSelected(4);
+    const { errors, data } = await postRoute(
+      `api/university`,
+      universityDetails
+    );
+    if (errors) {
+      setErrors(errors);
+    } else {
+      setAdmissionId(data?.admission_id);
+      // setSelected(2);
+    }
   };
 
   const handleUniversity = (name, value) => {
@@ -25,6 +51,50 @@ const UniversityDetails = ({
       [name]: value,
     }));
   };
+  useEffect(() => {
+    const getData = async () => {
+      if (false) {
+        const editAdmisson = await getRoute(
+          "/api/admission/filter",
+          { id: editAdmissionId },
+          false
+        );
+        if (editAdmisson) {
+          setUniversityDetails({
+            id: editAdmisson?.id,
+            inquiry_id: createAdmission?.inquiry_id || null,
+            name: editAdmisson?.name,
+            email: editAdmisson?.email,
+            contact_no: editAdmisson?.contact_no,
+            alternate_no: editAdmisson?.alternate_no,
+            address: editAdmisson?.address,
+            date_of_birth: moment(editAdmisson?.date_of_birth).format(
+              "YYYY-MM-DD"
+            ),
+            current_city: editAdmisson?.current_city,
+            visa_type: editAdmisson?.visa_type,
+            telecaller_name: editAdmisson?.telecaller_name,
+          });
+        }
+        setIsEdit(true);
+      } else {
+        if (createAdmission) {
+          setUniversityDetails({
+            inquiry_id: createAdmission?.id,
+            institute_name: createAdmission?.institute_name,
+            country: createAdmission?.country,
+            course_detail: createAdmission?.course_detail,
+            city: createAdmission?.city,
+            stay_in_type: createAdmission?.stay_in_type,
+            inquiry_id: createAdmission?.inquiry_id,
+            admission_id: "008ee915-e006-4a47-87ee-121686479f62",
+          });
+        }
+        setIsEdit(false);
+      }
+    };
+    getData();
+  }, [editAdmissionId, createAdmission]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -37,7 +107,7 @@ const UniversityDetails = ({
             <div className="body">
               {/* Removed the inner form tag */}
               <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <div className="form-group">
                     <label>Interested University/Institute Name</label>
                     <input
@@ -53,7 +123,23 @@ const UniversityDetails = ({
                     </p>
                   </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Country</label>
+                    <ReactSelect
+                      options={Object.entries(countries)?.map(
+                        ([key, value]) => ({
+                          label: value,
+                          value: key,
+                        })
+                      )}
+                      value={universityDetails?.country || ""}
+                      onChange={(e) => handleUniversity("country", e.value)}
+                    />
+                    <p className="mt-2 text-danger">{errors["country"]}</p>
+                  </div>
+                </div>
+                <div className="col-md-4">
                   <div className="form-group">
                     <label>Course Detail</label>
                     <input
@@ -69,7 +155,38 @@ const UniversityDetails = ({
                     </p>
                   </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Living options</label>
+                    <RadioGroup
+                      onChange={(option) =>
+                        handleUniversity("stay_in_type", option)
+                      }
+                      value={universityDetails?.stay_in_type}
+                      options={stayInOptions}
+                    />
+                    <p className="mt-2 text-danger">{errors["stay_in_type"]}</p>
+                  </div>
+                </div>{" "}
+               
+            
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Living Address</label>
+                    <input
+                      className={`form-control`}
+                      value={universityDetails?.stay_in_address || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleUniversity("stay_in_address", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["stay_in_address"]}
+                    </p>
+                  </div>
+                </div>
+                <div className="col-md-4">
                   <div className="form-group">
                     <label>City</label>
                     <input
@@ -79,22 +196,6 @@ const UniversityDetails = ({
                       onChange={(e) => handleUniversity("city", e.target.value)}
                     />
                     <p className="mt-2 text-danger">{errors["city"]}</p>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>Country</label>
-                    <ReactSelect
-                      options={Object.entries(countries)?.map(
-                        ([key, value]) => ({
-                          label: value,
-                          value: key,
-                        })
-                      )}
-                      value={universityDetails?.country || ""}
-                      onChange={(e) => handleUniversity("country", e.value)}
-                    />
-                    <p className="mt-2 text-danger">{errors["country"]}</p>
                   </div>
                 </div>
               </div>

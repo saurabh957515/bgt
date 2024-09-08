@@ -1,12 +1,26 @@
 import Education from "../models/Education.model.js";
+import { v4 as uuidv4 } from "uuid";
+import { educationSchema } from "../validation/education.js";
 export async function createEducation(req, res) {
   if (!req.body) {
     return res.status(400).send({
       message: "Content cannot be empty!",
     });
   }
-  const newAdmission = {
+  const { error, value } = educationSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    const errors = error.details.reduce((acc, err) => {
+      acc[err.path.join(".")] = err.message;
+      return acc;
+    }, {});
+    return res.status(400).send({ errors });
+  }
+  const newEducation = {
+    id: uuidv4(),
     admission_id: req.body?.admission_id,
+    inquiry_id: req?.body?.inquiry_id,
     highest_qualification: req?.body?.highest_qualification,
     passing_year: req?.body?.passing_year,
     name_of_institute: req?.body?.name_of_institute,
@@ -16,15 +30,29 @@ export async function createEducation(req, res) {
     current_designation: req?.body?.current_designation,
     current_monthly_salary: req?.body?.current_monthly_salary,
     total_experience_years: req?.body?.total_experience_years,
-    country_interested: req?.body?.country_interested,
-    visa_type: req?.body?.visa_type,
     past_rejection_country_name: req?.body?.past_rejection_country_name,
     ielts_score: req?.body?.ielts_score,
-    telecaller_name: req?.body?.telecaller_name,
+    business_name: req?.body?.business_name,
+    business_type: req?.body?.business_type,
+    business_start_date: req?.body?.business_start_date,
+    employed_type: req?.body?.employed_type,
+    place_of_birth: req?.body?.place_of_birth,
+    gender: req?.body?.gender,
+    current_nationality: req?.body?.current_nationality,
   };
 
   try {
-    const result = await Education.create(newAdmission);
+    const admissionExists = await Education?.findByFields({
+      inquiry_id: newEducation?.inquiry_id,
+    });
+
+    if (admissionExists?.length > 0) {
+      res.status(300).send({
+        message: "admission already exists bad request or malfunctioning",
+      });
+    }
+
+    const result = await Education.create(newEducation);
     if (result?.error) {
       res.send({
         message: result?.error,
@@ -55,7 +83,7 @@ export async function getEducationDetails(req, res) {
 }
 export async function getByFilter(req, res) {
   try {
-    const result = await Education?.findByFields({});
+    const result = await Education?.findByFields(req?.query);
     if (result?.error) {
       res.send({
         message: result?.error,

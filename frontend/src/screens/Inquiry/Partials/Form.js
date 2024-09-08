@@ -8,17 +8,18 @@ import { countries } from "../../../helper.js";
 import RadioGroup from "../../../components/RadioGroup.js";
 const inquiryObject = {
   name: "john cena",
-  email: "cena@123",
+  email: "cena@gmail.com",
   contact_no: "96523485",
   alternate_no: "69523652",
   address: "jimsd@132",
   date_of_birth: "2001-09-03",
   interested_country: "USA",
-  course_detail: "",
-  city: "",
-  telecaller_name: "",
-  gender: "",
-  visa_type: "",
+  course_detail: "gg",
+  current_city: "gg",
+  telecaller_name: "gg",
+  gender: "male",
+  visa_type: "Work Visa",
+  progress_count: "0",
 };
 
 const Form = ({ inquiryEdit }) => {
@@ -63,7 +64,6 @@ const Form = ({ inquiryEdit }) => {
       setIsEdit(false);
     }
   }, [inquiryEdit]);
-  console.log(genderOptions, visaOptions);
   const handleInquiry = (name, value) => {
     setInquiry((prev) => ({ ...prev, [name]: value }));
   };
@@ -203,30 +203,17 @@ const Form = ({ inquiryEdit }) => {
                   <p className="mt-2 text-danger">{errors["email"]}</p>
                 </div>
                 <div className="form-group col-md-4">
-                  <label>Course Detail</label>
-                  <input
+                  <label>Inquiry Type</label>
+                  <ReactSelect
+                    options={visaOptions}
                     required
-                    className="form-control"
-                    value={inquiry?.course_detail}
-                    type="text"
-                    onChange={(e) =>
-                      handleInquiry("course_detail", e.target.value)
-                    }
+                    value={inquiry?.visa_type || ""}
+                    onChange={(e) => {
+                      handleInquiry("visa_type", e.value);
+                    }}
                   />{" "}
-                  <p className="mt-2 text-danger">{errors["course_detail"]}</p>
-                </div>
-                <div className="form-group col-md-4">
-                  <label>City</label>
-                  <input
-                    required
-                    className="form-control"
-                    value={inquiry?.city}
-                    type="text"
-                    onChange={(e) => handleInquiry("city", e.target.value)}
-                  />{" "}
-                  <p className="mt-2 text-danger">{errors["city"]}</p>
-                </div>
-                <div className="form-group col-md-4">
+                  <p className="mt-2 text-danger">{errors["visa_type"]}</p>
+                </div>     <div className="form-group col-md-4">
                   <label>Country Interested</label>
                   <ReactSelect
                     options={Object.entries(countries)?.map(([key, value]) => ({
@@ -244,6 +231,33 @@ const Form = ({ inquiryEdit }) => {
                   </p>
                 </div>
                 <div className="form-group col-md-4">
+                  <label>Course Detail</label>
+                  <input
+                    required
+                    className="form-control"
+                    value={inquiry?.course_detail}
+                    type="text"
+                    onChange={(e) =>
+                      handleInquiry("course_detail", e.target.value)
+                    }
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["course_detail"]}</p>
+                </div>
+                <div className="form-group col-md-4">
+                  <label>Current City</label>
+                  <input
+                    required
+                    className="form-control"
+                    value={inquiry?.current_city}
+                    type="text"
+                    onChange={(e) =>
+                      handleInquiry("current_city", e.target.value)
+                    }
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["city"]}</p>
+                </div>
+           
+                <div className="form-group col-md-4">
                   <label>Telecaller Name</label>
                   <input
                     required
@@ -257,19 +271,6 @@ const Form = ({ inquiryEdit }) => {
                   <p className="mt-2 text-danger">
                     {errors["telecaller_name"]}
                   </p>
-                </div>
-
-                <div className="form-group col-md-4">
-                  <label>Visa Type</label>
-                  <ReactSelect
-                    options={visaOptions}
-                    required
-                    value={inquiry?.visa_type || ""}
-                    onChange={(e) => {
-                      handleInquiry("visa_type", e.value);
-                    }}
-                  />{" "}
-                  <p className="mt-2 text-danger">{errors["visa_type"]}</p>
                 </div>
 
                 {/* Date of Birth */}

@@ -21,7 +21,7 @@ const BankForm = ({ bankDetails }) => {
 
   useEffect(() => {
     const getTypes = async () => {
-      const data = await getRoute("/api/bank/gettypes", "", false);
+      const { data } = await getRoute("/api/bank/gettypes", "", false);
       setTypeOptions(
         Object.entries(data)?.map(([key, value]) => ({
           label: key,
@@ -59,7 +59,6 @@ const BankForm = ({ bankDetails }) => {
       console.error("Submission error:", error);
     }
   };
-  console.log("log details", details);
   return (
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">

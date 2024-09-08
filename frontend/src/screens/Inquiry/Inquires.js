@@ -8,8 +8,9 @@ const Inquires = () => {
     date: moment().format("YYYY-MM-DD"),
     name: "",
     order: "asc",
+    telecaller_name:'',
   });
-  const [queryOrder, serQueryOrder] = useState("");
+
   return (
     <div
       style={{ flex: 1 }}

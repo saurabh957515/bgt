@@ -2,7 +2,6 @@ import sql from "../db/queryExecution.js";
 class Admission {
   static async create(newAdmission) {
     try {
-      console.log(newAdmission)
       const result = await sql("INSERT INTO admission SET ?", newAdmission);
       if (result?.error) {
         return { error: result?.error };
@@ -39,7 +38,6 @@ class Admission {
       const result = await sql(query, [id]);
       return result;
     } catch (error) {
-      console.error(error);
       throw error;
     }
   }
@@ -103,24 +101,26 @@ class Admission {
       )
         ? sortDirection.toUpperCase()
         : "DESC";
-      for (const [field, value] of Object.entries(fields)) {
-        if (value !== undefined && value !== null) {
-          conditions.push(`${field} = ?`);
-          values.push(value);
+
+      if (fields) {
+        if (Object?.keys(fields)) {
+          for (const [field, value] of Object.entries(fields)) {
+            if (value !== undefined && value !== null) {
+              conditions.push(`${field} LIKE ?`);
+              values.push(`%${value}%`);
+            }
+          }
         }
       }
+
       const query = `
         SELECT * FROM admission 
-        ${conditions.length ? "WHERE " + conditions.join(" AND ") : ""}
+       ${conditions.length ? "WHERE " + conditions.join(" AND ") : ""}
         ORDER BY created_at ${direction}
       `;
 
       const result = await sql(query, values);
-      if (result?.error) {
-        return { error: result?.error };
-      } else {
-        return result;
-      }
+      return result;
     } catch (error) {
       throw error;
     }

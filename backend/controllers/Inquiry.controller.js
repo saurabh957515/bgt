@@ -1,5 +1,6 @@
 import Inquiry from "../models/Inquiry.model.js";
 import Joi from "joi";
+import { v4 as uuidv4 } from "uuid";
 const currentDate = new Date();
 const minDateOfBirth = new Date(
   currentDate.getFullYear() - 50,
@@ -63,7 +64,7 @@ const inquirySchema = Joi.object({
     "string.empty": "Course detail is required.",
     "string.max": "Course detail cannot exceed 255 characters.",
   }),
-  city: Joi.string().max(100).required().messages({
+  current_city: Joi.string().max(100).required().messages({
     "string.empty": "City is required.",
     "string.max": "City cannot exceed 100 characters.",
   }),
@@ -74,6 +75,9 @@ const inquirySchema = Joi.object({
   gender: Joi.string().valid("male", "female", "others").required().messages({
     "any.only": "Gender must be one of 'male', 'female', or 'others'.",
     "string.empty": "Gender is required.",
+  }),
+  progress_count: Joi.string().valid("0", "1", "2", "3").required().messages({
+    "any.only": "progress_count must be one of '0','1','2','3' ",
   }),
   visa_type: Joi.string()
     .valid(
@@ -111,6 +115,7 @@ export async function createInquiry(req, res) {
     return res.status(400).send({ errors });
   }
   const newInquiry = {
+    id: uuidv4(),
     name: req?.body.name,
     email: req?.body.email,
     contact_no: req?.body.contact_no,
@@ -119,12 +124,21 @@ export async function createInquiry(req, res) {
     date_of_birth: req?.body.date_of_birth,
     interested_country: req?.body.interested_country,
     course_detail: req?.body?.course_detail,
-    city: req?.body?.city,
+    current_city: req?.body?.current_city,
     telecaller_name: req?.body?.telecaller_name,
     gender: req?.body?.gender,
     visa_type: req?.body?.visa_type,
+    progress_count: "0",
   };
+  const email_exists = await Inquiry.findByFields({
+    email: newInquiry?.email,
+  });
 
+  if (email_exists?.length > 0) {
+    return res
+      .status(400)
+      .send({ errors: { email: "This Email Already Exists" } });
+  }
   try {
     const added_Inquiry = await Inquiry.create(newInquiry);
     res.send({

@@ -6,7 +6,7 @@ const PageHeader = ({
   Breadcrumb,
   showFilter,
   setFilterField = () => {},
-  filterField,
+  filterField={},
 }) => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const [sortOrder, setSortOrder] = useState("ASC");

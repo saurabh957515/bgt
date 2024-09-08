@@ -1,8 +1,9 @@
 import sql from "../db/queryExecution.js";
-class Inquiry {
-  static async create(newInquiry) {
+class University {
+  static async create(newUniversity) {
     try {
-      const result = await sql("INSERT INTO inquiry SET ?", newInquiry);
+      const result = await sql("INSERT INTO university SET ?", newUniversity);
+ 
       return result.insertId;
     } catch (error) {
       throw error;
@@ -11,7 +12,7 @@ class Inquiry {
 
   static async findAll() {
     try {
-      const query = `SELECT * FROM inquiry`;
+      const query = `SELECT * FROM university`;
       const result = await sql(query);
       return result;
     } catch (error) {
@@ -20,49 +21,36 @@ class Inquiry {
   }
   static async deleteByID(id) {
     try {
-      const query = `DELETE FROM inquiry WHERE id = ?`;
+      const query = `DELETE FROM university WHERE id = ?`;
       const result = await sql(query, [id]);
       return result?.afectedRows !== 0;
     } catch (error) {
       throw error;
     }
   }
+
   static async updateByID(newInquiry, id) {
     try {
       const query = `
-        UPDATE inquiry 
-        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,course_detail = ?,current_city = ?, interested_country = ? ,telecaller_name = ? , visa_type = ? ,gender = ? ,progress_count = ?
+        UPDATE university 
+        SET institute_name = ?, country = ?, course_detail = ?, city = ?, stay_in_type = ?, stay_in_address = ?
         WHERE id = ?
       `;
       const {
-        name,
-        email,
-        contact_no,
-        alternate_no,
-        address,
-        date_of_birth,
+        institute_name,
+        country,
         course_detail,
-        current_city,
-        interested_country,
-        telecaller_name,
-        visa_type,
-        gender,
-        progress_count,
+        city,
+        stay_in_type,
+        stay_in_address,
       } = newInquiry;
       const result = await sql(query, [
-        name,
-        email,
-        contact_no,
-        alternate_no,
-        address,
-        date_of_birth,
+        institute_name,
+        country,
         course_detail,
-        current_city,
-        interested_country,
-        telecaller_name,
-        visa_type,
-        gender,
-        progress_count,
+        city,
+        stay_in_type,
+        stay_in_address,
         id,
       ]);
       return result;
@@ -94,7 +82,7 @@ class Inquiry {
       }
 
       const query = `
-        SELECT * FROM inquiry 
+        SELECT * FROM university 
         ${conditions.length ? "WHERE " + conditions.join(" AND ") : ""}
         ORDER BY created_at ${direction}
       `;
@@ -132,4 +120,4 @@ class Inquiry {
     }
   }
 }
-export default Inquiry;
+export default University;

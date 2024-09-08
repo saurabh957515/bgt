@@ -1,4 +1,5 @@
 import Bank from "../models/Bank.model.js";
+import { v4 as uuidv4 } from "uuid";
 export async function createBank(req, res) {
   if (!req.body) {
     return res.status(400).send({
@@ -7,6 +8,7 @@ export async function createBank(req, res) {
   }
 
   const newBank = {
+    id: uuidv4(),
     account_holder_name: req?.body.account_holder_name,
     account_number: req?.body.account_number,
     bank_name: req?.body.bank_name,

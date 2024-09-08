@@ -8,10 +8,10 @@ import { useDispatch } from "react-redux";
 const BankList = () => {
   const [banks, setBanks] = useState([]);
   const history = useHistory();
-  const dispatch =useDispatch();
+  const dispatch = useDispatch();
   const { getRoute, deleteById } = useApi();
   const getBanks = async () => {
-    const data = await getRoute("/api/bank", "", false);
+    const { data } = await getRoute("/api/bank", "", false);
     setBanks(data);
   };
   useEffect(() => {
@@ -92,9 +92,8 @@ const BankList = () => {
                       >
                         Delete
                       </button>
-                    </div>                   
-                     </div>
-               
+                    </div>
+                  </div>
                 </div>
               ))
             ) : (

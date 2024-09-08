@@ -44,6 +44,7 @@ const Admissions = () => {
       <div>
         <div className="container-fluid">
           <PageHeader
+            showFilter={true}
             HeaderText="Admissions"
             Breadcrumb={[
               { name: "Admission", navigate: "" },

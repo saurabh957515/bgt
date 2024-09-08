@@ -1,13 +1,13 @@
-import FeePayment from "../models/FeePayment.model.js";
+import University from "../models/University.model.js";
 import { v4 as uuidv4 } from "uuid";
-import feePaymentSchema from "../validation/feepayment.js";
-export async function createFeePayment(req, res) {
+import universitySchema from "../validation/universtity.js";
+export async function createUniversity(req, res) {
   if (!req.body) {
     return res.status(400).send({
       message: "Content cannot be empty!",
     });
   }
-  const { error, value } = feePaymentSchema.validate(req.body, {
+  const { error, value } = universitySchema.validate(req.body, {
     abortEarly: false,
   });
   if (error) {
@@ -19,17 +19,20 @@ export async function createFeePayment(req, res) {
   }
   const newUniversity = {
     id: uuidv4(),
-    current_amount: req?.body?.current_amount,
-    remaining_amount: req?.body?.remaining_amount,
-    total_amount: req?.body?.total_amount,
+    institute_name: req?.body?.institute_name,
+    country: req?.body?.country,
+    course_detail: req?.body?.course_detail,
+    city: req?.body?.city,
+    stay_in_type: req?.body?.stay_in_type,
+    stay_in_address: req?.body?.stay_in_address,
     inquiry_id: req?.body?.inquiry_id,
     admission_id: req?.body?.admission_id,
-    bank_details_id: req?.body?.bank_details_id,
   };
 
   try {
-    const admissionExists = await FeePayment?.findByFields({
-      inquiry_id: newEducation?.inquiry_id,
+
+    const admissionExists = await University?.findByFields({
+      inquiry_id: newUniversity?.inquiry_id,
     });
 
     if (admissionExists?.length > 0) {
@@ -38,8 +41,8 @@ export async function createFeePayment(req, res) {
       });
     }
 
-    const result = await FeePayment.create(newUniversity);
 
+    const result = await University.create(newUniversity);
     if (result?.error) {
       res.send({
         message: result?.error,
@@ -47,7 +50,7 @@ export async function createFeePayment(req, res) {
       });
     } else {
       res.send({
-        message: "Fee Details Added !",
+        message: "University Added !",
         status: "success",
       });
     }
@@ -57,9 +60,9 @@ export async function createFeePayment(req, res) {
     });
   }
 }
-export async function getFeePaymentDetails(req, res) {
+export async function getUniversityDetails(req, res) {
   try {
-    const result = await FeePayment?.findAll();
+    const result = await University?.findAll();
     res.send(result);
   } catch (err) {
     res.status(500).send({
@@ -69,7 +72,7 @@ export async function getFeePaymentDetails(req, res) {
 }
 export async function getByFilter(req, res) {
   try {
-    const result = await FeePayment?.findByFields({});
+    const result = await University?.findByFields({});
     if (result?.error) {
       res.send({
         message: result?.error,
@@ -84,19 +87,19 @@ export async function getByFilter(req, res) {
     });
   }
 }
-export async function deleteFeePayment(req, res) {
+export async function deleteUniversity(req, res) {
   try {
-    const result = await FeePayment?.deleteByID(req.params.id);
-    res.send({ Message: "FeePayment Removed!" });
+    const result = await University?.deleteByID(req.params.id);
+    res.send({ Message: "Inquiry Removed!" });
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while creating the user.",
     });
   }
 }
-export async function updateFeePayment(req, res) {
+export async function updateUniversity(req, res) {
   try {
-    const result = await FeePayment?.updateByID(req?.body, req.params.id);
+    const result = await University?.updateByID(req?.body, req.params.id);
     if (result?.error) {
       res.send({
         message: result?.error,

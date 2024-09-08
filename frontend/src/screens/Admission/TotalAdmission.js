@@ -149,21 +149,16 @@ const TotalAdmission = () => {
   const history = useHistory();
   const { getRoute, editRoute, postRoute, deleteById } = useApi();
   const admissionObject = {
+    inquiry_id: "",
     name: "",
     email: "",
     contact_no: "",
     alternate_no: "",
     address: "",
     date_of_birth: "",
-    is_acknowledged: 0,
-    institute_name: "",
-    country: "",
-    city: "",
-    paid_amount: "",
-    remaining_amount: "",
-    total_amount: "",
-    course_detail: "",
-    bank_detail_id: "",
+    current_city: "",
+    visa_type: "",
+    telecaller_name: "",
   };
   const education_Details = {
     admission_id: "",
@@ -183,112 +178,142 @@ const TotalAdmission = () => {
     telecaller_name: "",
   };
   const [bankOptions, setBankOptions] = useState([]);
-
+  const [genderOptions, setGenderOptions] = useState([]);
+  const [visaOptions, setVisaOptions] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [educationDetails, setEducationDetail] = useState(education_Details);
   const [admissionDetail, setAdmissionDetail] = useState(admissionObject);
+  const [employedOptions, setEmployedOptions] = useState([]);
   const [errors, setErrors] = useState({});
+  const [stayInOptions,setStayInOptions]=useState([])
   const location = useLocation();
   const editAdmissionId = location.state?.admissionId;
   const createAdmission = location.state?.makeAdmission;
   useEffect(() => {
-    const getBankOption = async () => {
-      const { data ,error } = await getRoute("/api/bank", "", false);
+    const optionValues = async () => {
+      const genderOptions = await getRoute(
+        "api/inquiry/enum-values/inquiry/gender"
+      );
+      const visaOptions = await getRoute(
+        "api/inquiry/enum-values/inquiry/visa_type"
+      );
+      const employedOptions = await getRoute(
+        "api/inquiry/enum-values/education/employed_type"
+      );
+      const stayInOptions = await getRoute(
+        "api/inquiry/enum-values/university/stay_in_type"
+      );
+      setEmployedOptions(
+        employedOptions?.data?.map((type) => ({
+          label: type.charAt(0).toUpperCase() + type.slice(1).toLowerCase(),
+          value: type,
+        }))
+      );
+      setStayInOptions(
+        stayInOptions?.data?.map((stay) => ({
+          label: stay.charAt(0).toUpperCase() + stay.slice(1).toLowerCase(),
+          value: stay,
+        }))
+      );
+      const { data, error } = await getRoute("/api/bank", "", false);
       setBankOptions(
         data?.map((bank) => ({
           label: bank?.bank_name,
           value: bank?.id,
         }))
       );
+      setVisaOptions(
+        visaOptions?.data?.map((visa) => ({
+          label: visa.charAt(0).toUpperCase() + visa.slice(1).toLowerCase(),
+          value: visa,
+        }))
+      );
+      setGenderOptions(
+        genderOptions?.data?.map((gender) => ({
+          label: gender.charAt(0).toUpperCase() + gender.slice(1).toLowerCase(),
+          value: gender,
+        }))
+      );
     };
-    getBankOption();
+    optionValues();
   }, []);
   useEffect(() => {
-    const getData = async () => {
-      if (editAdmissionId) {
-        const admissionData = await getRoute("api/admission");
-        const editAdmisson = admissionData?.find(
-          (admisson) => admisson?.admissionDetails_id === editAdmissionId
-        );
-        if (editAdmisson) {
-          if (editAdmisson?.educationDetails_id) {
-            setEducationDetail({
-              id: editAdmisson?.educationDetails_id,
-              admission_id: editAdmisson?.admissionDetails_id,
-              highest_qualification: editAdmisson?.highest_qualification,
-              passing_year: editAdmisson?.passing_year,
-              name_of_institute: editAdmisson?.name_of_institute,
-              percentage_cgpa: editAdmisson?.percentage_cgpa,
-              is_employed: editAdmisson?.is_employed,
-              current_company: editAdmisson?.current_company,
-              current_designation: editAdmisson?.current_designation,
-              current_monthly_salary: editAdmisson?.current_monthly_salary || 0,
-              total_experience_years: editAdmisson?.total_experience_years || 0,
-              country_interested: editAdmisson?.country_interested,
-              visa_type: editAdmisson?.visa_type,
-              past_rejection_country_name:
-                editAdmisson?.past_rejection_country_name,
-              ielts_score: editAdmisson?.ielts_score,
-              telecaller_name: editAdmisson?.telecaller_name,
-            });
-          } else {
-            setEducationDetail({
-              ...education_Details,
-              admission_id: editAdmisson?.admissionDetails_id,
-            });
-          }
-          setAdmissionDetail({
-            id: editAdmisson?.admissionDetails_id,
-            name: editAdmisson?.name,
-            email: editAdmisson?.email,
-            contact_no: editAdmisson?.contact_no,
-            alternate_no: editAdmisson?.alternate_no,
-            address: editAdmisson?.address,
-            date_of_birth: moment(editAdmisson?.date_of_birth).format(
-              "YYYY-MM-DD"
-            ),
-            is_acknowledged: editAdmisson?.is_acknowledged,
-            institute_name: editAdmisson?.institute_name,
-            country: editAdmisson?.country,
-            city: editAdmisson?.city,
-            paid_amount: editAdmisson?.paid_amount,
-            remaining_amount: editAdmisson?.remaining_amount,
-            total_amount: editAdmisson?.total_amount,
-            course_detail: editAdmisson?.course_detail,
-            city: editAdmisson?.city,
-            bank_detail_id: editAdmisson?.bank_detail_id,
-          });
-        }
-        setIsEdit(true);
-      } else {
-        if (createAdmission) {
-          setAdmissionDetail({
-            name: createAdmission?.name,
-            email: createAdmission?.email,
-            contact_no: createAdmission?.contact_no,
-            alternate_no: createAdmission?.alternate_no,
-            address: createAdmission?.address,
-            date_of_birth: moment(createAdmission?.date_of_birth).format(
-              "YYYY-MM-DD"
-            ),
-            is_acknowledged: false,
-            institute_name: createAdmission?.institute_name,
-            country: createAdmission?.interested_country,
-            city: createAdmission?.city,
-            paid_amount: createAdmission?.paid_amount,
-            remaining_amount: createAdmission?.remaining_amount,
-            total_amount: createAdmission?.total_amount,
-            course_detail: createAdmission?.course_detail,
-            city: createAdmission?.city,
-            bank_detail: "",
-            institute_name: "",
-            bank_detail_id: "",
-          });
-        }
-        setIsEdit(false);
-      }
-    };
-    getData();
+    // const getData = async () => {
+    //   if (editAdmissionId) {
+    //     const admissionData = await getRoute("api/admission");
+    //     const editAdmisson = admissionData?.find(
+    //       (admisson) => admisson?.admissionDetails_id === editAdmissionId
+    //     );
+    //     if (editAdmisson) {
+    //       if (editAdmisson?.educationDetails_id) {
+    //         setEducationDetail({
+    //           id: editAdmisson?.educationDetails_id,
+    //           admission_id: editAdmisson?.admissionDetails_id,
+    //           highest_qualification: editAdmisson?.highest_qualification,
+    //           passing_year: editAdmisson?.passing_year,
+    //           name_of_institute: editAdmisson?.name_of_institute,
+    //           percentage_cgpa: editAdmisson?.percentage_cgpa,
+    //           is_employed: editAdmisson?.is_employed,
+    //           current_company: editAdmisson?.current_company,
+    //           current_designation: editAdmisson?.current_designation,
+    //           current_monthly_salary: editAdmisson?.current_monthly_salary || 0,
+    //           total_experience_years: editAdmisson?.total_experience_years || 0,
+    //           country_interested: editAdmisson?.country_interested,
+    //           visa_type: editAdmisson?.visa_type,
+    //           past_rejection_country_name:
+    //             editAdmisson?.past_rejection_country_name,
+    //           ielts_score: editAdmisson?.ielts_score,
+    //           telecaller_name: editAdmisson?.telecaller_name,
+    //         });
+    //       } else {
+    //         setEducationDetail({
+    //           ...education_Details,
+    //           admission_id: editAdmisson?.admissionDetails_id,
+    //         });
+    //       }
+    //       setAdmissionDetail({
+    //         id: editAdmisson?.admissionDetails_id,
+    //         name: editAdmisson?.name,
+    //         email: editAdmisson?.email,
+    //         contact_no: editAdmisson?.contact_no,
+    //         alternate_no: editAdmisson?.alternate_no,
+    //         address: editAdmisson?.address,
+    //         date_of_birth: moment(editAdmisson?.date_of_birth).format(
+    //           "YYYY-MM-DD"
+    //         ),
+    //         is_acknowledged: editAdmisson?.is_acknowledged,
+    //         institute_name: editAdmisson?.institute_name,
+    //         country: editAdmisson?.country,
+    //         city: editAdmisson?.city,
+    //         paid_amount: editAdmisson?.paid_amount,
+    //         remaining_amount: editAdmisson?.remaining_amount,
+    //         total_amount: editAdmisson?.total_amount,
+    //         city: editAdmisson?.city,
+    //         bank_detail_id: editAdmisson?.bank_detail_id,
+    //       });
+    //     }
+    //     setIsEdit(true);
+    //   } else {
+    //     if (createAdmission) {
+    //       setAdmissionDetail({
+    //         inquiry_id: createAdmission?.id,
+    //         name: createAdmission?.name,
+    //         email: createAdmission?.email,
+    //         contact_no: createAdmission?.contact_no,
+    //         alternate_no: createAdmission?.alternate_no,
+    //         address: createAdmission?.address,
+    //         date_of_birth: moment(createAdmission?.date_of_birth).format(
+    //           "YYYY-MM-DD"
+    //         ),
+    //         current_city: createAdmission?.current_city,
+    //         visa_type: createAdmission?.visa_type,
+    //         telecaller_name: createAdmission?.telecaller_name,
+    //       });
+    //     }
+    //     setIsEdit(false);
+    //   }
+    // };
+    // getData();
   }, [editAdmissionId, createAdmission]);
 
   const handleSubmit = async (e) => {
@@ -351,6 +376,7 @@ const TotalAdmission = () => {
       case 1:
         return (
           <AdmissionForm
+            visaOptions={visaOptions}
             admissionDetail={admissionDetail}
             setAdmissionDetail={setAdmissionDetail}
             setSelected={setSelected}
@@ -361,6 +387,8 @@ const TotalAdmission = () => {
       case 2:
         return (
           <EducationForm
+          employedOptions={employedOptions}
+            genderOptions={genderOptions}
             handleSubmit={handleSubmit}
             setEducationDetail={setEducationDetail}
             educationDetails={educationDetails}
@@ -372,11 +400,13 @@ const TotalAdmission = () => {
       case 3:
         return (
           <UniversityDetails
+          stayInOptions={stayInOptions}
             universityDetails={admissionDetail}
             setUniversityDetails={setAdmissionDetail}
             setSelected={setSelected}
             setAdmissionId={setAdmissionId}
             errors={errors}
+            addmissionId={addmissionId}
           />
         );
       case 4:
@@ -459,10 +489,11 @@ const TotalAdmission = () => {
                 onClick={() => {
                   setSelected(index + 1);
                 }}
-                className="nav-item"
+                className="cursor-pointer nav-item"
               >
                 <div
-                  className={`nav-link ${
+                  style={{ userSelect: "none", cursor: "pointer" }}
+                  className={`nav-link cursor-pointer ${
                     isErrorPresent(index + 1) && "text-danger"
                   } ${selected === index + 1 && "active"}`}
                 >

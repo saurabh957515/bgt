@@ -8,7 +8,7 @@ const ListTable = ({ filterField }) => {
   const { getRoute, deleteById } = useApi();
   const [inquiryList, setInquiryList] = useState([]);
   const history = useHistory();
-  const getData = async (filterField) => {
+  const getData = async () => {
     const inquiresData = await getRoute(
       "/api/inquiry/filter",
       filterField,
@@ -18,12 +18,12 @@ const ListTable = ({ filterField }) => {
   };
 
   useEffect(() => {
-    getData(filterField);
+    getData();
   }, [filterField]);
 
   const deleteInquiry = async (id) => {
     const inquiresData = await deleteById(`api/inquiry/${id}`);
-    if (inquiresData?.status == "success") {
+    if (inquiresData?.data?.status == "success") {
       getData();
     }
   };

@@ -15,7 +15,6 @@ const getErrors = (errorObj) => {
 const useApi = () => {
   const dispatch = useDispatch();
 
-  // Enhanced error handler
   const handleError = (err) => {
     let errors = {};
     if (err.response) {
@@ -74,6 +73,7 @@ const useApi = () => {
 
         return { data }; // Return the data on success
       } catch (err) {
+        console.log(err)
         return handleError(err); // Return errors on failure
       }
     },

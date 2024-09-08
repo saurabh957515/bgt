@@ -1,20 +1,108 @@
 import React, { useEffect, useState } from "react";
-
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import useApi from "../../../utils/UseApi";
+import Flatpickr from "react-flatpickr";
+import moment from "moment";
+import RadioGroup from "../../../components/RadioGroup";
+import ReactSelect from "../../../components/ReactSelect";
+const education_Object = {
+  admission_id: "008ee915-e006-4a47-87ee-121686479f62",
+  highest_qualification: "",
+  passing_year: 2012,
+  name_of_institute: "",
+  percentage_cgpa: "",
+  is_employed: 0,
+  current_company: null,
+  current_designation: null,
+  current_monthly_salary: 0,
+  total_experience_years: 0,
+  past_rejection_country_name: "",
+  ielts_score: "",
+  business_name: null,
+  business_type: null,
+  business_start_date: null,
+  employed_type: "job",
+};
 const EducationForm = ({
   educationDetails,
   setEducationDetail,
-  setSelected,errors
+  setSelected,
+  addmissionId,
+  genderOptions,
+  employedOptions,
 }) => {
-  const handleAdmission = (name, value) => {
-    setEducationDetail((pre) => ({
-      ...pre,
-      [name]: value,
-    }));
+  const location = useLocation();
+  const [errors, setErrors] = useState({});
+  const [isEdit, setIsEdit] = useState(false);
+  const { postRoute, editRoute, getRoute } = useApi();
+  const editAdmissionId = location.state?.admissionId;
+  const createAdmission = location.state?.makeAdmission;
+  const handleEducation = (name, value) => {
+    const newEducation = { ...educationDetails };
+    newEducation[name] = value;
+
+    if (name === "employed_type") {
+      if (value === "job") {
+        newEducation["business_name"] = null;
+        newEducation["business_type"] = null;
+        newEducation["business_start_date"] = null;
+      } else {
+        newEducation["current_designation"] = null;
+        newEducation["current_company"] = null;
+      }
+    }
+    setEducationDetail(newEducation);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSelected(3);
+    const { errors, data } = await postRoute(`api/education`, educationDetails);
+
+    console.log(errors, data);
+    if (errors) {
+      setErrors(errors);
+    } else {
+      // setSelected(3);
+    }
   };
+  useEffect(() => {
+    const getData = async () => {
+      if (editAdmissionId) {
+        const editAdmisson = await getRoute(
+          "/api/education/filter",
+          { admission_id: editAdmissionId },
+          false
+        );
+        setEducationDetail({
+          id: editAdmisson?.id,
+          admission_id: editAdmisson?.admission_id,
+          inquiry_id: editAdmisson?.inquiry_id || null,
+          highest_qualification: editAdmisson?.highest_qualification,
+          passing_year: editAdmisson?.passing_year,
+          name_of_institute: editAdmisson?.name_of_institute,
+          percentage_cgpa: editAdmisson?.percentage_cgpa,
+          is_employed: editAdmisson?.is_employed,
+          current_company: editAdmisson?.current_company,
+          current_designation: editAdmisson?.current_designation,
+          current_monthly_salary: editAdmisson?.current_monthly_salary || 0,
+          total_experience_years: editAdmisson?.total_experience_years || 0,
+          past_rejection_country_name:
+            editAdmisson?.past_rejection_country_name,
+          ielts_score: editAdmisson?.ielts_score,
+        });
+        setIsEdit(true);
+      } else {
+        if (createAdmission) {
+          setEducationDetail({
+            ...education_Object,
+            admission_id: "008ee915-e006-4a47-87ee-121686479f62",
+            inquiry_id: createAdmission?.id,
+          });
+        }
+        setIsEdit(false);
+      }
+    };
+    getData();
+  }, [editAdmissionId, createAdmission]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -22,11 +110,11 @@ const EducationForm = ({
         <div className="col-md-12">
           <div className="card">
             <div className="header">
-              <h2>Education Information</h2>
+              <h2>Current Education Information</h2>
             </div>
             <div className="body">
               <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <div className="form-group">
                     <label>Highest Qualification</label>
                     <input
@@ -36,7 +124,7 @@ const EducationForm = ({
                       required="required"
                       type="text"
                       onChange={(e) => {
-                        handleAdmission(
+                        handleEducation(
                           "highest_qualification",
                           e.target.value
                         );
@@ -47,7 +135,7 @@ const EducationForm = ({
                     </p>
                   </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <div className="form-group">
                     <label>Name of Institute</label>
                     <input
@@ -56,31 +144,56 @@ const EducationForm = ({
                       name="name_of_institute"
                       required="required"
                       onChange={(e) => {
-                        handleAdmission("name_of_institute", e.target.value);
+                        handleEducation("name_of_institute", e.target.value);
                       }}
                     />
                     <p className="mt-2 text-danger">
                       {errors["name_of_institute"]}
                     </p>
                   </div>
+                </div>{" "}
+                <div className="form-group col-md-4">
+                  <label>Gender</label>
+                  <RadioGroup
+                    onChange={(gender) => handleEducation("gender", gender)}
+                    value={educationDetails?.gender}
+                    options={genderOptions}
+                  />
+
+                  <p className="mt-2 text-danger">{errors["gender"]}</p>
+                </div>{" "}
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Place Of Birth</label>
+                    <input
+                      className={`form-control`}
+                      value={educationDetails?.place_of_birth || ""}
+                      required="required"
+                      type="text"
+                      onChange={(e) =>
+                        handleEducation("place_of_birth", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["place_of_birth"]}
+                    </p>
+                  </div>
                 </div>
                 <div className="col-md-4">
-                  <div className="mt-4 form-group">
-                    <div className="fancy-checkbox">
-                      <label>
-                        <input
-                          checked={educationDetails?.is_employed === 1}
-                          onChange={(e) => {
-                            handleAdmission(
-                              "is_employed",
-                              e.target.checked ? 1 : 0
-                            );
-                          }}
-                          type="checkbox"
-                        />
-                        <span>Is Currently Working</span>
-                      </label>
-                    </div>
+                  <div className="form-group">
+                    <label>Current Nationality</label>
+                    <input
+                      className={`form-control`}
+                      value={educationDetails?.current_nationality || ""}
+                      required="required"
+                      type="text"
+                      onChange={(e) => {
+                        handleEducation("current_nationality", e.target?.value);
+                      }}
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["current_nationality"]}
+                    </p>
                   </div>
                 </div>
                 <div className="col-md-4">
@@ -92,8 +205,9 @@ const EducationForm = ({
                       name="passing_year"
                       required="required"
                       type="number"
+                      max={2024}
                       onChange={(e) => {
-                        handleAdmission("passing_year", e.target.value);
+                        handleEducation("passing_year", e.target.value);
                       }}
                     />
                     <p className="mt-2 text-danger">{errors["passing_year"]}</p>
@@ -109,123 +223,12 @@ const EducationForm = ({
                       required="required"
                       type="number"
                       onChange={(e) => {
-                        handleAdmission("percentage_cgpa", e.target.value);
+                        handleEducation("percentage_cgpa", e.target.value);
                       }}
                     />
                     <p className="mt-2 text-danger">
                       {errors["percentage_cgpa"]}
                     </p>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>Current Company</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.current_company}
-                      name="current_company"
-                      required="required"
-                      onChange={(e) => {
-                        handleAdmission("current_company", e.target.value);
-                      }}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["current_company"]}
-                    </p>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>Current Designation</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.current_designation}
-                      name="current_designation"
-                      required="required"
-                      type="text"
-                      onChange={(e) => {
-                        handleAdmission("current_designation", e.target.value);
-                      }}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["current_designation"]}
-                    </p>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>Current Monthly Salary</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.current_monthly_salary}
-                      name="current_monthly_salary"
-                      required="required"
-                      type="number"
-                      onChange={(e) => {
-                        handleAdmission(
-                          "current_monthly_salary",
-                          e.target.value
-                        );
-                      }}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["current_monthly_salary"]}
-                    </p>
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>Total Experience (In Years)</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.total_experience_years}
-                      name="total_experience_years"
-                      required="required"
-                      type="number"
-                      onChange={(e) => {
-                        handleAdmission(
-                          "total_experience_years",
-                          e.target.value
-                        );
-                      }}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["total_experience_years"]}
-                    </p>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Country Interested</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.country_interested}
-                      name="country_interested"
-                      required="required"
-                      type="text"
-                      onChange={(e) => {
-                        handleAdmission("country_interested", e.target.value);
-                      }}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["country_interested"]}
-                    </p>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Visa Type</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.visa_type}
-                      name="visa_type"
-                      required="required"
-                      type="text"
-                      onChange={(e) => {
-                        handleAdmission("visa_type", e.target.value);
-                      }}
-                    />
-                    <p className="mt-2 text-danger">{errors["visa_type"]}</p>
                   </div>
                 </div>
                 <div className="col-md-4">
@@ -238,13 +241,13 @@ const EducationForm = ({
                       required="required"
                       type="text"
                       onChange={(e) => {
-                        handleAdmission("ielts_score", e.target.value);
+                        handleEducation("ielts_score", e.target.value);
                       }}
                     />
                     <p className="mt-2 text-danger">{errors["ielts_score"]}</p>
                   </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <div className="form-group">
                     <label>Past Rejection Country Name</label>
                     <input
@@ -254,7 +257,7 @@ const EducationForm = ({
                       required="required"
                       type="text"
                       onChange={(e) => {
-                        handleAdmission(
+                        handleEducation(
                           "past_rejection_country_name",
                           e.target.value
                         );
@@ -265,24 +268,202 @@ const EducationForm = ({
                     </p>
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>TeleCaller Name</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.telecaller_name}
-                      name="telecaller_name"
-                      required="required"
-                      type="text"
-                      onChange={(e) => {
-                        handleAdmission("telecaller_name", e.target.value);
-                      }}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["telecaller_name"]}
-                    </p>
+                <div className="col-md-4">
+                  <div className="mt-4 form-group">
+                    <div className="fancy-checkbox">
+                      <label>
+                        <input
+                          checked={educationDetails?.is_employed === 1}
+                          onChange={(e) => {
+                            handleEducation(
+                              "is_employed",
+                              e.target.checked ? 1 : 0
+                            );
+                          }}
+                          type="checkbox"
+                        />
+                        <span>Is Currently Working</span>
+                      </label>
+                    </div>
                   </div>
                 </div>
+                {educationDetails?.is_employed ? (
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <label>Employed Type</label>
+                      <ReactSelect
+                        options={employedOptions}
+                        required
+                        value={educationDetails?.employed_type || ""}
+                        onChange={(e) => {
+                          handleEducation("employed_type", e.value);
+                        }}
+                      />{" "}
+                      <p className="mt-2 text-danger">
+                        {errors["employed_type"]}
+                      </p>
+                    </div>
+                  </div>
+                ) : null}
+                {educationDetails?.is_employed ? (
+                  educationDetails?.employed_type === "job" ? (
+                    <>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label>Current Company</label>
+                          <input
+                            className={`form-control`}
+                            value={educationDetails?.current_company}
+                            name="current_company"
+                            required="required"
+                            onChange={(e) => {
+                              handleEducation(
+                                "current_company",
+                                e.target.value
+                              );
+                            }}
+                          />
+                          <p className="mt-2 text-danger">
+                            {errors["current_company"]}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label>Current Designation</label>
+                          <input
+                            className={`form-control`}
+                            value={educationDetails?.current_designation}
+                            name="current_designation"
+                            required="required"
+                            type="text"
+                            onChange={(e) => {
+                              handleEducation(
+                                "current_designation",
+                                e.target.value
+                              );
+                            }}
+                          />
+                          <p className="mt-2 text-danger">
+                            {errors["current_designation"]}
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label> Business Name</label>
+                          <input
+                            className={`form-control`}
+                            value={educationDetails?.business_name}
+                            name="business_name"
+                            required="required"
+                            onChange={(e) => {
+                              handleEducation("business_name", e.target.value);
+                            }}
+                          />
+                          <p className="mt-2 text-danger">
+                            {errors["business_name"]}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label>Business Type</label>
+                          <input
+                            className={`form-control`}
+                            value={educationDetails?.business_type}
+                            name="business_type"
+                            required="required"
+                            type="text"
+                            onChange={(e) => {
+                              handleEducation("business_type", e.target.value);
+                            }}
+                          />
+                          <p className="mt-2 text-danger">
+                            {errors["business_type"]}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label>Business Startdate</label>
+
+                          <Flatpickr
+                            maxDate={"today"}
+                            style={{
+                              border: "1px solid #d1d5db",
+                              borderRadius: "0.3rem",
+                              width: "100%",
+                              boxSizing: "border-box",
+                              padding: "0.5rem",
+                            }}
+                            value={educationDetails?.business_start_date || ""}
+                            className="date-picker"
+                            onChange={(date) =>
+                              handleEducation(
+                                "business_start_date",
+                                moment(date[0]).format("YYYY-MM-DD")
+                              )
+                            }
+                          />
+
+                          <p className="mt-2 text-danger">
+                            {errors["business_start_date"]}
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  )
+                ) : null}
+                {educationDetails?.is_employed ? (
+                  <>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label>Current Monthly Salary</label>
+                        <input
+                          className={`form-control`}
+                          value={educationDetails?.current_monthly_salary}
+                          name="current_monthly_salary"
+                          required="required"
+                          type="number"
+                          onChange={(e) => {
+                            handleEducation(
+                              "current_monthly_salary",
+                              e.target.value
+                            );
+                          }}
+                        />
+                        <p className="mt-2 text-danger">
+                          {errors["current_monthly_salary"]}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label>Total Experience (In Years)</label>
+                        <input
+                          className={`form-control`}
+                          value={educationDetails?.total_experience_years}
+                          name="total_experience_years"
+                          required="required"
+                          type="number"
+                          onChange={(e) => {
+                            handleEducation(
+                              "total_experience_years",
+                              e.target.value
+                            );
+                          }}
+                        />
+                        <p className="mt-2 text-danger">
+                          {errors["total_experience_years"]}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                ) : null}
               </div>
               <button className="btn btn-primary" type="submit">
                 Next

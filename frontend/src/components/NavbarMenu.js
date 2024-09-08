@@ -338,7 +338,7 @@ class NavbarMenu extends React.Component {
                   <li
                     className={toggleEqualizer ? "show dropdown" : "dropdown"}
                   >
-                    <a
+                    {/* <a
                       href="#!"
                       className="dropdown-toggle icon-menu"
                       data-toggle="dropdown"
@@ -348,7 +348,7 @@ class NavbarMenu extends React.Component {
                       }}
                     >
                       <i className="icon-equalizer"></i>
-                    </a>
+                    </a> */}
                     {/* <ul
                       className={
                         toggleEqualizer
@@ -401,6 +401,26 @@ class NavbarMenu extends React.Component {
                   <li>
                     <Logout history={this.props.history} />
                   </li>
+                        {/* <a
+                        href="#!"
+                        className="dropdown-toggle icon-menu"
+                        data-toggle="dropdown"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.props.onPressEqualizer();
+                        }}
+                      >
+                        <i className="icon-equalizer"></i>
+                      </a>
+                      <ul
+                        className={
+                          toggleEqualizer
+                            ? "dropdown-menu  mr-2 menu-icon show"
+                            : "dropdown-menu  menu-icon"
+                        }
+                      >
+                        <li className="menu-heading">Log Out</li>
+                      </ul> */}
                 </ul>
               </div>
             </div>
@@ -530,11 +550,6 @@ class NavbarMenu extends React.Component {
                         <span>Admission</span>
                       </a>
                       <ul className="collapse">
-                        <li
-                          className={activeKey === "admission" ? "active" : ""}
-                        >
-                          <Link to="admission">Admission</Link>
-                        </li>
                         <li
                           className={
                             activeKey === "totaladmission" ? "active" : ""
