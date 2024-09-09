@@ -1,5 +1,5 @@
-import Joi from "joi";
-import { v4 as uuidv4 } from "uuid";
+import Joi from 'joi';
+import { v4 as uuidv4 } from 'uuid';
 
 const feeDetailsSchema = Joi.object({
   id: Joi.string().guid({ version: 'uuidv4' }).default(uuidv4).messages({
@@ -35,6 +35,18 @@ const feeDetailsSchema = Joi.object({
   updated_at: Joi.date().default(() => new Date()).messages({
     "date.base": "Invalid date format for updated_at.",
   })
-});
+}).custom((value, helpers) => {
+  const { current_amount, remaining_amount, total_amount } = value;
+
+  if (current_amount > total_amount) {
+    return helpers.message('Current amount cannot be greater than total amount.');
+  }
+
+  if (remaining_amount > total_amount) {
+    return helpers.message('Remaining amount cannot be greater than total amount.');
+  }
+
+  return value;
+}, 'Custom validation for amount checks');
 
 export default feeDetailsSchema;

@@ -106,7 +106,7 @@ export async function updateFeePayment(req, res) {
         status: "Failed",
       });
     } else {
-      res.send({ message: "University Updated!", status: "success" });
+      res.send({ message: "Fee Details Updated!", status: "success" });
     }
   } catch (err) {
     res.status(500).send({
