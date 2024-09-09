@@ -7,18 +7,18 @@ import ReactSelect from "../../../components/ReactSelect";
 import { countries } from "../../../helper.js";
 import RadioGroup from "../../../components/RadioGroup.js";
 const inquiryObject = {
-  name: "john cena",
-  email: "cena@gmail.com",
-  contact_no: "96523485",
-  alternate_no: "69523652",
-  address: "jimsd@132",
-  date_of_birth: "2001-09-03",
-  interested_country: "USA",
-  course_detail: "gg",
-  current_city: "gg",
-  telecaller_name: "gg",
-  gender: "male",
-  visa_type: "Work Visa",
+  name: "",
+  email: "",
+  contact_no: "",
+  alternate_no: "",
+  address: "",
+  date_of_birth: "",
+  interested_country: "",
+  course_detail: "",
+  current_city: "",
+  telecaller_name: "",
+  gender: "",
+  visa_type: "",
   progress_count: "0",
 };
 
