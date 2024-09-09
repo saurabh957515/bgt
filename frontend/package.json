@@ -18,7 +18,7 @@
     "@testing-library/user-event": "^7.1.2",
     "apexcharts": "^3.26.0",
     "axios": "^1.7.4",
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^4.4.1",
     "ckeditor4-react": "^1.0.1",
     "cors-env": "^1.0.2",
     "cross-env": "^7.0.3",

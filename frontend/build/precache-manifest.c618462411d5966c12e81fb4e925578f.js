@@ -1,18 +1,18 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "d9b9b22d2e830c802f91b786a0613688",
+    "revision": "efb6e1121b78d072c542267e048ac691",
     "url": "/index.html"
   },
   {
-    "revision": "603ea1f25b27d2a72df2",
-    "url": "/static/css/2.b35284e9.chunk.css"
+    "revision": "2df83bdb8a11250a715e",
+    "url": "/static/css/2.da4da3d5.chunk.css"
   },
   {
-    "revision": "4ddcd496a401be7ddab6",
-    "url": "/static/css/main.cdf1a091.chunk.css"
+    "revision": "863ea473223a55e7ab18",
+    "url": "/static/css/main.24143884.chunk.css"
   },
   {
-    "revision": "603ea1f25b27d2a72df2",
+    "revision": "2df83bdb8a11250a715e",
     "url": "/static/js/2.69c2325a.chunk.js"
   },
   {
@@ -20,7 +20,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/js/2.69c2325a.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "4ddcd496a401be7ddab6",
+    "revision": "863ea473223a55e7ab18",
     "url": "/static/js/main.0d47c844.chunk.js"
   },
   {
@@ -204,8 +204,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/simple-Line-Icons.596814ca.ttf"
   },
   {
-    "revision": "c9c9b5ebc6395eeb83072bf18e3818aa",
-    "url": "/static/media/simple-Line-Icons.c9c9b5eb.svg"
+    "revision": "5db2ea1bcb7a6cc078755c90458c3b65",
+    "url": "/static/media/simple-Line-Icons.5db2ea1b.svg"
   },
   {
     "revision": "f19a7f6c7a0b54b748277c40d7cf8882",
@@ -236,8 +236,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/weathericons-regular-webfont.2ca3df09.ttf"
   },
   {
-    "revision": "c0c7fbba3a7f2f44830c0a06fb399c74",
-    "url": "/static/media/weathericons-regular-webfont.c0c7fbba.svg"
+    "revision": "b2233bc1525939550405c87cffede242",
+    "url": "/static/media/weathericons-regular-webfont.b2233bc1.svg"
   },
   {
     "revision": "e7ef2b448d27cf5312a73ceb3e7841c4",
