@@ -235,9 +235,6 @@ const TotalAdmission = () => {
             ]?.map((tab, index) => (
               <li
                 key={index}
-                onClick={() => {
-                  setSelected(index + 1);
-                }}
                 className="cursor-pointer nav-item"
               >
                 <div
