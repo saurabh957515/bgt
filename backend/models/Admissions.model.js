@@ -17,20 +17,147 @@ class Admission {
     try {
       const query = `
       SELECT 
-        admission.id AS admissionDetails_id, 
-        admission.*, 
-        education.*, 
-        education.id AS educationDetails_id
+        -- Admission details
+        admission.id AS admission_id,
+        admission.inquiry_id AS admission_inquiry_id,
+        admission.name AS admission_name,
+        admission.email AS admission_email,
+        admission.contact_no AS admission_contact_no,
+        admission.alternate_no AS admission_alternate_no,
+        admission.address AS admission_address,
+        admission.date_of_birth AS admission_date_of_birth,
+        admission.current_city AS admission_current_city,
+        admission.telecaller_name AS admission_telecaller_name,
+        admission.visa_type AS admission_visa_type,
+        admission.created_at AS admission_created_at,
+        
+        -- Education details
+        education.id AS education_id,
+        education.admission_id AS education_admission_id,
+        education.inquiry_id AS education_inquiry_id,
+        education.highest_qualification AS education_highest_qualification,
+        education.passing_year AS education_passing_year,
+        education.name_of_institute AS education_name_of_institute,
+        education.percentage_cgpa AS education_percentage_cgpa,
+        education.is_employed AS education_is_employed,
+        education.current_company AS education_current_company,
+        education.current_designation AS education_current_designation,
+        education.current_monthly_salary AS education_current_monthly_salary,
+        education.total_experience_years AS education_total_experience_years,
+        education.past_rejection_country_name AS education_past_rejection_country_name,
+        education.ielts_score AS education_ielts_score,
+        education.employed_type AS education_employed_type,
+        education.business_name AS education_business_name,
+        education.business_type AS education_business_type,
+        education.business_start_date AS education_business_start_date,
+        education.place_of_birth AS education_place_of_birth,
+        education.gender AS education_gender,
+        education.current_nationality AS education_current_nationality,
+  
+        -- University details
+        university.id AS university_id,
+        university.institute_name AS university_institute_name,
+        university.country AS university_country,
+        university.course_detail AS university_course_detail,
+        university.city AS university_city,
+        university.stay_in_type AS university_stay_in_type,
+        university.stay_in_address AS university_stay_in_address,
+        university.inquiry_id AS university_inquiry_id,
+        university.admission_id AS university_admission_id,
+        university.created_at AS university_created_at,
+        university.updated_at AS university_updated_at,
+  
+        -- Fee details
+        fee_details.id AS fee_details_id,
+        fee_details.admission_id AS fee_details_admission_id,
+        fee_details.inquiry_id AS fee_details_inquiry_id,
+        fee_details.bank_details_id AS fee_details_bank_details_id,
+        fee_details.current_amount AS fee_details_current_amount,
+        fee_details.remaining_amount AS fee_details_remaining_amount,
+        fee_details.total_amount AS fee_details_total_amount,
+        fee_details.updated_at AS fee_details_updated_at
+  
       FROM admission
       LEFT JOIN education ON admission.id = education.admission_id
-    `;
+      LEFT JOIN university ON admission.id = university.admission_id
+      LEFT JOIN fee_details ON admission.id = fee_details.admission_id
+      WHERE education.id IS NOT NULL
+        AND university.id IS NOT NULL
+        AND fee_details.id IS NOT NULL
+  `;
 
-      const result = await sql(query);
-      return result;
+      const rows = await sql(query);
+      const results = rows.map((row) => ({
+        admission: {
+          id: row.admission_id,
+          inquiry_id: row.admission_inquiry_id,
+          name: row.admission_name,
+          email: row.admission_email,
+          contact_no: row.admission_contact_no,
+          alternate_no: row.admission_alternate_no,
+          address: row.admission_address,
+          date_of_birth: row.admission_date_of_birth,
+          current_city: row.admission_current_city,
+          telecaller_name: row.admission_telecaller_name,
+          visa_type: row.admission_visa_type,
+          created_at: row.admission_created_at,
+        },
+        education: {
+          id: row.education_id,
+          admission_id: row.education_admission_id,
+          inquiry_id: row.education_inquiry_id,
+          highest_qualification: row.education_highest_qualification,
+          passing_year: row.education_passing_year,
+          name_of_institute: row.education_name_of_institute,
+          percentage_cgpa: row.education_percentage_cgpa,
+          is_employed: row.education_is_employed,
+          current_company: row.education_current_company,
+          current_designation: row.education_current_designation,
+          current_monthly_salary: row.education_current_monthly_salary,
+          total_experience_years: row.education_total_experience_years,
+          past_rejection_country_name:
+            row.education_past_rejection_country_name,
+          ielts_score: row.education_ielts_score,
+          employed_type: row.education_employed_type,
+          business_name: row.education_business_name,
+          business_type: row.education_business_type,
+          business_start_date: row.education_business_start_date,
+          place_of_birth: row.education_place_of_birth,
+          gender: row.education_gender,
+          current_nationality: row.education_current_nationality,
+        },
+        university: {
+          id: row.university_id,
+          institute_name: row.university_institute_name,
+          country: row.university_country,
+          course_detail: row.university_course_detail,
+          city: row.university_city,
+          stay_in_type: row.university_stay_in_type,
+          stay_in_address: row.university_stay_in_address,
+          inquiry_id: row.university_inquiry_id,
+          admission_id: row.university_admission_id,
+          created_at: row.university_created_at,
+          updated_at: row.university_updated_at,
+        },
+        fee_details: {
+          id: row.fee_details_id,
+          admission_id: row.fee_details_admission_id,
+          inquiry_id: row.fee_details_inquiry_id,
+          bank_details_id: row.fee_details_bank_details_id,
+          current_amount: row.fee_details_current_amount,
+          remaining_amount: row.fee_details_remaining_amount,
+          total_amount: row.fee_details_total_amount,
+          updated_at: row.fee_details_updated_at,
+        },
+      }));
+
+      return results;
     } catch (error) {
+      console.error("Error fetching data:", error);
       throw error;
     }
   }
+
   static async deleteByID(id) {
     try {
       const query = `DELETE FROM admission WHERE id = ?`;
@@ -73,7 +200,7 @@ class Admission {
         inquiry_id,
         id,
       ]);
-  console.log(result,id)
+      console.log(result, id);
       if (result?.error) {
         return { error: result?.error };
       } else {
@@ -94,30 +221,171 @@ class Admission {
       )
         ? sortDirection.toUpperCase()
         : "DESC";
-
-      if (fields) {
-        if (Object?.keys(fields)) {
-          for (const [field, value] of Object.entries(fields)) {
-            if (value !== undefined && value !== null) {
-              conditions.push(`${field} LIKE ?`);
-              values.push(`%${value}%`);
-            }
-          }
-        }
+  
+      // Validate and add conditions for admission name
+      if (fields?.name) {
+        conditions.push("admission.name LIKE ?");
+        values.push(`%${fields.name}%`);
       }
+  
+      // Validate and add conditions for telecaller name
+      if (fields?.telecaller_name) {
+        conditions.push("admission.telecaller_name LIKE ?");
+        values.push(`%${fields.telecaller_name}%`);
+      }
+  
+      // Validate and add conditions for created_at
+      if (fields?.created_at) {
 
+        conditions.push("admission.created_at >= ?");
+        values.push(fields.created_at);  
+      }
+  
+      // Build the query
       const query = `
-        SELECT * FROM admission 
-       ${conditions.length ? "WHERE " + conditions.join(" AND ") : ""}
-        ORDER BY created_at ${direction}
+        SELECT 
+          -- Admission details
+          admission.id AS admission_id,
+          admission.inquiry_id AS admission_inquiry_id,
+          admission.name AS admission_name,
+          admission.email AS admission_email,
+          admission.contact_no AS admission_contact_no,
+          admission.alternate_no AS admission_alternate_no,
+          admission.address AS admission_address,
+          admission.date_of_birth AS admission_date_of_birth,
+          admission.current_city AS admission_current_city,
+          admission.telecaller_name AS admission_telecaller_name,
+          admission.visa_type AS admission_visa_type,
+          admission.created_at AS admission_created_at,
+          
+          -- Education details
+          education.id AS education_id,
+          education.admission_id AS education_admission_id,
+          education.inquiry_id AS education_inquiry_id,
+          education.highest_qualification AS education_highest_qualification,
+          education.passing_year AS education_passing_year,
+          education.name_of_institute AS education_name_of_institute,
+          education.percentage_cgpa AS education_percentage_cgpa,
+          education.is_employed AS education_is_employed,
+          education.current_company AS education_current_company,
+          education.current_designation AS education_current_designation,
+          education.current_monthly_salary AS education_current_monthly_salary,
+          education.total_experience_years AS education_total_experience_years,
+          education.past_rejection_country_name AS education_past_rejection_country_name,
+          education.ielts_score AS education_ielts_score,
+          education.employed_type AS education_employed_type,
+          education.business_name AS education_business_name,
+          education.business_type AS education_business_type,
+          education.business_start_date AS education_business_start_date,
+          education.place_of_birth AS education_place_of_birth,
+          education.gender AS education_gender,
+          education.current_nationality AS education_current_nationality,
+    
+          -- University details
+          university.id AS university_id,
+          university.institute_name AS university_institute_name,
+          university.country AS university_country,
+          university.course_detail AS university_course_detail,
+          university.city AS university_city,
+          university.stay_in_type AS university_stay_in_type,
+          university.stay_in_address AS university_stay_in_address,
+          university.inquiry_id AS university_inquiry_id,
+          university.admission_id AS university_admission_id,
+          university.created_at AS university_created_at,
+          university.updated_at AS university_updated_at,
+    
+          -- Fee details
+          fee_details.id AS fee_details_id,
+          fee_details.admission_id AS fee_details_admission_id,
+          fee_details.inquiry_id AS fee_details_inquiry_id,
+          fee_details.bank_details_id AS fee_details_bank_details_id,
+          fee_details.current_amount AS fee_details_current_amount,
+          fee_details.remaining_amount AS fee_details_remaining_amount,
+          fee_details.total_amount AS fee_details_total_amount,
+          fee_details.updated_at AS fee_details_updated_at
+  
+        FROM admission
+        LEFT JOIN education ON admission.id = education.admission_id
+        LEFT JOIN university ON admission.id = university.admission_id
+        LEFT JOIN fee_details ON admission.id = fee_details.admission_id
+        ${conditions.length ? "WHERE " + conditions.join(" AND ") : ""}
+        ORDER BY admission.created_at ${direction}
       `;
-
-      const result = await sql(query, values);
-      return result;
+  
+      // Execute the query with parameters
+      const rows = await sql(query, values);
+  
+      // Map the result to structured objects
+      const results = rows.map((row) => ({
+        admission: {
+          id: row.admission_id,
+          inquiry_id: row.admission_inquiry_id,
+          name: row.admission_name,
+          email: row.admission_email,
+          contact_no: row.admission_contact_no,
+          alternate_no: row.admission_alternate_no,
+          address: row.admission_address,
+          date_of_birth: row.admission_date_of_birth,
+          current_city: row.admission_current_city,
+          telecaller_name: row.admission_telecaller_name,
+          visa_type: row.admission_visa_type,
+          created_at: row.admission_created_at,
+        },
+        education: {
+          id: row.education_id,
+          admission_id: row.education_admission_id,
+          inquiry_id: row.education_inquiry_id,
+          highest_qualification: row.education_highest_qualification,
+          passing_year: row.education_passing_year,
+          name_of_institute: row.education_name_of_institute,
+          percentage_cgpa: row.education_percentage_cgpa,
+          is_employed: row.education_is_employed,
+          current_company: row.education_current_company,
+          current_designation: row.education_current_designation,
+          current_monthly_salary: row.education_current_monthly_salary,
+          total_experience_years: row.education_total_experience_years,
+          past_rejection_country_name: row.education_past_rejection_country_name,
+          ielts_score: row.education_ielts_score,
+          employed_type: row.education_employed_type,
+          business_name: row.education_business_name,
+          business_type: row.education_business_type,
+          business_start_date: row.education_business_start_date,
+          place_of_birth: row.education_place_of_birth,
+          gender: row.education_gender,
+          current_nationality: row.education_current_nationality,
+        },
+        university: {
+          id: row.university_id,
+          institute_name: row.university_institute_name,
+          country: row.university_country,
+          course_detail: row.university_course_detail,
+          city: row.university_city,
+          stay_in_type: row.university_stay_in_type,
+          stay_in_address: row.university_stay_in_address,
+          inquiry_id: row.university_inquiry_id,
+          admission_id: row.university_admission_id,
+          created_at: row.university_created_at,
+          updated_at: row.university_updated_at,
+        },
+        fee_details: {
+          id: row.fee_details_id,
+          admission_id: row.fee_details_admission_id,
+          inquiry_id: row.fee_details_inquiry_id,
+          bank_details_id: row.fee_details_bank_details_id,
+          current_amount: row.fee_details_current_amount,
+          remaining_amount: row.fee_details_remaining_amount,
+          total_amount: row.fee_details_total_amount,
+          updated_at: row.fee_details_updated_at,
+        },
+      }));
+  
+      return results;
     } catch (error) {
+      console.error("Error fetching data:", error);
       throw error;
     }
   }
+  
 }
 
 export default Admission;

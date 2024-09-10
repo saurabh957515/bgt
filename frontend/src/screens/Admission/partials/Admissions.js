@@ -52,7 +52,7 @@ const Admissions = () => {
             ]}
           />
           <div className="accordion-wrap">
-            {admissions?.map((admission, index) => (
+            {admissions?.map((admissionDetails, index) => (
               <div
                 key={index}
                 className={`accordion ${
@@ -64,12 +64,12 @@ const Admissions = () => {
               >
                 <div className="teaser">
                   <div className="time">
-                    <h5>{moment(admission?.date).format("YYYY-MM-DD")}</h5>
+                    <h5>{moment(admissionDetails?.admission?.created_at).format("YYYY-MM-DD")}</h5>
                   </div>
 
                   <div className="title">
-                    <h3>{admission?.name}</h3>
-                    <h6 className="theme">{admission?.telecaller_name}</h6>
+                    <h3>{admissionDetails?.admission?.name}</h3>
+                    <h6 className="theme">{admissionDetails?.admission?.telecaller_name}</h6>
                   </div>
                 </div>
 
@@ -78,24 +78,24 @@ const Admissions = () => {
                   id="collapseOne"
                 >
                   <div className="d-flex justify-content-between align-items-center content">
-                    {admission?.educationDetails_id ? (
+                    {admissionDetails?.education?.id ? (
                       <>
                         <div>
                           <div>
                             <strong>Institute Name:</strong>{" "}
-                            {admission?.name_of_institute}
+                            {admissionDetails?.education?.name_of_institute}
                           </div>
-                          <div>
+                          {/* <div>
                             <strong>Country Interested:</strong>{" "}
-                            {admission?.country_interested}
-                          </div>
+                            {education?.country_interested}
+                          </div> */}
                           <div>
                             <strong>Highest Qualification:</strong>{" "}
-                            {admission?.highest_qualification}
+                            {admissionDetails?.education?.highest_qualification}
                           </div>
                           <div>
                             <strong>IELTS Score:</strong>{" "}
-                            {admission?.ielts_score}
+                            {admissionDetails?.education?.ielts_score}
                           </div>
                         </div>
                       </>
@@ -107,7 +107,7 @@ const Admissions = () => {
                     <div>
                       <button
                         onClick={() => {
-                          handleEditAdmission(admission?.admissionDetails_id);
+                          handleEditAdmission(admissionDetails?.admission?.id);
                         }}
                         className="btn btn-primary me-2"
                       >
@@ -115,7 +115,7 @@ const Admissions = () => {
                       </button>
                       <button
                         onClick={() =>
-                          handleDeleteAdmission(admission?.admissionDetails_id)
+                          handleDeleteAdmission(admissionDetails?.admission?.id)
                         }
                         className="ml-2 btn btn-danger"
                       >
