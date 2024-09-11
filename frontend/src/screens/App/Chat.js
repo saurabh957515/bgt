@@ -12,11 +12,7 @@ class Chat extends React.Component {
       <div style={{ flex: 1 }}>
         <div>
           <div className="ng-star-inserted">
-            <div className="container-fluid">
-              <PageHeader
-                HeaderText="Chat"
-                Breadcrumb={[{ name: "App" }, { name: "Chat" }]}
-              />
+            <div className="mt-2 container-fluid">
               <ChatInbox />
             </div>
           </div>

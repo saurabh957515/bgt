@@ -13,8 +13,9 @@ const ChatInbox = () => {
   const [selected, setSelected] = useState(1);
   const [selectedAdmission, setSelectedAdmission] = useState({});
   const getAdmissions = async () => {
-    const admissionsData = await getRoute("/api/admission");
-    setAdmissions(admissionsData);
+    const {data} = await getRoute("/api/admission");
+    console.log(data)
+    setAdmissions(data);
   };
   useEffect(() => {
     getAdmissions();
@@ -52,8 +53,8 @@ const ChatInbox = () => {
   };
 
   return (
-    <div className="row" style={{ height: "70vh", overflow: "hidden" }}>
-      <div className="col-lg-12" style={{ height: "100%" }}>
+    <div className="row" style={{ height: "88vh", overflow: "hidden" }}>
+      <div className="col-lg-12" style={{ height: "98%" }}>
         <ul
           style={{
             margin: "8px 0px",
@@ -90,7 +91,7 @@ const ChatInbox = () => {
         </ul>
         <div
           className="bg-blue-500 card chat-app d-flex flex-column"
-          style={{ height: "90%" }}
+          style={{ height: "93%" }}
         >
           <div className="people-list" style={{ maxHeight: "100%" }}>
             <div
