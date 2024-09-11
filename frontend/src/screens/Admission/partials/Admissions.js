@@ -22,8 +22,8 @@ const Admissions = () => {
     setActiveIndex(activeIndex === index ? null : index);
   };
   const handleDeleteAdmission = async (id) => {
-    const inquiresData = await deleteById(`api/admission/${id}`);
-    if (inquiresData?.status == "success") {
+    const {data} = await deleteById(`api/admission/${id}`);
+    if (data?.status == "success") {
       getData();
     }
   };
