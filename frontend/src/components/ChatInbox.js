@@ -10,6 +10,7 @@ const ChatInbox = () => {
   const [admissions, setAdmissions] = useState([]);
   const [loading, setLoading] = useState(false);
   const { getRoute, editRoute, postRoute } = useApi();
+  const [selected, setSelected] = useState(1);
   const [selectedAdmission, setSelectedAdmission] = useState({});
   const getAdmissions = async () => {
     const admissionsData = await getRoute("/api/admission");
@@ -53,9 +54,43 @@ const ChatInbox = () => {
   return (
     <div className="row" style={{ height: "70vh", overflow: "hidden" }}>
       <div className="col-lg-12" style={{ height: "100%" }}>
+        <ul
+          style={{
+            margin: "8px 0px",
+          }}
+          className="nav"
+        >
+          {["Inquiry", "Admissions"]?.map((tab, index) => (
+            <li
+              onClick={() => setSelected(index + 1)}
+              key={index}
+              className="cursor-pointer nav-item"
+            >
+              <div
+                style={{
+                  userSelect: "none",
+                  cursor: "pointer",
+                  padding: "10px 20px", // Spacing within the tabs
+                  marginRight: "10px", // Space between the tabs
+                  color: selected === index + 1 ? "#000" : "#888", // Active tab color and lighter color for inactive
+                  backgroundColor:
+                    selected === index + 1 ? "#e0e0e0" : "#f0f0f0", // Different background for active/inactive
+                  opacity: selected === index + 1 ? 1 : 0.6, // Slight opacity difference for inactive tabs
+                  borderRadius: "8px", // Rounded corners for tabs
+                  transition: "background-color 0.3s ease, opacity 0.3s ease", // Smooth transition for background and opacity
+                }}
+                className={`nav-link cursor-pointer ${
+                  selected === index + 1 && "active"
+                }`}
+              >
+                {tab}
+              </div>
+            </li>
+          ))}
+        </ul>
         <div
           className="bg-blue-500 card chat-app d-flex flex-column"
-          style={{ height: "100%" }}
+          style={{ height: "90%" }}
         >
           <div className="people-list" style={{ maxHeight: "100%" }}>
             <div
@@ -252,8 +287,10 @@ const ChatInbox = () => {
                   <div onClick={sendMessage} className="input-group-prepend">
                     <span className="input-group-text">
                       {loading ? (
-                       <div class="spinner-border spinner-border-sm text-secondary" role="status">
-                     </div>
+                        <div
+                          class="spinner-border spinner-border-sm text-secondary"
+                          role="status"
+                        ></div>
                       ) : (
                         <i className="icon-paper-plane"></i>
                       )}
