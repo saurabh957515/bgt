@@ -11,7 +11,7 @@ const Admissions = () => {
   const history = useHistory();
   const { getRoute, deleteById } = useApi();
   const getData = async () => {
-    const { data } = await getRoute("api/admission");
+    const { data } = await getRoute("api/admission/getall");
     setAdmissions(data);
   };
 
@@ -64,12 +64,18 @@ const Admissions = () => {
               >
                 <div className="teaser">
                   <div className="time">
-                    <h5>{moment(admissionDetails?.admission?.created_at).format("YYYY-MM-DD")}</h5>
+                    <h5>
+                      {moment(admissionDetails?.admission?.created_at).format(
+                        "YYYY-MM-DD"
+                      )}
+                    </h5>
                   </div>
 
                   <div className="title">
                     <h3>{admissionDetails?.admission?.name}</h3>
-                    <h6 className="theme">{admissionDetails?.admission?.telecaller_name}</h6>
+                    <h6 className="theme">
+                      {admissionDetails?.admission?.telecaller_name}
+                    </h6>
                   </div>
                 </div>
 

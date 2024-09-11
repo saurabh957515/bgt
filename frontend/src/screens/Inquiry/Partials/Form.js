@@ -86,7 +86,7 @@ const Form = ({ inquiryEdit }) => {
       console.error("Submission error:", error);
     }
   };
-
+  const tenYearsAgo = moment().subtract(10, 'years').format("YYYY-MM-DD");
   return (
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">
@@ -118,10 +118,14 @@ const Form = ({ inquiryEdit }) => {
                       boxSizing: "border-box",
                       padding: "0.5rem",
                     }}
+                    options={{
+                      maxDate:tenYearsAgo,
+                    }}
                     required
                     value={inquiry?.date_of_birth}
-                    onChange={(data) => {
+                    onChange={(data,date) => {
                       const newDate = moment(data[0]).format("YYYY-MM-DD");
+                      console.log(newDate,date)
                       handleInquiry("date_of_birth", newDate);
                     }}
                   />{" "}

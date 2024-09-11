@@ -169,6 +169,16 @@ export async function getAdmissionDetail(req, res) {
     });
   }
 }
+export async function getAllDetails(req, res) {
+  try {
+    const result = await Admission?.getAllDetails();
+    res.send(result);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Some error occurred while creating the user.",
+    });
+  }
+}
 
 export async function getByFilter(req, res) {
   const { order, ...goodQuery } = req?.query;

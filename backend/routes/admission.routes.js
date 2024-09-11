@@ -4,7 +4,8 @@ import {
   getAdmissionDetail,
   updateAdmission,
   deleteAdmission,
-  getByFilter
+  getByFilter,
+  getAllDetails
 } from "../controllers/Admissions.controller.js";
 import protectRoute from "../middleware/protectRoute.js";
 const router = express.Router();
@@ -13,4 +14,5 @@ router.get("/", getAdmissionDetail);
 router.delete("/:id", deleteAdmission);
 router.patch("/:id", updateAdmission);
 router.get("/filter", getByFilter);
+router.get("/getall", getAllDetails);
 export default router;
