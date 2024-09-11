@@ -276,7 +276,6 @@ const AdmissionForm = ({ setAdmissionId, setSelected, visaOptions,progressCount 
                 <button className="mr-2 btn btn-outline-primary" type="submit">
                   Save
                 </button>
-                {console.log(createAdmission?.progress_count)}
                 <button
                  disabled={progressCount<1}
                   onClick={() => {
