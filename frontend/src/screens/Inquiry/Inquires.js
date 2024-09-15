@@ -5,9 +5,9 @@ import moment from "moment";
 
 const Inquires = () => {
   const [filterField, setFilterField] = useState({
-    date: moment().format("YYYY-MM-DD"),
+    date: "",
     name: "",
-    order: "asc",
+    order: "",
     telecaller_name: "",
   });
 

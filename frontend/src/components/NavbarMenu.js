@@ -3,6 +3,7 @@ import { Dropdown, Nav, Toast } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { VscAccount } from "react-icons/vsc";
 import {
   onPressDashbord,
   onPressDashbordChild,
@@ -133,6 +134,7 @@ class NavbarMenu extends React.Component {
       activeMenu.children[1].classList.toggle("in");
     }, 10);
   }
+ 
   render() {
     const {
       addClassactive,
@@ -147,9 +149,6 @@ class NavbarMenu extends React.Component {
       toastMessage,
     } = this.props;
     document.body.classList.add(themeColor);
-    const handleLogout = () => {
-      const isLogout = this.props.history.push("/login");
-    };
     return (
       <div>
         {isToastMessage ? (
@@ -198,147 +197,12 @@ class NavbarMenu extends React.Component {
             </div>
 
             <div className="navbar-right">
-              <form id="navbar-search" className="navbar-form search-form">
-                <input
-                  className="form-control"
-                  placeholder="Search here..."
-                  type="text"
-                />
-                <button type="button" className="btn btn-default">
-                  <i className="icon-magnifier"></i>
-                </button>
-              </form>
-
               <div id="navbar-menu">
                 <ul className="nav navbar-nav">
-                  {/* <li>
-                    <Link
-                      to="/filedocuments"
-                      className="icon-menu d-none d-sm-block d-md-none d-lg-block"
-                    >
-                      <i className="fa fa-folder-open-o"></i>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="appcalendar"
-                      className="icon-menu d-none d-sm-block d-md-none d-lg-block"
-                    >
-                      <i className="icon-calendar"></i>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="appchat" className="icon-menu d-none d-sm-block">
-                      <i className="icon-bubbles"></i>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="appinbox" className="icon-menu d-none d-sm-block">
-                      <i className="icon-envelope"></i>
-                      <span className="notification-dot"></span>
-                    </Link>
-                  </li> */}
-                  {/* <li
-                    className={
-                      toggleNotification ? "show dropdown" : "dropdown"
-                    }
-                  >
-                    <a
-                      href="#!"
-                      className="dropdown-toggle icon-menu"
-                      data-toggle="dropdown"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.props.onPressNotification();
-                      }}
-                    >
-                      <i className="icon-bell"></i>
-                      <span className="notification-dot"></span>
-                    </a>
-                    <ul
-                      className={
-                        toggleNotification
-                          ? "dropdown-menu notifications show"
-                          : "dropdown-menu notifications"
-                      }
-                    >
-                      <li className="header">
-                        <strong>You have 4 new Notifications</strong>
-                      </li>
-                      <li>
-                        <Link to="#">
-                          <div className="media">
-                            <div className="media-left">
-                              <i className="icon-info text-warning"></i>
-                            </div>
-                            <div className="media-body">
-                              <p className="text">
-                                Campaign <strong>Holiday Sale</strong> is nearly
-                                reach budget limit.
-                              </p>
-                              <span className="timestamp">10:00 AM Today</span>
-                            </div>
-                          </div>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="#">
-                          <div className="media">
-                            <div className="media-left">
-                              <i className="icon-like text-success"></i>
-                            </div>
-                            <div className="media-body">
-                              <p className="text">
-                                Your New Campaign <strong>Holiday Sale</strong>{" "}
-                                is approved.
-                              </p>
-                              <span className="timestamp">11:30 AM Today</span>
-                            </div>
-                          </div>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="#">
-                          <div className="media">
-                            <div className="media-left">
-                              <i className="icon-pie-chart text-info"></i>
-                            </div>
-                            <div className="media-body">
-                              <p className="text">
-                                Website visits from Twitter is 27% higher than
-                                last week.
-                              </p>
-                              <span className="timestamp">04:00 PM Today</span>
-                            </div>
-                          </div>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="#">
-                          <div className="media">
-                            <div className="media-left">
-                              <i className="icon-info text-danger"></i>
-                            </div>
-                            <div className="media-body">
-                              <p className="text">
-                                Error on website analytics configurations
-                              </p>
-                              <span className="timestamp">Yesterday</span>
-                            </div>
-                          </div>
-                        </Link>
-                      </li>
-                      <li className="footer">
-                        <Link to="#" className="more">
-                          See all notifications
-                        </Link>
-                      </li>
-                    </ul>
-                  </li> */}
                   <li
                     className={toggleEqualizer ? "show dropdown" : "dropdown"}
                   >
-                    {/* <a
+                    <a
                       href="#!"
                       className="dropdown-toggle icon-menu"
                       data-toggle="dropdown"
@@ -348,15 +212,15 @@ class NavbarMenu extends React.Component {
                       }}
                     >
                       <i className="icon-equalizer"></i>
-                    </a> */}
-                    {/* <ul
+                    </a>
+                    <ul
                       className={
                         toggleEqualizer
                           ? "dropdown-menu user-menu menu-icon show"
                           : "dropdown-menu user-menu menu-icon"
                       }
                     >
-                      <li className="menu-heading">ACCOUNT SETTINGS</li>
+                      <li className="menu-heading">More Actions</li>
                       <li>
                         <Link to="#">
                           <i className="icon-note"></i> <span>Basic</span>
@@ -374,34 +238,14 @@ class NavbarMenu extends React.Component {
                         </Link>
                       </li>
                       <li>
-                        <Link to="#">
-                          <i className="icon-bell"></i>{" "}
-                          <span>Notifications</span>
-                        </Link>
+                      <Logout history={this.props.history} />
                       </li>
-                      <li className="menu-heading">BILLING</li>
-                      <li>
-                        <Link to="#">
-                          <i className="icon-credit-card"></i>{" "}
-                          <span>Payments</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="#">
-                          <i className="icon-printer"></i> <span>Invoices</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="#">
-                          <i className="icon-refresh"></i> <span>Renewals</span>
-                        </Link>
-                      </li>
-                    </ul> */}
+                    </ul>
                   </li>
                   <li>
                     <Logout history={this.props.history} />
                   </li>
-                        {/* <a
+                  {/* <a
                         href="#!"
                         className="dropdown-toggle icon-menu"
                         data-toggle="dropdown"
@@ -429,13 +273,22 @@ class NavbarMenu extends React.Component {
 
         <div id="left-sidebar" className="sidebar" style={{ zIndex: 9 }}>
           <div className="sidebar-scroll">
-            <div className="user-account">
-              <img
-                src={UserImage}
-                className="rounded-circle user-photo"
-                alt="User Profile"
-              />
-
+            <div
+              className="flex user-account"
+              style={{ alignItems: "center", display: "flex" }}
+            >
+              <div
+                style={{
+                  marginRight: "16px",
+                }}
+              >
+                <VscAccount
+                  style={{
+                    height: "32px",
+                    width: "32px",
+                  }}
+                />
+              </div>
               <Dropdown>
                 <span>Welcome,</span>
                 <Dropdown.Toggle
@@ -443,36 +296,13 @@ class NavbarMenu extends React.Component {
                   as="a"
                   id="dropdown-basic"
                   className="user-name"
+                  style={{ marginLeft: "5px" }}
                 >
-                  <AuthUser/>
-               
+                  <AuthUser />
                 </Dropdown.Toggle>
-
-                {/* <Dropdown.Menu className="dropdown-menu-right account">
-                  <Dropdown.Item as="div">
-                    <Link to="/profilev2page" className="dropdown-item">
-                      <i className="icon-user"></i> My Profile
-                    </Link>
-                  </Dropdown.Item>
-                  <Dropdown.Item as="div">
-                    <Link to="/appinbox" className="dropdown-item">
-                      <i className="icon-envelope-open"></i> Messages
-                    </Link>
-                  </Dropdown.Item>
-                  <Dropdown.Item as="div">
-                    <Link to="/settings" className="dropdown-item">
-                      <i className="icon-settings"></i> Settings
-                    </Link>
-                  </Dropdown.Item>
-                  <li className="divider"></li>
-                  <Dropdown.Item as="div">
-                    <button onClick={handleLogout} className="dropdown-item">
-                      <i className="icon-power"></i> Logout
-                    </button>
-                  </Dropdown.Item>
-                </Dropdown.Menu> */}
               </Dropdown>
             </div>
+
             <ul className="nav nav-tabs">
               <li className="nav-item">
                 <Link
@@ -638,7 +468,7 @@ class NavbarMenu extends React.Component {
                             style={{
                               height: "28px",
                               width: "26px",
-                               marginTop:'-8px'
+                              marginTop: "-8px",
                             }}
                           >
                             <path
@@ -672,7 +502,7 @@ class NavbarMenu extends React.Component {
                             style={{
                               height: "26px",
                               width: "26px",
-                              marginTop:'-8px'
+                              marginTop: "-8px",
                             }}
                             fill="currentColor"
                             strokeWidth="0"

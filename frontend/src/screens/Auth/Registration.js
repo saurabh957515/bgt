@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../../assets/images/logo-white.svg";
+import Logo from "../../assets/images/rrlogo.svg";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import useSignup from "../../hooks/useSignup";
 
@@ -46,7 +46,7 @@ const Registration = () => {
                 <img
                   src={Logo}
                   alt="Lucid"
-                  style={{ height: "40px", margin: "10px" }}
+                  style={{ height: "70px", margin: "10px" }}
                 />
               </div>
               <div className="card">

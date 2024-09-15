@@ -10,6 +10,7 @@
     "@fullcalendar/list": "^4.3.0",
     "@fullcalendar/react": "^4.3.0",
     "@fullcalendar/timegrid": "^4.3.0",
+    "@headlessui/react": "^2.1.8",
     "@react-navigation/core": "^3.5.1",
     "@react-navigation/web": "^1.0.0-alpha.9",
     "@reduxjs/toolkit": "^2.2.3",

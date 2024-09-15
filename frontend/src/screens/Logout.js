@@ -1,5 +1,6 @@
 import React from "react";
 import useLogout from "../hooks/useLogout";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const Logout = ({ history }) => {
   const { loading, logout } = useLogout();
@@ -8,11 +9,11 @@ const Logout = ({ history }) => {
     if (isloggedout) {
       history.push("/login");
     }
-  };
+}
   return (
-    <div onClick={handleLogout} className="icon-menu">
-      <i className="icon-login"></i>
-    </div>
+    <Link onClick={handleLogout} to="#">
+      <i className="icon-login"></i> <span>Logout</span>
+    </Link>
   );
 };
 

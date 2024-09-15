@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-import Logo from "../assets/images/logo-white.svg";
+import Logo from "../assets/images/logoimage.png";
 import { updateEmail, updatePassword, onLoggedin } from "../actions";
 import useLogin from "../hooks/useLogin";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
@@ -55,8 +55,7 @@ const Login = ({ history }) => {
         <div className="loader">
           <div className="m-t-30">
             <img
-              src={require("../assets/images/logo-icon.svg")}
-              width="48"
+              src={Logo}
               height="48"
               alt="Lucid"
             />
@@ -72,7 +71,7 @@ const Login = ({ history }) => {
                 <img
                   src={Logo}
                   alt="Lucid"
-                  style={{ height: "40px", margin: "10px" }}
+                  style={{ height: "70px", margin: "10px" }}
                 />
               </div>
               <div className="card">

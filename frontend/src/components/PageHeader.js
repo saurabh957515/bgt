@@ -6,10 +6,10 @@ const PageHeader = ({
   Breadcrumb,
   showFilter,
   setFilterField = () => {},
-  filterField={},
+  filterField = {},
 }) => {
   const [toggleMenu, setToggleMenu] = useState(false);
-  const [sortOrder, setSortOrder] = useState("ASC");
+  const [sortOrder, setSortOrder] = useState("");
 
   const onToggleMenu = () => {
     setToggleMenu((prevToggleMenu) => !prevToggleMenu);
@@ -83,6 +83,9 @@ const PageHeader = ({
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
                 >
+                  <option value="" disabled hidden>
+                    Select Order
+                  </option>
                   <option value="ASC">Ascending</option>
                   <option value="DESC">Descending</option>
                 </select>
