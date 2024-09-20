@@ -38,21 +38,33 @@ const NavbarMenu = ({
 }) => {
   const [linkupdate, setLinkupdate] = useState(false);
 
-  const activeMenutabContainer = useCallback((id) => {
-    const parents = document.getElementById("main-menu");
-    const activeMenu = document.getElementById(id);
-    console.log(parents, activeMenu);
-    for (let index = 0; index < parents.children.length; index++) {
-      if (parents.children[index].id !== id) {
-        parents.children[index].classList.remove("active");
-        parents.children[index].children[1].classList.remove("in");
+  const activeMenutabContainer = useCallback(
+    (id,toggle) => {
+      const parents = document.getElementById("main-menu");
+      const activeMenu = document.getElementById(id);
+
+      for (let index = 0; index < parents.children.length; index++) {
+        if (parents.children[index].id !== id) {
+          parents.children[index].classList.remove("active");
+          parents.children[index].children[1].classList.remove("in");
+        }else{
+          if(toggle){
+            activeMenu.classList.toggle("active");
+            activeMenu.children[1].classList.toggle("in");
+          }else{
+            activeMenu.classList.add("active");
+            activeMenu.children[1].classList.add("in");
+          }
+      
+        }
       }
-    }
-    setTimeout(() => {
-      activeMenu.classList.toggle("active");
-      activeMenu.children[1].classList.toggle("in");
-    }, 10);
-  }, []);
+      // setTimeout(() => {
+      //   activeMenu.classList.toggle("active");
+      //   activeMenu.children[1].classList.toggle("in");
+      // }, 10);
+    },
+    [activeKey]
+  );
 
   const activeMenutabwhenNavigate = useCallback(
     (activeKey) => {
@@ -72,23 +84,20 @@ const NavbarMenu = ({
         activeMenutabContainer("AppContainer");
       } else if (activeKey === "/inquiry" || activeKey === "/createinquiry") {
         activeMenutabContainer("inquiryContainer");
-      } else if (activeKey === "/totaladmission") {
+      } else if (activeKey === "/totaladmission" ) {
         activeMenutabContainer("admissionContainer");
+      }else{
+        activeMenutabContainer("");
       }
     },
-    [activeMenutabContainer]
+    [activeMenutabContainer, activeKey]
   );
+
   useEffect(() => {
     tostMessageLoad(true);
     activeMenutabwhenNavigate("/" + activeKey);
   }, [activeKey, activeMenutabwhenNavigate]);
-  useEffect(() => {
-    if (activeKey === "admission") {
-      activeMenutabContainer("inquiryContainer");
-    }
-  }, [activeKey, activeMenutabContainer]);
-  
-  // Apply the theme color to the body element when it changes
+
   useEffect(() => {
     document.body.classList.add(themeColor);
     return () => {
@@ -275,7 +284,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("dashboradContainer");
+                        activeMenutabContainer("dashboradContainer",true);
                       }}
                     >
                       {" "}
@@ -296,7 +305,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("inquiryContainer");
+                        activeMenutabContainer("inquiryContainer",true);
                       }}
                     >
                       {" "}
@@ -325,7 +334,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("admissionContainer");
+                        activeMenutabContainer("admissionContainer",true);
                       }}
                     >
                       {" "}
@@ -350,7 +359,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("AppContainer");
+                        activeMenutabContainer("AppContainer",true);
                       }}
                     >
                       {" "}
@@ -376,7 +385,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("feesContainer");
+                        activeMenutabContainer("feesContainer",true);
                       }}
                     >
                       {" "}
@@ -420,7 +429,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("bankDetails");
+                        activeMenutabContainer("bankDetails",true);
                       }}
                     >
                       {" "}
