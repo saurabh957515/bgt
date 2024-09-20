@@ -25,6 +25,7 @@ import Avatar1 from "../assets/images/xs/avatar1.jpg";
 import Avatar3 from "../assets/images/xs/avatar3.jpg";
 import Logout from "../screens/Logout";
 import AuthUser from "./AuthUser";
+import LogoIcon from "../assets/Icons/LogoIcon";
 
 const NavbarMenu = ({
   activeKey,
@@ -149,7 +150,8 @@ const NavbarMenu = ({
             {" "}
             <a href="dashboard">
               {" "}
-              <img
+              <LogoIcon className={''}/>
+              {/* <img
                 src={
                   document.body.classList.contains("full-dark")
                     ? LogoWhite
@@ -157,7 +159,7 @@ const NavbarMenu = ({
                 }
                 alt="Lucid Logo"
                 className="img-responsive logo"
-              />{" "}
+              />{" "} */}
             </a>{" "}
           </div>{" "}
           <div className="navbar-right">
