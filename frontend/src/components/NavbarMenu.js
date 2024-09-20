@@ -41,7 +41,7 @@ const NavbarMenu = ({
   const activeMenutabContainer = useCallback((id) => {
     const parents = document.getElementById("main-menu");
     const activeMenu = document.getElementById(id);
-
+    console.log(parents, activeMenu);
     for (let index = 0; index < parents.children.length; index++) {
       if (parents.children[index].id !== id) {
         parents.children[index].classList.remove("active");
@@ -70,70 +70,6 @@ const NavbarMenu = ({
         activeKey === "/apptaskbar"
       ) {
         activeMenutabContainer("AppContainer");
-      } else if (
-        activeKey === "/filemanagerdashboard" ||
-        activeKey === "/filedocuments" ||
-        activeKey === "/filemedia"
-      ) {
-        activeMenutabContainer("FileManagerContainer");
-      } else if (
-        activeKey === "/blognewpost" ||
-        activeKey === "/bloglist" ||
-        activeKey === "/blogdetails"
-      ) {
-        activeMenutabContainer("BlogContainer");
-      } else if (
-        activeKey === "/uitypography" ||
-        activeKey === "/uitabs" ||
-        activeKey === "/uibuttons" ||
-        activeKey === "/bootstrapui" ||
-        activeKey === "/uiicons" ||
-        activeKey === "/uinotifications" ||
-        activeKey === "/uicolors" ||
-        activeKey === "/uilistgroup" ||
-        activeKey === "/uimediaobject" ||
-        activeKey === "/uimodal" ||
-        activeKey === "/uiprogressbar"
-      ) {
-        activeMenutabContainer("UIElementsContainer");
-      } else if (
-        activeKey === "/widgetsdata" ||
-        activeKey === "/widgetsweather" ||
-        activeKey === "/widgetsblog" ||
-        activeKey === "/widgetsecommers"
-      ) {
-        activeMenutabContainer("WidgetsContainer");
-      } else if (activeKey === "/login") {
-        activeMenutabContainer("WidgetsContainer");
-      } else if (
-        activeKey === "/teamsboard" ||
-        activeKey === "/profilev2page" ||
-        activeKey === "/helperclass" ||
-        activeKey === "/searchresult" ||
-        activeKey === "/invoicesv2" ||
-        activeKey === "/invoices" ||
-        activeKey === "/pricing" ||
-        activeKey === "/timeline" ||
-        activeKey === "/profilev1page" ||
-        activeKey === "/blankpage" ||
-        activeKey === "/imagegalleryprofile" ||
-        activeKey === "/projectslist" ||
-        activeKey === "/maintanance" ||
-        activeKey === "/testimonials" ||
-        activeKey === "/faqs"
-      ) {
-        activeMenutabContainer("PagesContainer");
-      } else if (
-        activeKey === "/formvalidation" ||
-        activeKey === "/basicelements"
-      ) {
-        activeMenutabContainer("FormsContainer");
-      } else if (activeKey === "/tablenormal") {
-        activeMenutabContainer("TablesContainer");
-      } else if (activeKey === "/echart") {
-        activeMenutabContainer("chartsContainer");
-      } else if (activeKey === "/leafletmap") {
-        activeMenutabContainer("MapsContainer");
       } else if (activeKey === "/inquiry" || activeKey === "/createinquiry") {
         activeMenutabContainer("inquiryContainer");
       } else if (activeKey === "/totaladmission") {
@@ -142,18 +78,17 @@ const NavbarMenu = ({
     },
     [activeMenutabContainer]
   );
-
   useEffect(() => {
     tostMessageLoad(true);
     activeMenutabwhenNavigate("/" + activeKey);
-  }, [activeKey, activeMenutabwhenNavigate, tostMessageLoad]);
-
+  }, [activeKey, activeMenutabwhenNavigate]);
   useEffect(() => {
     if (activeKey === "admission") {
       activeMenutabContainer("inquiryContainer");
     }
   }, [activeKey, activeMenutabContainer]);
-
+  
+  // Apply the theme color to the body element when it changes
   useEffect(() => {
     document.body.classList.add(themeColor);
     return () => {
@@ -169,7 +104,7 @@ const NavbarMenu = ({
           id="toast-container"
           show={isToastMessage}
           onClose={() => {
-             tostMessageLoad(false);
+            tostMessageLoad(false);
           }}
           className="toast-info toast-top-right"
           autohide={true}
@@ -194,7 +129,7 @@ const NavbarMenu = ({
             <button
               className="btn-toggle-offcanvas"
               onClick={() => {
-                 onPressSideMenuToggle();
+                onPressSideMenuToggle();
               }}
             >
               {" "}
@@ -230,7 +165,7 @@ const NavbarMenu = ({
                     data-toggle="dropdown"
                     onClick={(e) => {
                       e.preventDefault();
-                       onPressEqualizer();
+                      onPressEqualizer();
                     }}
                   >
                     {" "}
@@ -267,16 +202,10 @@ const NavbarMenu = ({
                         <i className="icon-lock"></i> <span>Privacy</span>{" "}
                       </Link>{" "}
                     </li>{" "}
-                    <li>
-                      {" "}
-                      {/* <Logout history={history} />{" "} */}
-                    </li>{" "}
+                    <li> {/* <Logout history={history} />{" "} */}</li>{" "}
                   </ul>{" "}
                 </li>{" "}
-                <li>
-                  {" "}
-              
-                </li>{" "}
+                <li> </li>{" "}
                 {/* <a href="#!" className="dropdown-toggle icon-menu" data-toggle="dropdown" onClick={(e) => { e.preventDefault();  onPressEqualizer(); }} > <i className="icon-equalizer"></i> </a> <ul className={ toggleEqualizer ? "dropdown-menu  mr-2 menu-icon show" : "dropdown-menu  menu-icon" } > <li className="menu-heading">Log Out</li> </ul> */}{" "}
               </ul>{" "}
             </div>{" "}
@@ -320,7 +249,7 @@ const NavbarMenu = ({
                 className={sideMenuTab[0] ? "nav-link active" : "nav-link"}
                 data-toggle="tab"
                 onClick={() => {
-                   onPressSideMenuTab(0);
+                  onPressSideMenuTab(0);
                 }}
               >
                 {" "}
@@ -346,7 +275,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                          activeMenutabContainer("dashboradContainer");
+                        activeMenutabContainer("dashboradContainer");
                       }}
                     >
                       {" "}
@@ -367,7 +296,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                          activeMenutabContainer("inquiryContainer");
+                        activeMenutabContainer("inquiryContainer");
                       }}
                     >
                       {" "}
@@ -396,7 +325,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                          activeMenutabContainer("admissionContainer");
+                        activeMenutabContainer("admissionContainer");
                       }}
                     >
                       {" "}
@@ -421,7 +350,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                          activeMenutabContainer("AppContainer");
+                        activeMenutabContainer("AppContainer");
                       }}
                     >
                       {" "}
@@ -447,7 +376,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                          activeMenutabContainer("feesContainer");
+                        activeMenutabContainer("feesContainer");
                       }}
                     >
                       {" "}
@@ -491,7 +420,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                          activeMenutabContainer("bankDetails");
+                        activeMenutabContainer("bankDetails");
                       }}
                     >
                       {" "}
@@ -687,7 +616,7 @@ const NavbarMenu = ({
                       : "active"
                   }
                   onClick={() => {
-                      // setState({ somethi: false });
+                    // setState({ somethi: false });
                     document.body.classList.remove("full-dark");
                   }}
                 >
@@ -724,7 +653,7 @@ const NavbarMenu = ({
                       if (themeColor !== "theme-purple") {
                         document.body.classList.remove(themeColor);
                       }
-                       onPressThemeColor("purple");
+                      onPressThemeColor("purple");
                     }}
                   ></div>{" "}
                   <span>Purple</span>{" "}
@@ -740,7 +669,7 @@ const NavbarMenu = ({
                       if (themeColor !== "theme-blue") {
                         document.body.classList.remove(themeColor);
                       }
-                       onPressThemeColor("blue");
+                      onPressThemeColor("blue");
                     }}
                   ></div>{" "}
                   <span>Blue</span>{" "}
@@ -756,7 +685,7 @@ const NavbarMenu = ({
                       if (themeColor !== "theme-cyan") {
                         document.body.classList.remove(themeColor);
                       }
-                       onPressThemeColor("cyan");
+                      onPressThemeColor("cyan");
                     }}
                   ></div>{" "}
                   <span>Cyan</span>{" "}
@@ -772,7 +701,7 @@ const NavbarMenu = ({
                       if (themeColor !== "theme-green") {
                         document.body.classList.remove(themeColor);
                       }
-                       onPressThemeColor("green");
+                      onPressThemeColor("green");
                     }}
                   ></div>{" "}
                   <span>Green</span>{" "}
@@ -788,7 +717,7 @@ const NavbarMenu = ({
                       if (themeColor !== "theme-orange") {
                         document.body.classList.remove(themeColor);
                       }
-                       onPressThemeColor("orange");
+                      onPressThemeColor("orange");
                     }}
                   ></div>{" "}
                   <span>Orange</span>{" "}
@@ -804,7 +733,7 @@ const NavbarMenu = ({
                       if (themeColor !== "theme-blush") {
                         document.body.classList.remove(themeColor);
                       }
-                       onPressThemeColor("blush");
+                      onPressThemeColor("blush");
                     }}
                   ></div>{" "}
                   <span>Blush</span>{" "}
