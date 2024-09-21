@@ -54,11 +54,7 @@ const Login = ({ history }) => {
       >
         <div className="loader">
           <div className="m-t-30">
-            <img
-              src={Logo}
-              height="48"
-              alt="Lucid"
-            />
+            <img src={Logo} height="48" alt="Lucid" />
           </div>
           <p>Please wait...</p>
         </div>
