@@ -16,7 +16,7 @@ import {
   onPressSideMenuTab,
   tostMessageLoad,
 } from "../actions";
-import Logo from "../assets/images/logo.svg";
+import Logo from "../assets/images/logoimage.png";
 import LogoWhite from "../assets/images/logo-white.svg";
 import Avatar4 from "../assets/images/xs/avatar4.jpg";
 import Avatar5 from "../assets/images/xs/avatar5.jpg";
@@ -38,9 +38,9 @@ const NavbarMenu = ({
   tostMessageLoad,
 }) => {
   const [linkupdate, setLinkupdate] = useState(false);
-
+  const [isFilereOpen, setIsFilterOpen] = useState(false);
   const activeMenutabContainer = useCallback(
-    (id,toggle) => {
+    (id, toggle) => {
       const parents = document.getElementById("main-menu");
       const activeMenu = document.getElementById(id);
 
@@ -48,21 +48,16 @@ const NavbarMenu = ({
         if (parents.children[index].id !== id) {
           parents.children[index].classList.remove("active");
           parents.children[index].children[1].classList.remove("in");
-        }else{
-          if(toggle){
+        } else {
+          if (toggle) {
             activeMenu.classList.toggle("active");
             activeMenu.children[1].classList.toggle("in");
-          }else{
+          } else {
             activeMenu.classList.add("active");
             activeMenu.children[1].classList.add("in");
           }
-      
         }
       }
-      // setTimeout(() => {
-      //   activeMenu.classList.toggle("active");
-      //   activeMenu.children[1].classList.toggle("in");
-      // }, 10);
     },
     [activeKey]
   );
@@ -85,9 +80,13 @@ const NavbarMenu = ({
         activeMenutabContainer("AppContainer");
       } else if (activeKey === "/inquiry" || activeKey === "/createinquiry") {
         activeMenutabContainer("inquiryContainer");
-      } else if (activeKey === "/totaladmission" ) {
+      } else if (activeKey === "/totaladmission") {
         activeMenutabContainer("admissionContainer");
-      }else{
+      } else if (activeKey === "/createBank" || activeKey === "/bankList") {
+        activeMenutabContainer("bankDetails");
+      } else if (activeKey === "/fees") {
+        activeMenutabContainer("feesContainer");
+      } else {
         activeMenutabContainer("");
       }
     },
@@ -148,9 +147,9 @@ const NavbarMenu = ({
           </div>{" "}
           <div className="navbar-brand">
             {" "}
-            <a href="dashboard">
-              {" "}
-              <LogoIcon className={''}/>
+            <div>
+              <LogoIcon/>
+              {/* <img src={Logo} height="48" alt="Lucid" /> */}
               {/* <img
                 src={
                   document.body.classList.contains("full-dark")
@@ -160,7 +159,7 @@ const NavbarMenu = ({
                 alt="Lucid Logo"
                 className="img-responsive logo"
               />{" "} */}
-            </a>{" "}
+            </div>{" "}
           </div>{" "}
           <div className="navbar-right">
             {" "}
@@ -176,7 +175,7 @@ const NavbarMenu = ({
                     data-toggle="dropdown"
                     onClick={(e) => {
                       e.preventDefault();
-                      onPressEqualizer();
+                      setIsFilterOpen((pre) => !pre);
                     }}
                   >
                     {" "}
@@ -184,7 +183,7 @@ const NavbarMenu = ({
                   </a>{" "}
                   <ul
                     className={
-                      toggleEqualizer
+                      isFilereOpen
                         ? "dropdown-menu user-menu menu-icon show"
                         : "dropdown-menu user-menu menu-icon"
                     }
@@ -193,31 +192,11 @@ const NavbarMenu = ({
                     <li className="menu-heading">More Actions</li>{" "}
                     <li>
                       {" "}
-                      <Link to="#">
-                        {" "}
-                        <i className="icon-note"></i> <span>Basic</span>{" "}
-                      </Link>{" "}
+                      <Logout />{" "}
                     </li>{" "}
-                    <li>
-                      {" "}
-                      <Link to="#">
-                        {" "}
-                        <i className="icon-equalizer"></i>{" "}
-                        <span>Preferences</span>{" "}
-                      </Link>{" "}
-                    </li>{" "}
-                    <li>
-                      {" "}
-                      <Link to="#">
-                        {" "}
-                        <i className="icon-lock"></i> <span>Privacy</span>{" "}
-                      </Link>{" "}
-                    </li>{" "}
-                    <li> {/* <Logout history={history} />{" "} */}</li>{" "}
                   </ul>{" "}
                 </li>{" "}
                 <li> </li>{" "}
-                {/* <a href="#!" className="dropdown-toggle icon-menu" data-toggle="dropdown" onClick={(e) => { e.preventDefault();  onPressEqualizer(); }} > <i className="icon-equalizer"></i> </a> <ul className={ toggleEqualizer ? "dropdown-menu  mr-2 menu-icon show" : "dropdown-menu  menu-icon" } > <li className="menu-heading">Log Out</li> </ul> */}{" "}
               </ul>{" "}
             </div>{" "}
           </div>{" "}
@@ -237,18 +216,10 @@ const NavbarMenu = ({
               <VscAccount style={{ height: "32px", width: "32px" }} />{" "}
             </div>{" "}
             <Dropdown>
-              {" "}
-              <span>Welcome,</span>{" "}
-              <Dropdown.Toggle
-                variant="none"
-                as="a"
-                id="dropdown-basic"
-                className="user-name"
-                style={{ marginLeft: "5px" }}
-              >
-                {" "}
-                <AuthUser />{" "}
-              </Dropdown.Toggle>{" "}
+              <span>Welcome </span>{" "}
+              <div>
+                <AuthUser />
+              </div>
             </Dropdown>{" "}
           </div>{" "}
           <ul className="nav nav-tabs">
@@ -286,7 +257,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("dashboradContainer",true);
+                        activeMenutabContainer("dashboradContainer", true);
                       }}
                     >
                       {" "}
@@ -307,7 +278,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("inquiryContainer",true);
+                        activeMenutabContainer("inquiryContainer", true);
                       }}
                     >
                       {" "}
@@ -336,7 +307,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("admissionContainer",true);
+                        activeMenutabContainer("admissionContainer", true);
                       }}
                     >
                       {" "}
@@ -361,7 +332,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("AppContainer",true);
+                        activeMenutabContainer("AppContainer", true);
                       }}
                     >
                       {" "}
@@ -387,7 +358,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("feesContainer",true);
+                        activeMenutabContainer("feesContainer", true);
                       }}
                     >
                       {" "}
@@ -431,7 +402,7 @@ const NavbarMenu = ({
                       className="has-arrow"
                       onClick={(e) => {
                         e.preventDefault();
-                        activeMenutabContainer("bankDetails",true);
+                        activeMenutabContainer("bankDetails", true);
                       }}
                     >
                       {" "}

@@ -1,9 +1,10 @@
 import React from "react";
 import useLogout from "../hooks/useLogout";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-const Logout = ({ history }) => {
+const Logout = () => {
   const { loading, logout } = useLogout();
+  const history = useHistory()
   const handleLogout = async () => {
     const isloggedout = await logout();
     if (isloggedout) {
