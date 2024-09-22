@@ -22,6 +22,7 @@ const education_Object = {
   business_type: null,
   business_start_date: null,
   employed_type: "job",
+
 };
 const EducationForm = ({
   educationDetails,
@@ -30,6 +31,8 @@ const EducationForm = ({
   genderOptions,
   employedOptions,
   progressCount,
+  setIsModalOpen
+
 }) => {
   const location = useLocation();
   const [admissionId, setAdmissionId] = useState("");
@@ -59,6 +62,8 @@ const EducationForm = ({
     setEducationDetail(newEducation);
   };
   const handleSubmit = async (e) => {
+
+    return;
     e.preventDefault();
     const { errors, data } = isEdit
       ? await editRoute(
@@ -174,7 +179,7 @@ const EducationForm = ({
               <div className="row">
                 <div className="col-md-4">
                   <div className="form-group">
-                    <label>Highest Qualification</label>
+                    <label>Course Details</label>
                     <input
                       className={`form-control`}
                       value={educationDetails?.highest_qualification}
@@ -195,7 +200,75 @@ const EducationForm = ({
                 </div>
                 <div className="col-md-4">
                   <div className="form-group">
-                    <label>Name of Institute</label>
+                    <label> Institution Name</label>
+                    <input
+                      className={`form-control`}
+                      value={educationDetails?.name_of_institute}
+                      name="name_of_institute"
+                      required="required"
+                      onChange={(e) => {
+                        handleEducation("name_of_institute", e.target.value);
+                      }}
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["name_of_institute"]}
+                    </p>
+                  </div>
+                </div>{" "}
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label> Program Start Date</label>
+                    <input
+                      className={`form-control`}
+                      value={educationDetails?.name_of_institute}
+                      name="name_of_institute"
+                      required="required"
+                      onChange={(e) => {
+                        handleEducation("name_of_institute", e.target.value);
+                      }}
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["name_of_institute"]}
+                    </p>
+                  </div>
+                </div>{" "}
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Duration of Study</label>
+                    <input
+                      className={`form-control`}
+                      value={educationDetails?.name_of_institute}
+                      name="name_of_institute"
+                      required="required"
+                      onChange={(e) => {
+                        handleEducation("name_of_institute", e.target.value);
+                      }}
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["name_of_institute"]}
+                    </p>
+                  </div>
+                </div>{" "}
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Mode of Study</label>
+                    <input
+                      className={`form-control`}
+                      value={educationDetails?.name_of_institute}
+                      name="name_of_institute"
+                      required="required"
+                      onChange={(e) => {
+                        handleEducation("name_of_institute", e.target.value);
+                      }}
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["name_of_institute"]}
+                    </p>
+                  </div>
+                </div>{" "}
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label> Program End Date</label>
                     <input
                       className={`form-control`}
                       value={educationDetails?.name_of_institute}
@@ -547,9 +620,11 @@ const EducationForm = ({
                   Save
                 </button>
                 <button
-                  disabled={progressCount < 2}
+                  // disabled={progressCount < 2}
                   onClick={() => {
-                    setSelected(3);
+                    
+                    setIsModalOpen(true);
+                    // setSelected(3);
                   }}
                   className="btn btn-outline-secondary "
                   type="button"

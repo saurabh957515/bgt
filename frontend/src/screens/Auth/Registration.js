@@ -116,6 +116,7 @@ const Registration = () => {
                         placeholder="Passowrd"
                         type="text"
                         required="required"
+                        maxLength={7}
                         value={data?.password}
                         onChange={(e) =>
                           setData((pre) => ({
@@ -135,6 +136,7 @@ const Registration = () => {
                         id="signup-password"
                         placeholder="Password"
                         type="password"
+                        maxLength={7}
                         required="required"
                         value={data?.confirmPassword}
                         onChange={(e) =>

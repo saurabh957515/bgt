@@ -22,7 +22,7 @@ const Login = ({ history }) => {
         type: "LOGIN_SUCCESS",
         payload: { user: isLoggedIn?.username, token: isLoggedIn?.id },
       });
-      history.push("/dashboard");
+      history.push("/inquiry");
       setErrorMessage("");
     } else {
       setErrorMessage(isLoggedIn?.error);
@@ -97,6 +97,7 @@ const Login = ({ history }) => {
                         type="password"
                         value={password}
                         required="required"
+                        maxLength={7}
                         onChange={(val) => setPassword(val.target.value)}
                       />
                     </div>

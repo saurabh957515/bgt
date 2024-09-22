@@ -4,6 +4,7 @@ import Flatpickr from "react-flatpickr";
 import useApi from "../../../utils/UseApi";
 import ReactSelect from "../../../components/ReactSelect";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import RadioGroup from "../../../components/RadioGroup";
 const admissionObject = {
   id: "",
   inquiry_id: "",
@@ -17,7 +18,13 @@ const admissionObject = {
   visa_type: "",
   telecaller_name: "",
 };
-const AdmissionForm = ({ setAdmissionId, setSelected, visaOptions,progressCount }) => {
+const AdmissionForm = ({
+  setAdmissionId,
+  setSelected,
+  visaOptions,
+  genderOptions,
+  progressCount,
+}) => {
   const [admissionDetail, setAdmissionDetail] = useState(admissionObject);
   const [errors, setErrors] = useState({});
   const { postRoute, editRoute, getRoute } = useApi();
@@ -126,16 +133,33 @@ const AdmissionForm = ({ setAdmissionId, setSelected, visaOptions,progressCount 
             </div>
             <div className="body">
               <div className="row">
-                <div className="col-md-4">
+                <di v className="col-md-4">
                   <div className="form-group">
-                    <label>Name</label>
+                    <label>First Name</label>
                     <input
                       className={`form-control`}
-                      value={admissionDetail?.name || ""}
+                      value={admissionDetail?.first_name || ""}
                       required="required"
-                      onChange={(e) => handleAdmission("name", e.target.value)}
+                      onChange={(e) =>
+                        handleAdmission("first_name", e.target.value)
+                      }
                     />
-                    <p className="mt-2 text-danger">{errors["name"]}</p>
+                    <p className="mt-2 text-danger">{errors["first_name"]}</p>
+                  </div>
+                </di>
+                {/* Date of Admission */}
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Last Name</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.last_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("last_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
                   </div>
                 </div>
                 <div className="col-md-4">
@@ -166,7 +190,57 @@ const AdmissionForm = ({ setAdmissionId, setSelected, visaOptions,progressCount 
                 </div>
                 <div className="col-md-4">
                   <div className="form-group">
-                    <label>Contact No</label>
+                    <label>Date of Admission</label>
+                    <Flatpickr
+                      maxDate={"today"}
+                      style={{
+                        border: "1px solid #d1d5db",
+                        borderRadius: "0.3rem",
+                        width: "100%",
+                        boxSizing: "border-box",
+                        padding: "0.5rem",
+                      }}
+                      value={admissionDetail?.date_of_birth || ""}
+                      className="date-picker"
+                      onChange={(date) =>
+                        handleAdmission(
+                          "date_of_birth",
+                          moment(date[0]).format("YYYY-MM-DD")
+                        )
+                      }
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["date_of_birth"]}
+                    </p>
+                  </div>
+                </div>
+                <div className="form-group col-md-4">
+                  <label>Gender</label>
+                  <RadioGroup
+                    onChange={(e) => handleAdmission("gender", e)}
+                    value={admissionDetail?.gender}
+                    options={genderOptions}
+                  />
+
+                  <p className="mt-2 text-danger">{errors["gender"]}</p>
+                </div>
+                <div className="form-group col-md-4">
+                  <label>Current Nationality</label>
+                  <ReactSelect
+                    options={visaOptions}
+                    required
+                    value={admissionDetail?.current_nationality || ""}
+                    onChange={(e) => {
+                      handleAdmission("current_nationality", e.value);
+                    }}
+                  />{" "}
+                  <p className="mt-2 text-danger">
+                    {errors["current_nationality"]}
+                  </p>
+                </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Phone Number</label>
                     <input
                       required
                       className="form-control"
@@ -185,7 +259,7 @@ const AdmissionForm = ({ setAdmissionId, setSelected, visaOptions,progressCount 
                 </div>
                 <div className="col-md-4">
                   <div className="form-group">
-                    <label>Alternate No</label>
+                    <label>Alternate Number</label>
                     <input
                       className={`form-control`}
                       value={admissionDetail?.alternate_no || ""}
@@ -200,7 +274,7 @@ const AdmissionForm = ({ setAdmissionId, setSelected, visaOptions,progressCount 
                 </div>{" "}
                 <div className="col-md-4">
                   <div className="form-group">
-                    <label>Address</label>
+                    <label>Permanent Home Address</label>
                     <textarea
                       className={`form-control`}
                       value={admissionDetail?.address || ""}
@@ -228,7 +302,7 @@ const AdmissionForm = ({ setAdmissionId, setSelected, visaOptions,progressCount 
                 </div>
                 <div className="col-md-4">
                   <div className="form-group">
-                    <label>Email</label>
+                    <label>Email Address</label>
                     <input
                       className={`form-control`}
                       value={admissionDetail?.email || ""}
@@ -271,13 +345,244 @@ const AdmissionForm = ({ setAdmissionId, setSelected, visaOptions,progressCount 
                     <p className="mt-2 text-danger">{errors["current_city"]}</p>
                   </div>
                 </div>
+                <div className="form-group col-md-4">
+                  <label> Current State</label>
+                  <input
+                    required
+                    className="form-control"
+                    value={admissionDetail?.current_state}
+                    type="text"
+                    onChange={(e) =>
+                      handleAdmission("current_state", e.target.value)
+                    }
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["city"]}</p>
+                </div>
+                <div className="form-group col-md-4">
+                  <label>Postal/Zip Code</label>
+                  <input
+                    required
+                    className="form-control"
+                    value={admissionDetail?.zip_code}
+                    type="text"
+                    onChange={(e) =>
+                      handleAdmission("zip_code", e.target.value)
+                    }
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["city"]}</p>
+                </div>{" "}
+                <div className="form-group col-md-4">
+                  <label>Caste</label>
+                  <input
+                    required
+                    className="form-control"
+                    value={admissionDetail?.caste}
+                    type="text"
+                    onChange={(e) =>
+                      handleAdmission("zip_code", e.target.value)
+                    }
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["city"]}</p>
+                </div>
+              </div>
+            </div>
+            <div style={{ marginTop: "-35px" }} className="header">
+              <h2>PassPort Information</h2>
+            </div>
+            <div className="body">
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Passport Number</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.first_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("first_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["first_name"]}</p>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Passport Expiry Datee</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.last_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("last_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style={{ marginTop: "-35px" }} className="header">
+              <h2>Family Information </h2>
+            </div>
+            <div className="body">
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Father Full Name</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.first_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("first_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["first_name"]}</p>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Father Occupation</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.last_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("last_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Mother Full Name</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.last_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("last_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Mother Occupation</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.last_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("last_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Guardian’s Name </label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.last_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("last_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Guardian’s Occupation</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.last_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("last_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
+                  </div>
+                </div>
+              </div>
+            </div>{" "}
+            <div style={{ marginTop: "-35px" }} className="header">
+              <h2>Document Uploads </h2>
+            </div>
+            <div className="body">
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Upload Photo</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.first_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("first_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["first_name"]}</p>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Upload Aadhar Card</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.last_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("last_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>Upload Certification</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.last_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("last_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
+                  </div>
+                </div>
+                
+              </div>
+              <div className="row">
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label>How Did You Hear About Us?</label>
+                    <input
+                      className={`form-control`}
+                      value={admissionDetail?.first_name || ""}
+                      required="required"
+                      onChange={(e) =>
+                        handleAdmission("first_name", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["first_name"]}</p>
+                  </div>
+                </div>
               </div>
               <div>
                 <button className="mr-2 btn btn-outline-primary" type="submit">
                   Save
                 </button>
                 <button
-                 disabled={progressCount<1}
+                  disabled={progressCount < 1}
                   onClick={() => {
                     setSelected(2);
                   }}
@@ -288,6 +593,7 @@ const AdmissionForm = ({ setAdmissionId, setSelected, visaOptions,progressCount 
                 </button>
               </div>
             </div>
+            {/* How Did You Hear About Us? */}
           </div>
         </div>
       </div>

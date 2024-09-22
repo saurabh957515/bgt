@@ -9,9 +9,10 @@ import {
 import useApi from "../../utils/UseApi";
 import UniversityDetails from "./partials/UniversityDetails";
 import FeePayment from "./partials/FeePayment";
+import PopupModel from "../../components/PopupModel";
 
 const TotalAdmission = () => {
-  const [selected, setSelected] = useState(1);
+  const [selected, setSelected] = useState(2);
   const [addmissionId, setAdmissionId] = useState("");
   const history = useHistory();
   const { getRoute, editRoute, postRoute, deleteById } = useApi();
@@ -57,7 +58,7 @@ const TotalAdmission = () => {
   const location = useLocation();
   const editAdmissionId = location.state?.admissionId;
   const createAdmission = location.state?.makeAdmission;
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     const getProgressCount = async () => {
       const { data } = await getRoute("/api/inquiry/filter", {
@@ -129,12 +130,14 @@ const TotalAdmission = () => {
             setSelected={setSelected}
             setAdmissionId={setAdmissionId}
             errors={errors}
+            genderOptions={genderOptions}
           />
         );
       case 2:
         return (
           <EducationForm
-          progressCount={progressCount}
+            setIsModalOpen={setIsModalOpen}
+            progressCount={progressCount}
             setAdmissionId={setAdmissionId}
             employedOptions={employedOptions}
             genderOptions={genderOptions}
@@ -148,7 +151,7 @@ const TotalAdmission = () => {
       case 3:
         return (
           <UniversityDetails
-          progressCount={progressCount}
+            progressCount={progressCount}
             stayInOptions={stayInOptions}
             universityDetails={admissionDetail}
             setUniversityDetails={setAdmissionDetail}
@@ -161,7 +164,7 @@ const TotalAdmission = () => {
       case 4:
         return (
           <FeePayment
-          progressCount={progressCount}
+            progressCount={progressCount}
             bankOptions={bankOptions}
             feePaymentDetails={admissionDetail}
             setFeePaymentDetails={setAdmissionDetail}
@@ -217,6 +220,7 @@ const TotalAdmission = () => {
         document.body.classList.remove("offcanvas-active");
       }}
     >
+      <PopupModel isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
       <div>
         <div className="container-fluid">
           <PageHeader
@@ -236,6 +240,7 @@ const TotalAdmission = () => {
               <li
                 key={index}
                 className="cursor-pointer nav-item"
+                onClick={() => setSelected(index + 1)}
               >
                 <div
                   style={{ userSelect: "none", cursor: "pointer" }}

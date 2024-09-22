@@ -6,8 +6,10 @@ import { useHistory } from "react-router-dom";
 import ReactSelect from "../../../components/ReactSelect";
 import { countries } from "../../../helper.js";
 import RadioGroup from "../../../components/RadioGroup.js";
+import PopupModel from "../../../components/PopupModel.js";
 const inquiryObject = {
-  name: "",
+  fist_name: "",
+  last_name: "",
   email: "",
   contact_no: "",
   alternate_no: "",
@@ -86,10 +88,12 @@ const Form = ({ inquiryEdit }) => {
       console.error("Submission error:", error);
     }
   };
-  const tenYearsAgo = moment().subtract(10, 'years').format("YYYY-MM-DD");
+  const tenYearsAgo = moment().subtract(10, "years").format("YYYY-MM-DD");
   return (
     <form onSubmit={handleSubmit}>
+   
       <div className="clearfix row">
+  
         <div className="col-md-12">
           <div className="card">
             <div className="header">
@@ -99,14 +103,26 @@ const Form = ({ inquiryEdit }) => {
               <div className="row">
                 {/* Name */}
                 <div className="form-group col-md-4">
-                  <label>Name</label>
+                  <label>First Name</label>
                   <input
                     required
                     className="form-control"
-                    value={inquiry?.name}
-                    onChange={(e) => handleInquiry("name", e.target.value)}
+                    value={inquiry?.first_name}
+                    onChange={(e) =>
+                      handleInquiry("first_name", e.target.value)
+                    }
                   />
-                  <p className="mt-2 text-danger">{errors["name"]}</p>
+                  <p className="mt-2 text-danger">{errors["first_name"]}</p>
+                </div>
+                <div className="form-group col-md-4">
+                  <label>Last Name</label>
+                  <input
+                    required
+                    className="form-control"
+                    value={inquiry?.last_name}
+                    onChange={(e) => handleInquiry("last_name", e.target.value)}
+                  />
+                  <p className="mt-2 text-danger">{errors["last_name"]}</p>
                 </div>
                 <div className="form-group col-md-4">
                   <label>Date Of Birth</label>
@@ -119,19 +135,18 @@ const Form = ({ inquiryEdit }) => {
                       padding: "0.5rem",
                     }}
                     options={{
-                      maxDate:tenYearsAgo,
+                      maxDate: tenYearsAgo,
                     }}
                     required
                     value={inquiry?.date_of_birth}
-                    onChange={(data,date) => {
+                    onChange={(data, date) => {
                       const newDate = moment(data[0]).format("YYYY-MM-DD");
-                      console.log(newDate,date)
+                      console.log(newDate, date);
                       handleInquiry("date_of_birth", newDate);
                     }}
                   />{" "}
                   <p className="mt-2 text-danger">{errors["date_of_birth"]}</p>
                 </div>
-
                 <div className="form-group col-md-4">
                   <label>Gender</label>
                   <RadioGroup
@@ -141,6 +156,20 @@ const Form = ({ inquiryEdit }) => {
                   />
 
                   <p className="mt-2 text-danger">{errors["gender"]}</p>
+                </div>
+                <div className="form-group col-md-4">
+                  <label>Current Nationality</label>
+                  <ReactSelect
+                    options={visaOptions}
+                    required
+                    value={inquiry?.current_nationality || ""}
+                    onChange={(e) => {
+                      handleInquiry("current_nationality", e.value);
+                    }}
+                  />{" "}
+                  <p className="mt-2 text-danger">
+                    {errors["current_nationality"]}
+                  </p>
                 </div>
                 <div className="form-group col-md-4">
                   <label>Contact No</label>
@@ -177,23 +206,30 @@ const Form = ({ inquiryEdit }) => {
                   />{" "}
                   <p className="mt-2 text-danger">{errors["alternate_no"]}</p>
                 </div>
-
                 {/* Contact No */}
-
                 {/* Address */}
-                <div className="form-group col-md-4">
-                  <label>Address</label>
+                <div
+                  style={{
+                    overflowY: "auto",
+                  }}
+                  className="form-group col-md-4"
+                >
+                  <label> Permanent Home Address</label>
                   <textarea
                     required
                     className="form-control"
                     value={inquiry?.address}
                     onChange={(e) => handleInquiry("address", e.target.value)}
-                  />{" "}
+                    style={{
+                      maxHeight: "50px",
+                      resize: "vertical",
+                      overflowY: "auto",
+                    }} // Allow resizing vertically up to 50px
+                  />
+
                   <p className="mt-2 text-danger">{errors["address"]}</p>
                 </div>
-
                 {/* Email */}
-
                 {/* Alternate No */}
                 <div className="form-group col-md-4">
                   <label>Email</label>
@@ -217,7 +253,8 @@ const Form = ({ inquiryEdit }) => {
                     }}
                   />{" "}
                   <p className="mt-2 text-danger">{errors["visa_type"]}</p>
-                </div>     <div className="form-group col-md-4">
+                </div>{" "}
+                <div className="form-group col-md-4">
                   <label>Country Interested</label>
                   <ReactSelect
                     options={Object.entries(countries)?.map(([key, value]) => ({
@@ -235,19 +272,6 @@ const Form = ({ inquiryEdit }) => {
                   </p>
                 </div>
                 <div className="form-group col-md-4">
-                  <label>Course Detail</label>
-                  <input
-                    required
-                    className="form-control"
-                    value={inquiry?.course_detail}
-                    type="text"
-                    onChange={(e) =>
-                      handleInquiry("course_detail", e.target.value)
-                    }
-                  />{" "}
-                  <p className="mt-2 text-danger">{errors["course_detail"]}</p>
-                </div>
-                <div className="form-group col-md-4">
                   <label>Current City</label>
                   <input
                     required
@@ -260,7 +284,32 @@ const Form = ({ inquiryEdit }) => {
                   />{" "}
                   <p className="mt-2 text-danger">{errors["city"]}</p>
                 </div>
-           
+                <div className="form-group col-md-4">
+                  <label> Current State</label>
+                  <input
+                    required
+                    className="form-control"
+                    value={inquiry?.current_city}
+                    type="text"
+                    onChange={(e) =>
+                      handleInquiry("current_city", e.target.value)
+                    }
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["city"]}</p>
+                </div>
+                <div className="form-group col-md-4">
+                  <label>Postal/Zip Code</label>
+                  <input
+                    required
+                    className="form-control"
+                    value={inquiry?.current_city}
+                    type="text"
+                    onChange={(e) =>
+                      handleInquiry("current_city", e.target.value)
+                    }
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["city"]}</p>
+                </div>
                 <div className="form-group col-md-4">
                   <label>Telecaller Name</label>
                   <input
@@ -276,7 +325,6 @@ const Form = ({ inquiryEdit }) => {
                     {errors["telecaller_name"]}
                   </p>
                 </div>
-
                 {/* Date of Birth */}
               </div>
               <button className="btn btn-primary" type="submit">
