@@ -91,9 +91,7 @@ const Form = ({ inquiryEdit }) => {
   const tenYearsAgo = moment().subtract(10, "years").format("YYYY-MM-DD");
   return (
     <form onSubmit={handleSubmit}>
-   
       <div className="clearfix row">
-  
         <div className="col-md-12">
           <div className="card">
             <div className="header">
@@ -101,11 +99,11 @@ const Form = ({ inquiryEdit }) => {
             </div>
             <div className="body">
               <div className="row">
-                {/* Name */}
                 <div className="form-group col-md-4">
                   <label>First Name</label>
                   <input
                     required
+                    maxLength={320}
                     className="form-control"
                     value={inquiry?.first_name}
                     onChange={(e) =>
@@ -118,6 +116,7 @@ const Form = ({ inquiryEdit }) => {
                   <label>Last Name</label>
                   <input
                     required
+                    maxLength={320}
                     className="form-control"
                     value={inquiry?.last_name}
                     onChange={(e) => handleInquiry("last_name", e.target.value)}
@@ -149,9 +148,10 @@ const Form = ({ inquiryEdit }) => {
                 </div>
                 <div className="form-group col-md-4">
                   <label>Gender</label>
-                  <RadioGroup
-                    onChange={(e) => handleInquiry("gender", e)}
-                    value={inquiry?.gender}
+                  <ReactSelect
+                    required
+                    onChange={(e) => handleInquiry("gender", e.value)}
+                    value={inquiry?.gender || ""}
                     options={genderOptions}
                   />
 
@@ -172,89 +172,6 @@ const Form = ({ inquiryEdit }) => {
                   </p>
                 </div>
                 <div className="form-group col-md-4">
-                  <label>Contact No</label>
-                  <input
-                    required
-                    className="form-control"
-                    value={inquiry?.contact_no}
-                    type="number"
-                    min="1"
-                    maxLength="12"
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (/^\+?[0-9]*$/.test(value)) {
-                        handleInquiry("contact_no", value.slice(0, 12));
-                      }
-                    }}
-                  />
-                  <p className="mt-2 text-danger">{errors["contact_no"]}</p>
-                </div>
-                <div className="form-group col-md-4">
-                  <label>Alternate No</label>
-                  <input
-                    required
-                    className="form-control"
-                    value={inquiry?.alternate_no}
-                    type="text"
-                    maxLength="12"
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (/^\+?[0-9]*$/.test(value)) {
-                        handleInquiry("alternate_no", value.slice(0, 12));
-                      }
-                    }}
-                  />{" "}
-                  <p className="mt-2 text-danger">{errors["alternate_no"]}</p>
-                </div>
-                {/* Contact No */}
-                {/* Address */}
-                <div
-                  style={{
-                    overflowY: "auto",
-                  }}
-                  className="form-group col-md-4"
-                >
-                  <label> Permanent Home Address</label>
-                  <textarea
-                    required
-                    className="form-control"
-                    value={inquiry?.address}
-                    onChange={(e) => handleInquiry("address", e.target.value)}
-                    style={{
-                      maxHeight: "50px",
-                      resize: "vertical",
-                      overflowY: "auto",
-                    }} // Allow resizing vertically up to 50px
-                  />
-
-                  <p className="mt-2 text-danger">{errors["address"]}</p>
-                </div>
-                {/* Email */}
-                {/* Alternate No */}
-                <div className="form-group col-md-4">
-                  <label>Email</label>
-                  <input
-                    required
-                    className="form-control"
-                    value={inquiry?.email}
-                    type="email"
-                    onChange={(e) => handleInquiry("email", e.target.value)}
-                  />{" "}
-                  <p className="mt-2 text-danger">{errors["email"]}</p>
-                </div>
-                <div className="form-group col-md-4">
-                  <label>Inquiry Type</label>
-                  <ReactSelect
-                    options={visaOptions}
-                    required
-                    value={inquiry?.visa_type || ""}
-                    onChange={(e) => {
-                      handleInquiry("visa_type", e.value);
-                    }}
-                  />{" "}
-                  <p className="mt-2 text-danger">{errors["visa_type"]}</p>
-                </div>{" "}
-                <div className="form-group col-md-4">
                   <label>Country Interested</label>
                   <ReactSelect
                     options={Object.entries(countries)?.map(([key, value]) => ({
@@ -272,11 +189,85 @@ const Form = ({ inquiryEdit }) => {
                   </p>
                 </div>
                 <div className="form-group col-md-4">
+                  <label>Phone Number</label>
+                  <input
+                    required
+                    className="form-control"
+                    value={inquiry?.contact_no}
+                    type="number"
+                    min="1"
+                    maxLength="12"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\+?[0-9]*$/.test(value)) {
+                        handleInquiry("contact_no", value.slice(0, 12));
+                      }
+                    }}
+                  />
+                  <p className="mt-2 text-danger">{errors["contact_no"]}</p>
+                </div>
+                <div className="form-group col-md-4">
+                  <label>Alternate Number</label>
+                  <input
+                    required
+                    className="form-control"
+                    value={inquiry?.alternate_no}
+                    type="text"
+                    maxLength="12"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\+?[0-9]*$/.test(value)) {
+                        handleInquiry("alternate_no", value.slice(0, 12));
+                      }
+                    }}
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["alternate_no"]}</p>
+                </div>
+                {/* Contact No */}
+                {/* Address */}
+                <div className="form-group col-md-4">
+                  <label>Email Address</label>
+                  <input
+                    maxLength={320}
+                    required
+                    className="form-control"
+                    value={inquiry?.email}
+                    type="email"
+                    onChange={(e) => handleInquiry("email", e.target.value)}
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["email"]}</p>
+                </div>
+                <div
+                  style={{
+                    overflowY: "auto",
+                  }}
+                  className="form-group col-md-4"
+                >
+                  <label> Permanent Home Address</label>
+                  <textarea
+                    required
+                    className="form-control"
+                    value={inquiry?.address}
+                    onChange={(e) => handleInquiry("address", e.target.value)}
+                    style={{
+                      maxHeight: "50px",
+                      resize: "vertical",
+                      overflowY: "auto",
+                      height:'30px'
+                    }} // Allow resizing vertically up to 50px
+                  />
+
+                  <p className="mt-2 text-danger">{errors["address"]}</p>
+                </div>
+            
+           
+                <div className="form-group col-md-4">
                   <label>Current City</label>
                   <input
                     required
                     className="form-control"
                     value={inquiry?.current_city}
+                    maxLength={320}
                     type="text"
                     onChange={(e) =>
                       handleInquiry("current_city", e.target.value)
@@ -291,6 +282,7 @@ const Form = ({ inquiryEdit }) => {
                     className="form-control"
                     value={inquiry?.current_city}
                     type="text"
+                    maxLength={320}
                     onChange={(e) =>
                       handleInquiry("current_city", e.target.value)
                     }
@@ -301,6 +293,7 @@ const Form = ({ inquiryEdit }) => {
                   <label>Postal/Zip Code</label>
                   <input
                     required
+                    maxLength={10}
                     className="form-control"
                     value={inquiry?.current_city}
                     type="text"
@@ -311,9 +304,22 @@ const Form = ({ inquiryEdit }) => {
                   <p className="mt-2 text-danger">{errors["city"]}</p>
                 </div>
                 <div className="form-group col-md-4">
+                  <label>Visa Type</label>
+                  <ReactSelect
+                    options={visaOptions}
+                    required
+                    value={inquiry?.visa_type || ""}
+                    onChange={(e) => {
+                      handleInquiry("visa_type", e.value);
+                    }}
+                  />{" "}
+                  <p className="mt-2 text-danger">{errors["visa_type"]}</p>
+                </div>{" "}
+                <div className="form-group col-md-4">
                   <label>Telecaller Name</label>
                   <input
                     required
+                    maxLength={320}
                     className="form-control"
                     value={inquiry?.telecaller_name}
                     type="text"
