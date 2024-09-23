@@ -10,8 +10,9 @@ import useApi from "../../utils/UseApi";
 import UniversityDetails from "./partials/UniversityDetails";
 import FeePayment from "./partials/FeePayment";
 import PopupModel from "../../components/PopupModel";
+import { connect } from "react-redux";
 
-const TotalAdmission = () => {
+const TotalAdmission = ({ nationalities }) => {
   const [selected, setSelected] = useState(2);
   const [addmissionId, setAdmissionId] = useState("");
   const history = useHistory();
@@ -96,9 +97,10 @@ const TotalAdmission = () => {
         }))
       );
       const { data, error } = await getRoute("/api/bank", "", false);
+      console.log(data);
       setBankOptions(
         data?.map((bank) => ({
-          label: bank?.bank_name,
+          label: `${bank?.bank_name} : ${bank?.account_number} `,
           value: bank?.id,
         }))
       );
@@ -123,6 +125,7 @@ const TotalAdmission = () => {
       case 1:
         return (
           <AdmissionForm
+            nationalities={nationalities}
             visaOptions={visaOptions}
             admissionDetail={admissionDetail}
             progressCount={progressCount}
@@ -230,7 +233,7 @@ const TotalAdmission = () => {
               { name: "Show", navigate: "" },
             ]}
           />
-          <ul className="nav nav-tabs">
+          <ul style={{borderBottom:'0px'}} className="nav nav-tabs">
             {[
               "Admission Details",
               "Education Details",
@@ -259,5 +262,8 @@ const TotalAdmission = () => {
     </div>
   );
 };
+const mapStateToProps = (state) => ({
+  nationalities: state?.nationalityReducer?.nationalities,
+});
 
-export default TotalAdmission;
+export default connect(mapStateToProps)(TotalAdmission);

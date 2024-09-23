@@ -2,8 +2,8 @@ import React from "react";
 import PageHeader from "../../components/PageHeader";
 import Form from "./Partials/Form";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
-
-const CreateInquiry = ({ hisotry }) => {
+import { connect } from "react-redux";
+const CreateInquiry = ({ hisotry, nationalities }) => {
   const location = useLocation();
   const inquiryData = location.state?.inquiryData;
   return (
@@ -16,7 +16,6 @@ const CreateInquiry = ({ hisotry }) => {
       <div>
         <div className="container-fluid">
           <PageHeader
-          
             HeaderText={inquiryData?.name ? "Edit Inquiry" : "Create Inquiry"}
             Breadcrumb={[
               { name: "Inquiry", navigate: "" },
@@ -28,12 +27,15 @@ const CreateInquiry = ({ hisotry }) => {
               },
             ]}
           />
-
-          <Form inquiryEdit={inquiryData} />
+          <Form nationalities={nationalities} inquiryEdit={inquiryData} />
         </div>
       </div>
     </div>
   );
 };
 
-export default CreateInquiry;
+const mapStateToProps = (state) => ({
+  nationalities: state?.nationalityReducer?.nationalities,
+});
+
+export default connect(mapStateToProps)(CreateInquiry);

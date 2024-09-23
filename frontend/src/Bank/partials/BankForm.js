@@ -3,13 +3,13 @@ import { useHistory } from "react-router-dom";
 import ReactSelect from "../../components/ReactSelect";
 import useApi from "../../utils/UseApi";
 const bankObject = {
-  account_holder_name: "",
-  account_number: "",
-  bank_name: "",
-  branch_name: "",
-  ifsc_code: "",
-  account_type: "",
-  branch_address: "",
+  account_holder_name: "Good Holder",
+  account_number: "12345678910",
+  bank_name: "State bank of india",
+  branch_name: "SBI Branch",
+  ifsc_code: "SBIN0523698",
+  account_type: "Savings",
+  branch_address: "Good Addres",
 };
 
 const BankForm = ({ bankDetails }) => {
@@ -18,10 +18,11 @@ const BankForm = ({ bankDetails }) => {
   const [typeOptions, setTypeOptions] = useState([]);
   const [details, setDetails] = useState(bankObject);
   const [isEdit, setIsEdit] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const getTypes = async () => {
-      const { data } = await getRoute("/api/bank/gettypes", "", false);
+      const { data } = await getRoute("/api/bank/gettypes",);
       setTypeOptions(
         Object.entries(data)?.map(([key, value]) => ({
           label: key,
@@ -51,8 +52,9 @@ const BankForm = ({ bankDetails }) => {
       const response = isEdit
         ? await editRoute(`/api/bank/${details?.id}`, details)
         : await postRoute("/api/bank", details);
-
-      if (response?.status) {
+      if (response?.errors) {
+        setErrors(response?.errors);
+      } else {
         history.push("/bankList");
       }
     } catch (error) {
@@ -69,7 +71,6 @@ const BankForm = ({ bankDetails }) => {
             </div>
             <div className="body">
               <div className="row">
-                {/* Name */}
                 <div className="form-group col-md-6">
                   <label>Account HolderName</label>
                   <input
@@ -80,9 +81,11 @@ const BankForm = ({ bankDetails }) => {
                       handleBankDetails("account_holder_name", e.target.value)
                     }
                   />
+                  <p className="mt-2 text-danger">
+                    {errors["account_holder_name"]}
+                  </p>
                 </div>
 
-                {/* Contact No */}
                 <div className="form-group col-md-6">
                   <label>Account Number</label>
                   <input
@@ -90,6 +93,7 @@ const BankForm = ({ bankDetails }) => {
                     value={details?.account_number}
                     required
                     type="number"
+                    minLength={12}
                     onChange={(e) => {
                       const value = e.target.value;
                       if (/^\+?[0-9]*$/.test(value)) {
@@ -97,9 +101,9 @@ const BankForm = ({ bankDetails }) => {
                       }
                     }}
                   />
+                  <p className="mt-2 text-danger">{errors["account_number"]}</p>
                 </div>
 
-                {/* Address */}
                 <div className="form-group col-md-6">
                   <label>Bank Name</label>
                   <input
@@ -110,23 +114,22 @@ const BankForm = ({ bankDetails }) => {
                       handleBankDetails("bank_name", e.target.value)
                     }
                   />
+                  <p className="mt-2 text-danger">{errors["bank_name"]}</p>
                 </div>
 
-                {/* Email */}
                 <div className="form-group col-md-6">
                   <label>IFSC Code</label>
                   <input
+                    maxLength={11}
                     className="form-control"
                     value={details?.ifsc_code}
                     required
                     type="text"
                     onChange={(e) => {
-                      const value = e.target.value;
-                      if (/^\+?[0-9]*$/.test(value)) {
-                        handleBankDetails("ifsc_code", value.slice(0, 17));
-                      }
+                      handleBankDetails("ifsc_code", e.target.value);
                     }}
                   />
+                  <p className="mt-2 text-danger">{errors["ifsc_code"]}</p>
                 </div>
 
                 <div className="form-group col-md-6">
@@ -137,6 +140,20 @@ const BankForm = ({ bankDetails }) => {
                     options={typeOptions}
                     onChange={(e) => handleBankDetails("account_type", e.value)}
                   />
+                  <p className="mt-2 text-danger">{errors["account_type"]}</p>
+                </div>
+                <div className="form-group col-md-6">
+                  <label>Branch Name</label>
+                  <input
+                    className="form-control"
+                    value={details?.branch_name}
+                    required
+                    type="text"
+                    onChange={(e) =>
+                      handleBankDetails("branch_name", e.target.value)
+                    }
+                  />
+                  <p className="mt-2 text-danger">{errors["branch_name"]}</p>
                 </div>
                 <div className="form-group col-md-6">
                   <label>Branch Address</label>
@@ -149,6 +166,7 @@ const BankForm = ({ bankDetails }) => {
                       handleBankDetails("branch_address", e.target.value)
                     }
                   />
+                  <p className="mt-2 text-danger">{errors["branch_address"]}</p>
                 </div>
               </div>
               <button className="btn btn-primary" type="submit">

@@ -433,7 +433,7 @@ export default (state = initialState, action) => {
     case TOAST_MESSAGE_LOAD: {
       return {
         ...state,
-        isToastMessage: !state.isToastMessage,
+        isToastMessage: action.payload,
       };
     }
     case TOAST_MESSAGE_SET:

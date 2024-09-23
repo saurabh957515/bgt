@@ -67,6 +67,8 @@ import Admissions from "./screens/Admission/partials/Admissions";
 import Fee from "./screens/Fees/Fee";
 import BankList from "./Bank/BankList";
 import CreateBanks from "./Bank/CreateBanks";
+import axios from "axios";
+import { setNationalities } from "./actions/nationalityActions";
 
 window.__DEV__ = true;
 const App = ({ isLoggedin, history }) => {
@@ -77,7 +79,7 @@ const App = ({ isLoggedin, history }) => {
   res = res.length > 0 ? res[baseUrl.length] : "/";
   res = res ? res : "/";
   const activeKey1 = res;
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     const allowedPaths = [
       "",
@@ -97,10 +99,29 @@ const App = ({ isLoggedin, history }) => {
       !localStorage.getItem("login-user") &&
       !allowedPaths.includes(activeKey1)
     ) {
-      history.push("/login"); 
+      history.push("/login");
     }
   }, [isLoggedin, activeKey1]);
-
+  useEffect(() => {
+    const fetchNationalities = async () => {
+      try {
+        const response = await axios.get("https://restcountries.com/v3.1/all");
+        const data = response.data;
+      
+        const extractedNationalities = data.map((country) => ({
+          value: country.demonyms?.eng?.m || country.name.common,
+          label: country.demonyms?.eng?.m || country.name.common,
+        }));
+    
+        const uniqueNationalities = Array.from(
+          new Map(extractedNationalities.map(item => [item.value, item])).values()
+        );
+    
+        dispatch(setNationalities(uniqueNationalities));
+      } catch (err) {}
+    };
+    fetchNationalities();
+  }, []);
   return (
     <div id="wrapper">
       {activeKey1 === "" ||
@@ -214,7 +235,7 @@ const App = ({ isLoggedin, history }) => {
                 path={`${process.env.PUBLIC_URL}/totalAdmission`}
                 component={Admissions}
               />
-                   <Route
+              <Route
                 exact
                 path={`${process.env.PUBLIC_URL}/fees`}
                 component={Fee}
@@ -425,7 +446,7 @@ const App = ({ isLoggedin, history }) => {
                 component={basicelements}
               />
               <Route
-              exact
+                exact
                 path={`${process.env.PUBLIC_URL}/tablenormal`}
                 component={tablenormal}
               />

@@ -10,25 +10,25 @@ const BankList = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { getRoute, deleteById } = useApi();
+  const [errors, setErrors] = useState({});
   const getBanks = async () => {
     const { data } = await getRoute("/api/bank", "", false);
     setBanks(data);
   };
   useEffect(() => {
     getBanks();
-}, []);
+  }, []);
   const handleDelete = async (bank) => {
-    const admissionData = await getRoute("api/admission");
-    const isBankAdded = admissionData?.find(
-      (data) => data?.bank_detail_id === bank?.id
+    const { data } = await getRoute("api/feepayment");
+    const isBankAdded = data?.find(
+      (admissionnData) => admissionnData?.bank_detail_id === bank?.id
     );
     if (isBankAdded) {
-      dispatch(tostMessageLoad(true));
-      dispatch(setToastMessage("This Bank is Associated with the admission"));
+      setErrors({ [bank?.id]: "This Bank is Associated with the admission" });
       return;
     } else {
-      const bankData = await deleteById(`api/bank/${bank?.id}`);
-      if (bankData?.status == "success") {
+      const { data, error } = await deleteById(`api/bank/${bank?.id}`, true);
+      if (data?.status == "success") {
         getBanks();
       }
     }
@@ -47,11 +47,12 @@ const BankList = () => {
           <div className="clearfix row">
             {banks?.length > 0 ? (
               banks.map((bank, i) => (
-                <div className="col-lg-3 col-md-6 col-sm-6">
+                <div key={i} className="col-lg-3 col-md-6 col-sm-6">
                   <div
                     className="overflow-hidden card number-chart"
                     style={{ position: "relative" }}
                   >
+
                     <div className="body">
                       <div className="number">
                         <h6>{bank?.account_holder_name}</h6>
@@ -93,7 +94,10 @@ const BankList = () => {
                         Delete
                       </button>
                     </div>
+                
+                    
                   </div>
+                  <p style={{marginTop:'-20px'}} className="absolute text-danger">{errors[bank?.id]}</p>
                 </div>
               ))
             ) : (

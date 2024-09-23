@@ -22,17 +22,15 @@ const useApi = () => {
       if (status === 400) {
         errors = getErrors(err.response.data.errors || {});
       } else {
-        // General server-side error
-        errors.message = err.response.data.message || "An error occurred on the server.";
+        errors.message =
+          err.response.data.message || "An error occurred on the server.";
       }
     } else if (err.request) {
-      // Network error or no response from the server
-      errors.message = "No response received from the server. Please check your network.";
+      errors.message =
+        "No response received from the server. Please check your network.";
     } else {
-      // Client-side error
       errors.message = err.message || "An unknown error occurred.";
     }
-    // Return the errors object
     return errors;
   };
 
@@ -73,7 +71,7 @@ const useApi = () => {
 
         return { data }; // Return the data on success
       } catch (err) {
-        console.log(err)
+        console.log(err);
         return handleError(err); // Return errors on failure
       }
     },
@@ -81,7 +79,7 @@ const useApi = () => {
   );
 
   const deleteById = useCallback(
-    async (url) => {
+    async (url, popup) => {
       const headers = {
         "Content-Type": "application/json",
       };
@@ -89,9 +87,11 @@ const useApi = () => {
         const { data } = await axios.delete(url, {
           headers,
         });
+        if (popup) {
+          dispatch(tostMessageLoad(true));
+          dispatch(setToastMessage(data?.message));
+        }
 
-        dispatch(tostMessageLoad(true));
-        dispatch(setToastMessage(data?.message));
         return { data }; // Return the data on success
       } catch (err) {
         return handleError(err); // Return errors on failure

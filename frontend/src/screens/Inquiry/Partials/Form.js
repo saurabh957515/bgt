@@ -24,7 +24,7 @@ const inquiryObject = {
   progress_count: "0",
 };
 
-const Form = ({ inquiryEdit }) => {
+const Form = ({ inquiryEdit,nationalities }) => {
   const { postRoute, editRoute, getRoute } = useApi();
   const history = useHistory();
   const [inquiry, setInquiry] = useState(inquiryObject);
@@ -160,7 +160,7 @@ const Form = ({ inquiryEdit }) => {
                 <div className="form-group col-md-4">
                   <label>Current Nationality</label>
                   <ReactSelect
-                    options={visaOptions}
+                    options={nationalities}
                     required
                     value={inquiry?.current_nationality || ""}
                     onChange={(e) => {

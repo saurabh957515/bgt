@@ -22,7 +22,7 @@ const UniversityDetails = ({
   universityDetails,
   setUniversityDetails,
   stayInOptions,
-  progressCount
+  progressCount,
 }) => {
   const [admissionId, setAdmissionId] = useState("");
   const { postRoute, editRoute, getRoute } = useApi();
@@ -124,10 +124,9 @@ const UniversityDetails = ({
         <div className="col-md-12">
           <div className="card">
             <div className="header">
-              <h2>University Information</h2>
+              <h2 className=" font-weight-bold">University Information</h2>
             </div>
             <div className="body">
-              {/* Removed the inner form tag */}
               <div className="row">
                 <div className="col-md-4">
                   <div className="form-group">
@@ -180,13 +179,14 @@ const UniversityDetails = ({
                 <div className="col-md-4">
                   <div className="form-group">
                     <label>Living options</label>
-                    <RadioGroup
+                    <ReactSelect
                       onChange={(option) =>
-                        handleUniversity("stay_in_type", option)
+                        handleUniversity("stay_in_type", option?.value)
                       }
                       value={universityDetails?.stay_in_type}
                       options={stayInOptions}
                     />
+
                     <p className="mt-2 text-danger">{errors["stay_in_type"]}</p>
                   </div>
                 </div>{" "}
@@ -219,7 +219,7 @@ const UniversityDetails = ({
                   </div>
                 </div>
               </div>
-              <div>
+              <div className="mt-4">
                 <button
                   onClick={() => {
                     setSelected(2);

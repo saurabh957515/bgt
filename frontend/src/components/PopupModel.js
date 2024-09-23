@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const PopupModel = ({ isModalOpen, setIsModalOpen = () => {} }) => {
-  console.log(isModalOpen);
   const closeModal = () => {
     setIsModalOpen(false);
   };

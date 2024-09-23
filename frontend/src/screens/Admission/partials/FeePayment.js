@@ -4,7 +4,10 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.css";
 import useApi from "../../../utils/UseApi";
 import ReactSelect from "../../../components/ReactSelect";
-import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import {
+  useHistory,
+  useLocation,
+} from "react-router-dom/cjs/react-router-dom.min";
 
 const FeePayment = ({
   setSelected,
@@ -21,7 +24,7 @@ const FeePayment = ({
   const [createAdmission, setCreateAdmission] = useState(
     location.state?.makeAdmission
   );
-  const history= useHistory()
+  const history = useHistory();
   const [isEdit, setIsEdit] = useState(false);
   const [errors, setErrors] = useState({});
   const handleSubmit = async (e) => {
@@ -125,10 +128,25 @@ const FeePayment = ({
         <div className="col-md-12">
           <div className="card">
             <div className="header">
-              <h2>FeePayment Information</h2>
+              <h2 className=" font-weight-bold">FeePayment Information</h2>
             </div>
             <div className="body">
               <div className="row">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label>Total Amount</label>
+                    <input
+                      className={`form-control`}
+                      value={feePaymentDetails?.total_amount || ""}
+                      required="required"
+                      type="number"
+                      onChange={(e) =>
+                        handleFeePayment("total_amount", e.target.value)
+                      }
+                    />
+                    <p className="mt-2 text-danger">{errors["total_amount"]}</p>
+                  </div>
+                </div>
                 <div className="col-md-6">
                   <div className="form-group">
                     <label>Pay Amount</label>
@@ -163,21 +181,7 @@ const FeePayment = ({
                     </p>
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>Total Amount</label>
-                    <input
-                      className={`form-control`}
-                      value={feePaymentDetails?.total_amount || ""}
-                      required="required"
-                      type="number"
-                      onChange={(e) =>
-                        handleFeePayment("total_amount", e.target.value)
-                      }
-                    />
-                    <p className="mt-2 text-danger">{errors["total_amount"]}</p>
-                  </div>
-                </div>
+
                 <div className="col-md-6">
                   <div className="form-group">
                     <label>Select BankAccount</label>
@@ -194,7 +198,7 @@ const FeePayment = ({
                 </div>
               </div>
               <p className="mt-2 text-danger">{errors["amounts"]}</p>
-              <div>
+              <div className="mt-4">
                 <button
                   onClick={() => {
                     setSelected(3);
@@ -207,7 +211,6 @@ const FeePayment = ({
                 <button className="ml-2 btn btn-outline-primary" type="submit">
                   Save
                 </button>
-               
               </div>
             </div>
           </div>

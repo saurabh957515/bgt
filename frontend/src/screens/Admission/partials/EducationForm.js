@@ -22,7 +22,6 @@ const education_Object = {
   business_type: null,
   business_start_date: null,
   employed_type: "job",
-
 };
 const EducationForm = ({
   educationDetails,
@@ -31,8 +30,7 @@ const EducationForm = ({
   genderOptions,
   employedOptions,
   progressCount,
-  setIsModalOpen
-
+  setIsModalOpen,
 }) => {
   const location = useLocation();
   const [admissionId, setAdmissionId] = useState("");
@@ -62,7 +60,6 @@ const EducationForm = ({
     setEducationDetail(newEducation);
   };
   const handleSubmit = async (e) => {
-
     return;
     e.preventDefault();
     const { errors, data } = isEdit
@@ -173,10 +170,27 @@ const EducationForm = ({
         <div className="col-md-12">
           <div className="card">
             <div className="header">
-              <h2>Current Education Information</h2>
+              <h2 className=" font-weight-bold">Current Education Information</h2>
             </div>
             <div className="body">
               <div className="row">
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label> Institution Name</label>
+                    <input
+                      className={`form-control`}
+                      value={educationDetails?.name_of_institute}
+                      name="name_of_institute"
+                      required="required"
+                      onChange={(e) => {
+                        handleEducation("name_of_institute", e.target.value);
+                      }}
+                    />
+                    <p className="mt-2 text-danger">
+                      {errors["name_of_institute"]}
+                    </p>
+                  </div>
+                </div>{" "}
                 <div className="col-md-4">
                   <div className="form-group">
                     <label>Course Details</label>
@@ -200,7 +214,7 @@ const EducationForm = ({
                 </div>
                 <div className="col-md-4">
                   <div className="form-group">
-                    <label> Institution Name</label>
+                    <label>City</label>
                     <input
                       className={`form-control`}
                       value={educationDetails?.name_of_institute}
@@ -217,7 +231,7 @@ const EducationForm = ({
                 </div>{" "}
                 <div className="col-md-4">
                   <div className="form-group">
-                    <label> Program Start Date</label>
+                    <label>State</label>
                     <input
                       className={`form-control`}
                       value={educationDetails?.name_of_institute}
@@ -229,101 +243,6 @@ const EducationForm = ({
                     />
                     <p className="mt-2 text-danger">
                       {errors["name_of_institute"]}
-                    </p>
-                  </div>
-                </div>{" "}
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Duration of Study</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.name_of_institute}
-                      name="name_of_institute"
-                      required="required"
-                      onChange={(e) => {
-                        handleEducation("name_of_institute", e.target.value);
-                      }}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["name_of_institute"]}
-                    </p>
-                  </div>
-                </div>{" "}
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Mode of Study</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.name_of_institute}
-                      name="name_of_institute"
-                      required="required"
-                      onChange={(e) => {
-                        handleEducation("name_of_institute", e.target.value);
-                      }}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["name_of_institute"]}
-                    </p>
-                  </div>
-                </div>{" "}
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label> Program End Date</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.name_of_institute}
-                      name="name_of_institute"
-                      required="required"
-                      onChange={(e) => {
-                        handleEducation("name_of_institute", e.target.value);
-                      }}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["name_of_institute"]}
-                    </p>
-                  </div>
-                </div>{" "}
-                <div className="form-group col-md-4">
-                  <label>Gender</label>
-                  <RadioGroup
-                    onChange={(gender) => handleEducation("gender", gender)}
-                    value={educationDetails?.gender}
-                    options={genderOptions}
-                  />
-
-                  <p className="mt-2 text-danger">{errors["gender"]}</p>
-                </div>{" "}
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Place Of Birth</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.place_of_birth || ""}
-                      required="required"
-                      type="text"
-                      onChange={(e) =>
-                        handleEducation("place_of_birth", e.target.value)
-                      }
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["place_of_birth"]}
-                    </p>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Current Nationality</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.current_nationality || ""}
-                      required="required"
-                      type="text"
-                      onChange={(e) => {
-                        handleEducation("current_nationality", e.target?.value);
-                      }}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["current_nationality"]}
                     </p>
                   </div>
                 </div>
@@ -377,7 +296,7 @@ const EducationForm = ({
                       name="ielts_score"
                       required="required"
                       type="number"
-                      maxlength="4"
+                      maxLength="4"
                       onChange={(e) => {
                         const value = e.target.value;
                         if (/^\+?[0-9]*$/.test(value)) {
@@ -389,43 +308,22 @@ const EducationForm = ({
                   </div>
                 </div>
                 <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Past Rejection Country Name</label>
-                    <input
-                      className={`form-control`}
-                      value={educationDetails?.past_rejection_country_name}
-                      name="past_rejection_country_name"
-                      required="required"
-                      type="text"
-                      onChange={(e) => {
-                        handleEducation(
-                          "past_rejection_country_name",
-                          e.target.value
-                        );
-                      }}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["past_rejection_country_name"]}
-                    </p>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="mt-4 form-group">
-                    <div className="fancy-checkbox">
-                      <label>
-                        <input
-                          checked={educationDetails?.is_employed === 1}
-                          onChange={(e) => {
-                            handleEducation(
-                              "is_employed",
-                              e.target.checked ? 1 : 0
-                            );
-                          }}
-                          type="checkbox"
-                        />
-                        <span>Is Currently Working</span>
-                      </label>
-                    </div>
+                  <div className=" form-group">
+                      <label>Employed Type</label>
+                      <ReactSelect
+                        options={[
+                          { label: "Working", value: 1 },
+                          {
+                            label: "Not Working",
+                            value: 0,
+                          },
+                        ]}
+                        required
+                        value={educationDetails?.is_employed}
+                        onChange={(e) => {
+                          handleEducation("is_employed", e.value);
+                        }}
+                      />{" "}
                   </div>
                 </div>
                 {educationDetails?.is_employed ? (
@@ -606,7 +504,7 @@ const EducationForm = ({
                   </>
                 ) : null}
               </div>
-              <div>
+              <div className="mt-4">
                 <button
                   onClick={() => {
                     setSelected(1);
@@ -622,7 +520,6 @@ const EducationForm = ({
                 <button
                   // disabled={progressCount < 2}
                   onClick={() => {
-                    
                     setIsModalOpen(true);
                     // setSelected(3);
                   }}

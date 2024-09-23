@@ -108,7 +108,7 @@ const NavbarMenu = ({
   return (
     <div>
       {" "}
-      {isToastMessage ? (
+      {isToastMessage  && toastMessage? (
         <Toast
           id="toast-container"
           show={isToastMessage}
@@ -124,7 +124,7 @@ const NavbarMenu = ({
             {" "}
             <strong className="me-auto">
               {" "}
-              {toastMessage ? toastMessage : "Welcome to Inquiry Manager"}{" "}
+              {toastMessage && toastMessage}{" "}
             </strong>{" "}
           </Toast.Header>{" "}
         </Toast>
@@ -148,7 +148,7 @@ const NavbarMenu = ({
           <div className="navbar-brand">
             {" "}
             <div>
-              <LogoIcon/>
+              <LogoIcon />
               {/* <img src={Logo} height="48" alt="Lucid" /> */}
               {/* <img
                 src={
@@ -939,7 +939,6 @@ NavbarMenu.propTypes = {
   addClassactiveChildChart: PropTypes.array.isRequired,
   addClassactiveChildMaps: PropTypes.array.isRequired,
   themeColor: PropTypes.string.isRequired,
-  toastMessage: PropTypes.string.isRequired,
   generalSetting: PropTypes.array.isRequired,
   toggleNotification: PropTypes.bool.isRequired,
   toggleEqualizer: PropTypes.bool.isRequired,

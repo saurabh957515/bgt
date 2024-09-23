@@ -1,12 +1,22 @@
 import Bank from "../models/Bank.model.js";
 import { v4 as uuidv4 } from "uuid";
+import bankSchema from "../validation/bankdetails.js";
 export async function createBank(req, res) {
   if (!req.body) {
     return res.status(400).send({
       message: "Content cannot be empty!",
     });
   }
-
+  const { error, value } = bankSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    const errors = error.details.reduce((acc, err) => {
+      acc[err.path.join(".")] = err.message;
+      return acc;
+    }, {});
+    return res.status(400).send({ errors });
+  }
   const newBank = {
     id: uuidv4(),
     account_holder_name: req?.body.account_holder_name,
@@ -66,6 +76,18 @@ export async function deleteBank(req, res) {
   }
 }
 export async function updateBank(req, res) {
+  const { id, created_at, updated_at, micr_code, ...filteredBody } = req.body;
+  const { error, value } = bankSchema.validate(filteredBody, {
+    abortEarly: false,
+  });
+  if (error) {
+    const errors = error.details.reduce((acc, err) => {
+      acc[err.path.join(".")] = err.message;
+      return acc;
+    }, {});
+    return res.status(400).send({ errors });
+  }
+
   try {
     const result = await Bank?.updateByID(req?.body, req.params.id);
     res.send({ message: "Bank Updated!", status: "success" });

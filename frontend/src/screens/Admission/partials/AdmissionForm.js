@@ -24,6 +24,7 @@ const AdmissionForm = ({
   visaOptions,
   genderOptions,
   progressCount,
+  nationalities,
 }) => {
   const [admissionDetail, setAdmissionDetail] = useState(admissionObject);
   const [errors, setErrors] = useState({});
@@ -127,9 +128,9 @@ const AdmissionForm = ({
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">
         <div className="col-md-12">
-          <div className="card">
+        <div className="card" style={{ borderRadius: '0 8px 8px 0' }}>
             <div className="header">
-              <h2>Basic Information</h2>
+              <h2 className="font-weight-bold">Basic Information</h2>
             </div>
             <div className="body">
               <div className="row">
@@ -147,7 +148,6 @@ const AdmissionForm = ({
                     <p className="mt-2 text-danger">{errors["first_name"]}</p>
                   </div>
                 </di>
-                {/* Date of Admission */}
                 <div className="col-md-4">
                   <div className="form-group">
                     <label>Last Name</label>
@@ -216,9 +216,10 @@ const AdmissionForm = ({
                 </div>
                 <div className="form-group col-md-4">
                   <label>Gender</label>
-                  <RadioGroup
-                    onChange={(e) => handleAdmission("gender", e)}
-                    value={admissionDetail?.gender}
+                  <ReactSelect
+                    required
+                    onChange={(e) => handleAdmission("gender", e.value)}
+                    value={admissionDetail?.gender || ""}
                     options={genderOptions}
                   />
 
@@ -227,7 +228,7 @@ const AdmissionForm = ({
                 <div className="form-group col-md-4">
                   <label>Current Nationality</label>
                   <ReactSelect
-                    options={visaOptions}
+                    options={nationalities}
                     required
                     value={admissionDetail?.current_nationality || ""}
                     onChange={(e) => {
@@ -371,23 +372,11 @@ const AdmissionForm = ({
                   />{" "}
                   <p className="mt-2 text-danger">{errors["city"]}</p>
                 </div>{" "}
-                <div className="form-group col-md-4">
-                  <label>Caste</label>
-                  <input
-                    required
-                    className="form-control"
-                    value={admissionDetail?.caste}
-                    type="text"
-                    onChange={(e) =>
-                      handleAdmission("zip_code", e.target.value)
-                    }
-                  />{" "}
-                  <p className="mt-2 text-danger">{errors["city"]}</p>
-                </div>
               </div>
             </div>
-            <div style={{ marginTop: "-35px" }} className="header">
-              <h2>PassPort Information</h2>
+            <hr />
+            <div className="header">
+              <h2 className="font-weight-bold">PassPort Information</h2>
             </div>
             <div className="body">
               <div className="row">
@@ -407,13 +396,22 @@ const AdmissionForm = ({
                 </div>
                 <div className="col-md-4">
                   <div className="form-group">
-                    <label>Passport Expiry Datee</label>
-                    <input
-                      className={`form-control`}
-                      value={admissionDetail?.last_name || ""}
-                      required="required"
-                      onChange={(e) =>
-                        handleAdmission("last_name", e.target.value)
+                    <label>Passport Expiry Date</label>
+                    <Flatpickr
+                      style={{
+                        border: "1px solid #d1d5db",
+                        borderRadius: "0.3rem",
+                        width: "100%",
+                        boxSizing: "border-box",
+                        padding: "0.5rem",
+                      }}
+                      value={admissionDetail?.date_of_birth || ""}
+                      className="date-picker"
+                      onChange={(date) =>
+                        handleAdmission(
+                          "date_of_birth",
+                          moment(date[0]).format("YYYY-MM-DD")
+                        )
                       }
                     />
                     <p className="mt-2 text-danger">{errors["last_name"]}</p>
@@ -421,99 +419,9 @@ const AdmissionForm = ({
                 </div>
               </div>
             </div>
-            <div style={{ marginTop: "-35px" }} className="header">
-              <h2>Family Information </h2>
-            </div>
-            <div className="body">
-              <div className="row">
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Father Full Name</label>
-                    <input
-                      className={`form-control`}
-                      value={admissionDetail?.first_name || ""}
-                      required="required"
-                      onChange={(e) =>
-                        handleAdmission("first_name", e.target.value)
-                      }
-                    />
-                    <p className="mt-2 text-danger">{errors["first_name"]}</p>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Father Occupation</label>
-                    <input
-                      className={`form-control`}
-                      value={admissionDetail?.last_name || ""}
-                      required="required"
-                      onChange={(e) =>
-                        handleAdmission("last_name", e.target.value)
-                      }
-                    />
-                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Mother Full Name</label>
-                    <input
-                      className={`form-control`}
-                      value={admissionDetail?.last_name || ""}
-                      required="required"
-                      onChange={(e) =>
-                        handleAdmission("last_name", e.target.value)
-                      }
-                    />
-                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Mother Occupation</label>
-                    <input
-                      className={`form-control`}
-                      value={admissionDetail?.last_name || ""}
-                      required="required"
-                      onChange={(e) =>
-                        handleAdmission("last_name", e.target.value)
-                      }
-                    />
-                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Guardian’s Name </label>
-                    <input
-                      className={`form-control`}
-                      value={admissionDetail?.last_name || ""}
-                      required="required"
-                      onChange={(e) =>
-                        handleAdmission("last_name", e.target.value)
-                      }
-                    />
-                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Guardian’s Occupation</label>
-                    <input
-                      className={`form-control`}
-                      value={admissionDetail?.last_name || ""}
-                      required="required"
-                      onChange={(e) =>
-                        handleAdmission("last_name", e.target.value)
-                      }
-                    />
-                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
-                  </div>
-                </div>
-              </div>
-            </div>{" "}
-            <div style={{ marginTop: "-35px" }} className="header">
-              <h2>Document Uploads </h2>
+            <hr />
+            <div className="header">
+              <h2 className="font-weight-bold">Document Uploads </h2>
             </div>
             <div className="body">
               <div className="row">
@@ -521,6 +429,7 @@ const AdmissionForm = ({
                   <div className="form-group">
                     <label>Upload Photo</label>
                     <input
+                    type="file"
                       className={`form-control`}
                       value={admissionDetail?.first_name || ""}
                       required="required"
@@ -535,12 +444,13 @@ const AdmissionForm = ({
                   <div className="form-group">
                     <label>Upload Aadhar Card</label>
                     <input
+                       type="file"
                       className={`form-control`}
                       value={admissionDetail?.last_name || ""}
                       required="required"
-                      onChange={(e) =>
-                        handleAdmission("last_name", e.target.value)
-                      }
+                      // onChange={(e) =>
+                      //   handleAdmission("last_name", e.target.value)
+                      // }
                     />
                     <p className="mt-2 text-danger">{errors["last_name"]}</p>
                   </div>
@@ -549,6 +459,7 @@ const AdmissionForm = ({
                   <div className="form-group">
                     <label>Upload Certification</label>
                     <input
+                       type="file"  
                       className={`form-control`}
                       value={admissionDetail?.last_name || ""}
                       required="required"
@@ -559,25 +470,8 @@ const AdmissionForm = ({
                     <p className="mt-2 text-danger">{errors["last_name"]}</p>
                   </div>
                 </div>
-                
               </div>
-              <div className="row">
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>How Did You Hear About Us?</label>
-                    <input
-                      className={`form-control`}
-                      value={admissionDetail?.first_name || ""}
-                      required="required"
-                      onChange={(e) =>
-                        handleAdmission("first_name", e.target.value)
-                      }
-                    />
-                    <p className="mt-2 text-danger">{errors["first_name"]}</p>
-                  </div>
-                </div>
-              </div>
-              <div>
+              <div className="mt-4 ">
                 <button className="mr-2 btn btn-outline-primary" type="submit">
                   Save
                 </button>
@@ -593,7 +487,6 @@ const AdmissionForm = ({
                 </button>
               </div>
             </div>
-            {/* How Did You Hear About Us? */}
           </div>
         </div>
       </div>
