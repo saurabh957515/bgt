@@ -13,7 +13,7 @@ import PopupModel from "../../components/PopupModel";
 import { connect } from "react-redux";
 
 const TotalAdmission = ({ nationalities }) => {
-  const [selected, setSelected] = useState(2);
+  const [selected, setSelected] = useState(4);
   const [addmissionId, setAdmissionId] = useState("");
   const history = useHistory();
   const { getRoute, editRoute, postRoute, deleteById } = useApi();

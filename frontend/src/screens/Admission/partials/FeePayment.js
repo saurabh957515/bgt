@@ -49,10 +49,16 @@ const FeePayment = ({
   };
 
   const handleFeePayment = (name, value) => {
-    setFeePaymentDetails((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const updatedDetails = {...feePaymentDetails};
+    updatedDetails[name] = value;
+    if (parseFloat(updatedDetails.total_amount) === 0) {
+      setErrors({ total_amount: "Add total amount first" });
+    } else if (name === "current_amount") {
+      const totalAmount = parseFloat(updatedDetails.total_amount) || 0;
+      const currentAmount = parseFloat(value) || 0;
+      updatedDetails["remaining_amount"] = totalAmount - currentAmount;
+    }
+    setFeePaymentDetails(updatedDetails);
   };
 
   useEffect(() => {
