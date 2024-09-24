@@ -49,16 +49,19 @@ const FeePayment = ({
   };
 
   const handleFeePayment = (name, value) => {
-    const updatedDetails = {...feePaymentDetails};
-    updatedDetails[name] = value;
-    if (parseFloat(updatedDetails.total_amount) === 0) {
+    const updatedDetails = { ...feePaymentDetails };
+
+    if (name !== "total_amount" && !updatedDetails.total_amount) {
       setErrors({ total_amount: "Add total amount first" });
+      return;
     } else if (name === "current_amount") {
       const totalAmount = parseFloat(updatedDetails.total_amount) || 0;
       const currentAmount = parseFloat(value) || 0;
       updatedDetails["remaining_amount"] = totalAmount - currentAmount;
     }
+    updatedDetails[name] = value;
     setFeePaymentDetails(updatedDetails);
+    setErrors({})
   };
 
   useEffect(() => {
@@ -146,9 +149,9 @@ const FeePayment = ({
                       value={feePaymentDetails?.total_amount || ""}
                       required="required"
                       type="number"
-                      onChange={(e) =>
-                        handleFeePayment("total_amount", e.target.value)
-                      }
+                      onChange={(e) => {
+                        handleFeePayment("total_amount", e.target.value);
+                      }}
                     />
                     <p className="mt-2 text-danger">{errors["total_amount"]}</p>
                   </div>
