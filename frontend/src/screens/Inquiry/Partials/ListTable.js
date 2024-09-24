@@ -81,7 +81,7 @@ const ListTable = ({ filterField }) => {
                   
 
                     <td>
-                      <div className="d-flex justify-content-center">
+                      <div   style={{ userSelect: "none", cursor: "pointer" }} className="d-flex justify-content-center">
                         <span
                           onClick={() => {
                             history.push({
@@ -103,6 +103,7 @@ const ListTable = ({ filterField }) => {
                           onClick={() => {
                             makeAdmission(inquiry);
                           }}
+                        
                           className="cursor-pointer text-success"
                         >
                           Confirm
