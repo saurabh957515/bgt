@@ -15,6 +15,7 @@ const ListTable = ({ filterField }) => {
       filterField,
       false
     );
+    console.log(inquiresData)
     setInquiryList(inquiresData?.data);
   };
 
@@ -68,7 +69,7 @@ const ListTable = ({ filterField }) => {
                     <td style={{ textAlign: "center" }}>
                       {moment(inquiry?.date).format("YYYY-MM-DD")}
                     </td>
-                    <td style={{ textAlign: "center" }}>{inquiry?.name}</td>
+                    <td style={{ textAlign: "center" }}>{inquiry?.first_name  }</td>
                     <td style={{ textAlign: "center" }}>
                       {inquiry?.contact_no}
                     </td>

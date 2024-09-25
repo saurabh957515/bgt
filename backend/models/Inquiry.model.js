@@ -31,37 +31,43 @@ class Inquiry {
     try {
       const query = `
         UPDATE inquiry 
-        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,course_detail = ?,current_city = ?, interested_country = ? ,telecaller_name = ? , visa_type = ? ,gender = ? ,progress_count = ?
+        SET   first_name = ? ,last_name = ? ,  email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,current_city = ?, interested_country = ? ,telecaller_name = ? , visa_type = ? ,gender = ? , current_state = ? ,current_nationality = ?,zip_code = ?,progress_count = ?
         WHERE id = ?
       `;
       const {
-        name,
+        first_name,
+        last_name,
         email,
         contact_no,
         alternate_no,
         address,
         date_of_birth,
-        course_detail,
         current_city,
         interested_country,
         telecaller_name,
         visa_type,
         gender,
+        current_state,
+        current_nationality,
+        zip_code,
         progress_count,
       } = newInquiry;
       const result = await sql(query, [
-        name,
+        first_name,
+        last_name,
         email,
         contact_no,
         alternate_no,
         address,
         date_of_birth,
-        course_detail,
         current_city,
         interested_country,
         telecaller_name,
         visa_type,
         gender,
+        current_state,
+        current_nationality,
+        zip_code,
         progress_count,
         id,
       ]);

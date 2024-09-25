@@ -98,11 +98,11 @@ const PageHeader = ({
                     type="search"
                     className="form-control"
                     placeholder="Search Name"
-                    value={filterField?.name}
+                    value={filterField?.first_name}
                     onChange={(e) =>
                       setFilterField((pre) => ({
                         ...pre,
-                        name: e.target.value,
+                        first_name: e.target.value,
                       }))
                     }
                   />

@@ -8,23 +8,25 @@ import { countries } from "../../../helper.js";
 import RadioGroup from "../../../components/RadioGroup.js";
 import PopupModel from "../../../components/PopupModel.js";
 const inquiryObject = {
-  fist_name: "",
-  last_name: "",
-  email: "",
+  date_of_birth: "",
+  gender: "",
+  interested_country: "",
   contact_no: "",
   alternate_no: "",
+  email: "",
   address: "",
-  date_of_birth: "",
-  interested_country: "",
-  course_detail: "",
   current_city: "",
+  current_state: "",
+  current_nationality: "",
+  first_name: "",
+  last_name: "",
+  zip_code:"",
   telecaller_name: "",
-  gender: "",
   visa_type: "",
   progress_count: "0",
 };
 
-const Form = ({ inquiryEdit,nationalities }) => {
+const Form = ({ inquiryEdit, nationalities }) => {
   const { postRoute, editRoute, getRoute } = useApi();
   const history = useHistory();
   const [inquiry, setInquiry] = useState(inquiryObject);
@@ -253,14 +255,12 @@ const Form = ({ inquiryEdit,nationalities }) => {
                       maxHeight: "50px",
                       resize: "vertical",
                       overflowY: "auto",
-                      height:'30px'
+                      height: "30px",
                     }} // Allow resizing vertically up to 50px
                   />
 
                   <p className="mt-2 text-danger">{errors["address"]}</p>
                 </div>
-            
-           
                 <div className="form-group col-md-4">
                   <label>Current City</label>
                   <input
@@ -273,21 +273,21 @@ const Form = ({ inquiryEdit,nationalities }) => {
                       handleInquiry("current_city", e.target.value)
                     }
                   />{" "}
-                  <p className="mt-2 text-danger">{errors["city"]}</p>
+                  <p className="mt-2 text-danger">{errors["current_city"]}</p>
                 </div>
                 <div className="form-group col-md-4">
                   <label> Current State</label>
                   <input
                     required
                     className="form-control"
-                    value={inquiry?.current_city}
+                    value={inquiry?.current_state}
                     type="text"
                     maxLength={320}
                     onChange={(e) =>
-                      handleInquiry("current_city", e.target.value)
+                      handleInquiry("current_state", e.target.value)
                     }
                   />{" "}
-                  <p className="mt-2 text-danger">{errors["city"]}</p>
+                  <p className="mt-2 text-danger">{errors["current_state"]}</p>
                 </div>
                 <div className="form-group col-md-4">
                   <label>Postal/Zip Code</label>
@@ -295,13 +295,13 @@ const Form = ({ inquiryEdit,nationalities }) => {
                     required
                     maxLength={10}
                     className="form-control"
-                    value={inquiry?.current_city}
+                    value={inquiry?.zip_code}
                     type="text"
                     onChange={(e) =>
-                      handleInquiry("current_city", e.target.value)
+                      handleInquiry("zip_code", e.target.value)
                     }
                   />{" "}
-                  <p className="mt-2 text-danger">{errors["city"]}</p>
+                  <p className="mt-2 text-danger">{errors["zip_code"]}</p>
                 </div>
                 <div className="form-group col-md-4">
                   <label>Visa Type</label>

@@ -6,9 +6,9 @@ import moment from "moment";
 const Inquires = () => {
   const [filterField, setFilterField] = useState({
     date: "",
-    name: "",
+    first_name: "",
     order: "",
-    telecaller_name: "",
+    telecaller_name: "",  
   });
 
   return (
