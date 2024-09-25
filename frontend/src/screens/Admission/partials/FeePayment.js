@@ -1,6 +1,4 @@
-import moment from "moment";
 import React, { useEffect, useState } from "react";
-import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.css";
 import useApi from "../../../utils/UseApi";
 import ReactSelect from "../../../components/ReactSelect";

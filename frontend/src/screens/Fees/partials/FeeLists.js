@@ -10,13 +10,16 @@ const FeeLists = () => {
   const [selectedAdmission, setSelectedAdmission] = useState({});
   const [errors, setErrors] = useState({});
   const [bankOptions, setBankOptions] = useState([]);
+  const [selectedFeeDatails, setSelectedFeeDetails] = useState({});
   const getAdmissions = async () => {
-    const {data} = await getRoute("/api/admission");
-    setAdmissions(data?.filter((admission) => +admission?.remaining_amount));
+    const { data } = await getRoute("api/admission/getall");
+    setAdmissions(
+      data?.filter((admission) => admission?.fee_details?.remaining_amount)
+    );
   };
   const [remainingAmount, setRemainingAmount] = useState(0);
   const handleFeePayment = (name, value) => {
-    setSelectedAdmission((pre) => ({
+    setSelectedFeeDetails((pre) => ({
       ...pre,
       [name]: value,
     }));
@@ -27,20 +30,27 @@ const FeeLists = () => {
       const { data } = await getRoute("/api/bank", "", false);
       setBankOptions(
         data?.map((bank) => ({
-          label: bank?.bank_name,
+          label: `${bank?.bank_name} : ${bank?.account_number}`,
           value: bank?.id,
         }))
       );
     };
     getBankOption();
   }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (+selectedAdmission?.remaining_amount !== +remainingAmount) {
+    if (+selectedFeeDatails?.remaining_amount !== +remainingAmount) {
       setErrors({ remaining_amount: "Remaining Amount is not valid" });
       return;
     } else {
-      let newpaidAmount = +selectedAdmission?.paid_amount + +remainingAmount;
+      let newpaidAmount = +selectedFeeDatails?.paid_amount + +remainingAmount;
+
+      // const { errors, data } = await editRoute(
+      //   `/api/feepayment/${selectedFeeDatails?.id}`,
+      //   { ...selectedFeeDatails, paid_amount: `${newpaidAmount}` }
+      // );
+
       const updatedAdmission = await editRoute(
         `api/admission/${selectedAdmission?.admissionDetails_id}`,
         {
@@ -71,7 +81,7 @@ const FeeLists = () => {
                 position: "sticky",
                 top: 0,
                 zIndex: 1,
-                backgroundColor: "#fff", // Solid background to cover content behind
+                backgroundColor: "#fff",
               }}
             >
               <div className="input-group-prepend">
@@ -96,16 +106,19 @@ const FeeLists = () => {
                 admissions?.map((admission, index) => (
                   <li
                     onClick={() => {
+                      console.log(admission);
                       setSelectedAdmission(admission);
+                      setSelectedFeeDetails(admission?.fee_details);
                       setRemainingAmount(admission?.remaining_amount);
                     }}
                     key={index}
                     className={`clearfix ${
-                      admission?.id === selectedAdmission?.id && "bg-light"
+                      admission?.admission?.id ===
+                        selectedAdmission?.admission?.id && "bg-light"
                     }`}
                   >
                     <div className="about">
-                      <div className="name">{admission?.name}</div>
+                      <div className="name">{admission?.admission?.name}</div>
                       <div className="status">
                         <i className="fa fa-circle offline"></i>
                         Created at:{" "}
@@ -153,7 +166,7 @@ const FeeLists = () => {
               className="chat-history flex-grow-1"
               style={{ overflowY: "auto" }}
             >
-              {selectedAdmission?.admissionDetails_id && (
+              {selectedAdmission?.admission?.id && (
                 <div className="">
                   <div className="header">
                     <h2>Complete Fee Payment</h2>
@@ -166,7 +179,7 @@ const FeeLists = () => {
                             Last Amount:
                           </label>
                           <p className="mb-0 text-muted">
-                            {selectedAdmission?.paid_amount || "N/A"}
+                            {selectedFeeDatails?.paid_amount || "N/A"}
                           </p>
                         </div>
                       </div>
@@ -176,7 +189,7 @@ const FeeLists = () => {
                             Total Amount:
                           </label>
                           <p className="mb-0 text-muted">
-                            {selectedAdmission?.total_amount || "N/A"}
+                            {selectedFeeDatails.total_amount || "N/A"}
                           </p>
                         </div>
                       </div>
@@ -185,7 +198,7 @@ const FeeLists = () => {
                           <label>Add Remaining Amount</label>
                           <input
                             className={`form-control`}
-                            value={selectedAdmission?.remaining_amount || ""}
+                            value={selectedFeeDatails?.remaining_amount || ""}
                             required="required"
                             type="number"
                             onChange={(e) =>
@@ -204,7 +217,7 @@ const FeeLists = () => {
                         <div className="form-group">
                           <label>Select BankAccount</label>
                           <ReactSelect
-                            value={selectedAdmission?.bank_detail_id || ""}
+                            value={selectedFeeDatails?.bank_detail_id || ""}
                             required="required"
                             onChange={(e) =>
                               handleFeePayment("bank_detail_id", e.value)
