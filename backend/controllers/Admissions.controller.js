@@ -2,32 +2,73 @@ import Admission from "../models/Admissions.model.js";
 import Joi from "joi";
 import Inquiry from "../models/Inquiry.model.js";
 import { v4 as uuidv4 } from "uuid";
+import { upload } from "../multerConfig.js";
+import { saveFile } from "./Files.controller.js";
 const currentDate = new Date();
+const maxAdmissionDate = new Date();
+maxAdmissionDate.setFullYear(currentDate.getFullYear() + 1); // One year in the future
+async function saveFileAndGetId(file) {
+  const filePath = file.path;
+  const fileId = await saveFile({
+    fileName: file.filename,
+    filePath: filePath,
+    mimeType: file.mimetype,
+  });
+  return fileId;
+}
+const minAdmissionDate = new Date();
+minAdmissionDate.setFullYear(currentDate.getFullYear() - 1);
+
 const minDateOfBirth = new Date(
   currentDate.getFullYear() - 50,
   currentDate.getMonth(),
   currentDate.getDate()
-); // No more than 50 years ago
+);
 const maxDateOfBirth = new Date(
   currentDate.getFullYear() - 10,
   currentDate.getMonth(),
   currentDate.getDate()
-); // At least 10 years ago
+);
 
 const admissionSchema = Joi.object({
   inquiry_id: Joi.string().max(36).required().messages({
     "any.required": "Inquiry ID is required.",
   }),
-  name: Joi.string().max(255).required().messages({
-    "string.empty": "Name is required.",
-    "string.max": "Name cannot exceed 255 characters.",
+  first_name: Joi.string().max(255).required().messages({
+    "string.empty": "First Name is required.",
+    "string.max": "Last Name cannot exceed 255 characters.",
+  }),
+  last_name: Joi.string().max(255).required().messages({
+    "string.empty": "Last Name is required.",
+    "string.max": "Last Name cannot exceed 255 characters.",
   }),
   email: Joi.string().email().required().messages({
     "string.empty": "Email is required.",
     "string.email": "Invalid email format.",
   }),
+  zip_code: Joi.string()
+    .pattern(/^[0-9]{5,10}$/)
+    .required()
+    .messages({
+      "string.empty": "ZipCode number is required.",
+      "string.pattern.base":
+        "Invalid ZipCode (must be numeric, between 5 and 10 digits).",
+      "string.min": "ZipCode must be at least 5 characters.", 
+      "string.max": "ZipCode cannot exceed 10 characters.",
+    }),
+  date_of_admission: Joi.date()
+    .max(maxAdmissionDate) 
+    .min(minAdmissionDate)
+    .required()
+    .messages({
+      "date.base": "Invalid date format for date of admission.",
+      "date.min": "Date of admission must be at least one year ago.",
+      "date.max":
+        "Date of admission cannot be more than one year in the future.",
+      "any.required": "Date of admission is required.",
+    }),
   contact_no: Joi.string()
-    .pattern(/^[0-9]+$/) // Ensure only digits
+    .pattern(/^[0-9]+$/)
     .max(12)
     .required()
     .messages({
@@ -36,7 +77,7 @@ const admissionSchema = Joi.object({
       "string.max": "Contact number cannot exceed 12 characters.",
     }),
   alternate_no: Joi.string()
-    .pattern(/^[0-9]*$/) // Ensure only digits or empty
+    .pattern(/^[0-9]*$/)
     .max(12)
     .optional()
     .messages({
@@ -58,9 +99,29 @@ const admissionSchema = Joi.object({
       "date.max": "Date of birth must be at least 10 years ago.",
       "any.required": "Date of birth is required.",
     }),
-  current_city: Joi.string().max(100).required().messages({
-    "string.empty": "City is required.",
-    "string.max": "City cannot exceed 100 characters.",
+  current_city: Joi.string()
+    .pattern(/^[a-zA-Z\s]+$/)
+    .max(100)
+    .required()
+    .messages({
+      "string.empty": "City is required.",
+      "string.base": "City must be a string.",
+      "string.pattern.base": "City must contain only alphabetic characters.",
+      "string.max": "City cannot exceed 100 characters.",
+    }),
+  current_state: Joi.string()
+    .pattern(/^[a-zA-Z\s]+$/)
+    .max(100)
+    .required()
+    .messages({
+      "string.empty": "State is required.",
+      "string.base": "State must be a string.",
+      "string.pattern.base": "State must contain only alphabetic characters.",
+      "string.max": "State cannot exceed 100 characters.",
+    }),
+  current_nationality: Joi.string().max(100).required().messages({
+    "string.empty": "Current Nationality is required.",
+    "string.max": "Current Nationality cannot exceed 100 characters.",
   }),
   telecaller_name: Joi.string().max(255).required().messages({
     "string.empty": "Telecaller name is required.",
@@ -84,81 +145,151 @@ const admissionSchema = Joi.object({
       "any.only": "Visa type must be one of the specified options.",
       "string.empty": "Visa type is required.",
     }),
+  gender: Joi.string().valid("male", "female", "others").required().messages({
+    "any.only": "Gender must be one of 'male', 'female', or 'others'.",
+    "string.empty": "Gender is required.",
+  }),
+  passport_number: Joi.string().alphanum().min(6).max(15).required().messages({
+    "string.empty": "Passport number is required.",
+    "string.min": "Passport number must be at least 6 characters long.",
+    "string.max": "Passport number must be at most 15 characters long.",
+    "string.alphanum": "Passport number must only contain letters and numbers.",
+  }),
+  passport_expirydate: Joi.date().greater("now").required().messages({
+    "date.base": "Passport expiry date must be a valid date.",
+    "date.greater": "Passport expiry date must be in the future.",
+    "date.empty": "Passport expiry date is required.",
+  }),
 });
 
 export async function createAdmission(req, res) {
-  if (!req.body) {
-    return res.status(400).send({
-      message: "Content cannot be empty!",
-    });
-  }
-  const { error } = admissionSchema.validate(req.body, { abortEarly: false });
-
-  if (error) {
-    const errors = error.details.reduce((acc, err) => {
-      acc[err.path.join(".")] = err.message;
-      return acc;
-    }, {});
-    return res.status(400).send({ errors });
-  }
-
-  const newAdmission = {
-    id: uuidv4(),
-    inquiry_id: req?.body?.inquiry_id,
-    name: req?.body.name,
-    email: req?.body.email,
-    contact_no: req?.body.contact_no,
-    alternate_no: req?.body.alternate_no,
-    address: req?.body.address,
-    date_of_birth: req?.body?.date_of_birth,
-    current_city: req?.body?.current_city,
-    telecaller_name: req?.body?.telecaller_name,
-    visa_type: req?.body?.visa_type,
-  };
-  const email_exists = await Admission.findByFields({
-    email: newAdmission?.email,
-  });
-
-  if (email_exists?.length > 0) {
-    return res
-      .status(400)
-      .send({ errors: { email: "This Email Already Exists" } });
-  }
-  try {
-    const admissionExists = await Admission?.findByFields({
-      inquiry_id: newAdmission?.inquiry_id,
-    });
-
-    if (admissionExists?.length > 0) {
-      res.status(300).send({
-        message: "admission already exists bad request or malfunctioning",
-      });
+  upload(req, res, async function (err) {
+    if (err) {
+      return res
+        .status(400)
+        .send({ message: "File upload failed", error: err });
     }
 
-    const result = await Admission.create(newAdmission);
+    const files = req.files;
+    const requiredDocuments = [
+      "photo_document",
+      "adharcard_document",
+      "certification_document",
+    ];
+    const missingFiles = requiredDocuments.filter(
+      (doc) => !files[doc] || files[doc].length === 0
+    );
 
-    if (result?.error) {
-      res.send({
-        message: result?.error,
-        status: "Failed",
+    const {
+      photo_document,
+      adharcard_document,
+      certification_document,
+      ...newBody
+    } = req?.body;
+
+    const { error } = admissionSchema.validate(newBody, { abortEarly: false });
+    let combinedErrors = {};
+
+    // If there are validation errors, combine them into the combinedErrors object
+    if (error) {
+      const schemaErrors = error.details.reduce((acc, err) => {
+        acc[err.path.join(".")] = err.message;
+        return acc;
+      }, {});
+
+      combinedErrors = { ...combinedErrors, ...schemaErrors }; // Merge schema errors
+    }
+
+    // If there are missing files, add those errors to the combinedErrors object
+    if (missingFiles.length > 0) {
+      const missingFilesObject = missingFiles.reduce((acc, doc) => {
+        acc[doc] = `${doc} is required`;
+        return acc;
+      }, {});
+
+      combinedErrors = { ...combinedErrors, ...missingFilesObject };
+    }
+
+    if (Object.keys(combinedErrors).length > 0) {
+      return res.status(400).send({
+        errors: combinedErrors,
       });
-    } else {
-      const updateInquiry = await Inquiry.updateProgressCountByID(
-        newAdmission?.inquiry_id,
-        "1"
+    }
+    try {
+      const photoDocumentId = await saveFileAndGetId(files.photo_document[0]);
+      const adharcardDocumentId = await saveFileAndGetId(
+        files.adharcard_document[0]
       );
-      res.send({
-        message: "admission completed !",
+      const certificationDocumentId = await saveFileAndGetId(
+        files.certification_document[0]
+      );
+
+      const newAdmission = {
+        id: uuidv4(),
+        inquiry_id: req.body.inquiry_id,
+        email: req.body.email,
+        first_name: req?.body?.first_name,
+        last_name: req?.body?.last_name,
+        contact_no: req.body.contact_no,
+        alternate_no: req.body.alternate_no,
+        address: req.body.address,
+        date_of_birth: req.body.date_of_birth,
+        current_city: req.body.current_city,
+        telecaller_name: req.body.telecaller_name,
+        visa_type: req.body.visa_type,
+        date_of_admission: req.body.date_of_admission,
+        gender: req.body.gender,
+        zip_code: req.body.zip_code,
+        current_state: req.body.current_state,
+        current_nationality: req.body.current_nationality,
+        passport_number: req.body.passport_number,
+        passport_expirydate: req.body.passport_expirydate,
+        photo_document: photoDocumentId,
+        adharcard_document: adharcardDocumentId,
+        certification_document: certificationDocumentId,
+      };
+
+      const emailExists = await Admission.findByFields({
+        email: newAdmission.email,
+      });
+      if (emailExists.length > 0) {
+        return res
+          .status(400)
+          .send({ errors: { email: "This Email Already Exists" } });
+      }
+
+      const admissionExists = await Admission.findByFields({
+        inquiry_id: newAdmission.inquiry_id,
+      });
+      if (admissionExists.length > 0) {
+        return res.status(400).send({
+          message: "Admission already exists for this inquiry ID.",
+        });
+      }
+      const result = await Admission.create(newAdmission);
+      if (result.error) {
+        return res.status(500).send({
+          message: result.error,
+          status: "Failed",
+        });
+      }
+
+      await Inquiry.updateProgressCountByID(newAdmission.inquiry_id, "1");
+
+      res.status(200).send({
+        message: "Admission completed successfully!",
         status: "success",
-        admission_id: newAdmission?.id,
+        admission_id: newAdmission.id,
+      });
+    } catch (err) {
+      res.status(500).send({
+        message:
+          err.message || "An error occurred while creating the admission.",
       });
     }
-  } catch (err) {
-    res.status(500).send({
-      message: err.message || "Some error occurred while creating the user.",
-    });
-  }
+  });
 }
+
 export async function getAdmissionDetail(req, res) {
   try {
     const result = await Admission?.findAll();

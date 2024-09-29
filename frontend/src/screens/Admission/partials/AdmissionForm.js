@@ -6,9 +6,9 @@ import ReactSelect from "../../../components/ReactSelect";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import RadioGroup from "../../../components/RadioGroup";
 const admissionObject = {
-  id: "",
   inquiry_id: "",
-  name: "",
+  first_name: "",
+  last_name: "",
   email: "",
   contact_no: "",
   alternate_no: "",
@@ -17,6 +17,14 @@ const admissionObject = {
   current_city: "",
   visa_type: "",
   telecaller_name: "",
+  date_of_admission: "2024-09-30",
+  gender: "",
+  zip_code: "",
+  passport_number: "333223",
+  passport_expirydate: "2024-09-30",
+  photo_document: "",
+  adharcard_document: "",
+  certification_document: "",
 };
 const AdmissionForm = ({
   setAdmissionId,
@@ -40,14 +48,37 @@ const AdmissionForm = ({
   const [isEdit, setIsEdit] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { errors, data } = isEdit
-      ? await editRoute(`api/admission/${admissionDetail?.id}`, admissionDetail)
-      : await postRoute(`api/admission`, admissionDetail);
+    const formData = new FormData();
+    formData.append("photo_document", admissionDetail.photo_document);
+    formData.append("adharcard_document", admissionDetail.adharcard_document);
+    formData.append(
+      "certification_document",
+      admissionDetail.certification_document
+    );
+    Object.keys(admissionDetail).forEach((key) => {
+      if (
+        key !== "photo_document" &&
+        key !== "adharcard_document" &&
+        key !== "certification_document"
+      ) {
+        formData.append(key, admissionDetail[key]);
+      }
+    });
+    const url = isEdit
+      ? `api/admission/${admissionDetail?.id}`
+      : `api/admission`;
+
+    const response = isEdit
+      ? await editRoute(url, formData)
+      : await postRoute(url, formData, true, false);
+
+    const { errors, data } = response;
+
     if (errors) {
       setErrors(errors);
     } else {
       setAdmissionId(data?.admission_id);
-      setSelected(2);
+      // setSelected(2); 
     }
   };
 
@@ -56,6 +87,18 @@ const AdmissionForm = ({
       ...prev,
       [name]: value,
     }));
+  };
+  const handlePhotoDocument = (e) => {
+    const file = e.target.files[0];
+    handleAdmission("photo_document", file);
+  };
+  const handlAdharDocument = (e) => {
+    const file = e.target.files[0];
+    handleAdmission("adharcard_document", file);
+  };
+  const handleCertificationDocument = (e) => {
+    const file = e.target.files[0];
+    handleAdmission("certification_document", file);
   };
 
   useEffect(() => {
@@ -71,7 +114,8 @@ const AdmissionForm = ({
           setAdmissionDetail({
             id: editAdmisson?.id,
             inquiry_id: editAdmisson?.inquiry_id,
-            name: editAdmisson?.name,
+            first_name: editAdmisson?.first_name,
+            last_name: editAdmisson?.last_name,
             email: editAdmisson?.email,
             contact_no: editAdmisson?.contact_no,
             alternate_no: editAdmisson?.alternate_no,
@@ -82,14 +126,21 @@ const AdmissionForm = ({
             current_city: editAdmisson?.current_city,
             visa_type: editAdmisson?.visa_type,
             telecaller_name: editAdmisson?.telecaller_name,
+            date_of_admission: editAdmisson?.date_of_admission,
+            gender: editAdmisson?.gender,
+            zip_code: editAdmisson?.zip_code,
+            current_state: editAdmisson?.current_state,
+            current_nationality: editAdmisson?.current_nationality,
           });
         }
         setIsEdit(true);
       } else {
         if (createAdmission) {
           setAdmissionDetail({
+            ...admissionDetail,
             inquiry_id: createAdmission?.id,
-            name: createAdmission?.name,
+            first_name: createAdmission?.first_name,
+            last_name: createAdmission?.last_name,
             email: createAdmission?.email,
             contact_no: createAdmission?.contact_no,
             alternate_no: createAdmission?.alternate_no,
@@ -100,6 +151,11 @@ const AdmissionForm = ({
             current_city: createAdmission?.current_city,
             visa_type: createAdmission?.visa_type,
             telecaller_name: createAdmission?.telecaller_name,
+            // date_of_admission: createAdmission?.date_of_admission,
+            gender: createAdmission?.gender,
+            zip_code: createAdmission?.zip_code,
+            current_state: createAdmission?.current_state,
+            current_nationality: createAdmission?.current_nationality,
           });
         }
         setIsEdit(false);
@@ -128,7 +184,7 @@ const AdmissionForm = ({
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">
         <div className="col-md-12">
-        <div className="card" style={{ borderRadius: '0 8px 8px 0' }}>
+          <div className="card" style={{ borderRadius: "0 8px 8px 0" }}>
             <div className="header">
               <h2 className="font-weight-bold">Basic Information</h2>
             </div>
@@ -140,7 +196,7 @@ const AdmissionForm = ({
                     <input
                       className={`form-control`}
                       value={admissionDetail?.first_name || ""}
-                      required="required"
+                      // required="required"
                       onChange={(e) =>
                         handleAdmission("first_name", e.target.value)
                       }
@@ -200,17 +256,17 @@ const AdmissionForm = ({
                         boxSizing: "border-box",
                         padding: "0.5rem",
                       }}
-                      value={admissionDetail?.date_of_birth || ""}
+                      value={admissionDetail?.date_of_admission || ""}
                       className="date-picker"
                       onChange={(date) =>
                         handleAdmission(
-                          "date_of_birth",
+                          "date_of_admission",
                           moment(date[0]).format("YYYY-MM-DD")
                         )
                       }
                     />
                     <p className="mt-2 text-danger">
-                      {errors["date_of_birth"]}
+                      {errors["date_of_admission"]}
                     </p>
                   </div>
                 </div>
@@ -385,15 +441,18 @@ const AdmissionForm = ({
                     <label>Passport Number</label>
                     <input
                       className={`form-control`}
-                      value={admissionDetail?.first_name || ""}
+                      value={admissionDetail?.passport_number || ""}
                       required="required"
                       onChange={(e) =>
-                        handleAdmission("first_name", e.target.value)
+                        handleAdmission("passport_number", e.target.value)
                       }
                     />
-                    <p className="mt-2 text-danger">{errors["first_name"]}</p>
+                    <p className="mt-2 text-danger">
+                      {errors["passport_number"]}
+                    </p>
                   </div>
                 </div>
+
                 <div className="col-md-4">
                   <div className="form-group">
                     <label>Passport Expiry Date</label>
@@ -405,16 +464,18 @@ const AdmissionForm = ({
                         boxSizing: "border-box",
                         padding: "0.5rem",
                       }}
-                      value={admissionDetail?.date_of_birth || ""}
+                      value={admissionDetail?.passport_expirydate || ""}
                       className="date-picker"
                       onChange={(date) =>
                         handleAdmission(
-                          "date_of_birth",
+                          "passport_expirydate",
                           moment(date[0]).format("YYYY-MM-DD")
                         )
                       }
                     />
-                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
+                    <p className="mt-2 text-danger">
+                      {errors["passport_expirydate"]}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -429,45 +490,42 @@ const AdmissionForm = ({
                   <div className="form-group">
                     <label>Upload Photo</label>
                     <input
-                    type="file"
+                      type="file"
+                      name="photo_document"
                       className={`form-control`}
-                      value={admissionDetail?.first_name || ""}
-                      required="required"
-                      onChange={(e) =>
-                        handleAdmission("first_name", e.target.value)
-                      }
+                      onChange={handlePhotoDocument}
                     />
-                    <p className="mt-2 text-danger">{errors["first_name"]}</p>
+                    <p className="mt-2 text-danger">
+                      {errors["photo_document"]}
+                    </p>
                   </div>
                 </div>
                 <div className="col-md-4">
                   <div className="form-group">
                     <label>Upload Aadhar Card</label>
                     <input
-                       type="file"
+                      name="adharcard_document"
+                      type="file"
                       className={`form-control`}
-                      value={admissionDetail?.last_name || ""}
-                      required="required"
-                      // onChange={(e) =>
-                      //   handleAdmission("last_name", e.target.value)
-                      // }
+                      onChange={handlAdharDocument}
                     />
-                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
+                    <p className="mt-2 text-danger">
+                      {errors["adharcard_document"]}
+                    </p>
                   </div>
                 </div>
                 <div className="col-md-4">
                   <div className="form-group">
                     <label>Upload Certification</label>
                     <input
-                       type="file"  
+                      name="certification_document"
+                      type="file"
                       className={`form-control`}
-                      value={admissionDetail?.last_name || ""}
-                      required="required"
-                      onChange={(e) =>
-                        handleAdmission("last_name", e.target.value)
-                      }
+                      onChange={handleCertificationDocument}
                     />
-                    <p className="mt-2 text-danger">{errors["last_name"]}</p>
+                    <p className="mt-2 text-danger">
+                      {errors["certification_document"]}
+                    </p>
                   </div>
                 </div>
               </div>

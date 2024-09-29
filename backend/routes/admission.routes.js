@@ -7,9 +7,10 @@ import {
   getByFilter,
   getAllDetails
 } from "../controllers/Admissions.controller.js";
+
 import protectRoute from "../middleware/protectRoute.js";
 const router = express.Router();
-router.post("/", createAdmission);
+router.post("/", createAdmission); 
 router.get("/", getAdmissionDetail);
 router.delete("/:id", deleteAdmission);
 router.patch("/:id", updateAdmission);

@@ -35,10 +35,12 @@ const useApi = () => {
   };
 
   const getRoute = useCallback(
-    async (url, params, toast = true) => {
-      const headers = {
-        "Content-Type": "application/json",
-      };
+    async (url, params, toast = true, useHeaders = true) => {
+      const headers = useHeaders
+        ? {
+            "Content-Type": "application/json",
+          }
+        : {};
       try {
         const { data } = await axios.get(url, {
           headers,
@@ -57,18 +59,21 @@ const useApi = () => {
   );
 
   const postRoute = useCallback(
-    async (url, postData) => {
-      const headers = {
-        "Content-Type": "application/json",
-      };
+    async (url, postData, toast = true, useHeaders = true) => {
+      const headers = useHeaders
+        ? {
+            "Content-Type": "application/json",
+          }
+        : {};
       try {
         const { data } = await axios.post(url, postData, {
           headers,
         });
 
-        dispatch(tostMessageLoad(true));
-        dispatch(setToastMessage(data?.message));
-
+        if (toast) {
+          dispatch(tostMessageLoad(true));
+          dispatch(setToastMessage(data?.message));
+        }
         return { data }; // Return the data on success
       } catch (err) {
         console.log(err);

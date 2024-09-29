@@ -11,6 +11,7 @@ import inquiryRoutes from "./routes/inquiry.routes.js";
 import feePaymentRoutes from "./routes/FeePayment.routes.js";
 import bankRoutes from "./routes/bank.routes.js";
 import educationRoutes from "./routes/Education.routes.js";
+import fileRoutes from "./routes/file.routes.js";
 const app = express();
 dotenv.config();
 const __dirname = path.resolve();
@@ -26,6 +27,7 @@ app.use("/api/inquiry", inquiryRoutes);
 app.use("/api/bank", bankRoutes);
 app.use("/api/admission", admissionRoutes);
 app.use("/api/education", educationRoutes);
+app.use("/api/file", fileRoutes);
 app.use(express.static(path.join(__dirname, "/frontend/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
