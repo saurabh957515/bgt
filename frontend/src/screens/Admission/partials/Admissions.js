@@ -4,15 +4,18 @@ import PageHeader from "../../../components/PageHeader";
 import useApi from "../../../utils/UseApi";
 import moment from "moment";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import PopupModel from "../../../components/PopupModel";
 
 const Admissions = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [admissions, setAdmissions] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const history = useHistory();
   const { getRoute, deleteById } = useApi();
   const getData = async () => {
     const { data } = await getRoute("api/admission/getall");
-    console.log(data)
+    console.log(data);
     setAdmissions(data);
   };
 
@@ -23,7 +26,7 @@ const Admissions = () => {
     setActiveIndex(activeIndex === index ? null : index);
   };
   const handleDeleteAdmission = async (id) => {
-    const {data} = await deleteById(`api/admission/${id}`);
+    const { data } = await deleteById(`api/admission/${id}`);
     if (data?.status == "success") {
       getData();
     }
@@ -34,7 +37,6 @@ const Admissions = () => {
       state: { admissionId: id },
     });
   };
-
   return (
     <div
       style={{ flex: 1 }}
@@ -42,6 +44,7 @@ const Admissions = () => {
         document.body.classList.remove("offcanvas-active");
       }}
     >
+      <PopupModel isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
       <div>
         <div className="container-fluid">
           <PageHeader
@@ -122,7 +125,10 @@ const Admissions = () => {
                       </button>
                       <button
                         onClick={() =>
-                          handleDeleteAdmission(admissionDetails?.admission?.id)
+                        { 
+                          setIsModalOpen(true);
+                          // handleDeleteAdmission(admissionDetails?.admission?.id)
+                        }
                         }
                         className="ml-2 btn btn-danger"
                       >

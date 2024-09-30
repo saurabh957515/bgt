@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const PopupModel = ({ isModalOpen, setIsModalOpen = () => {} }) => {
+const PopupModel = ({ isModalOpen,title="empty title", setIsModalOpen = () => {} }) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -31,17 +31,17 @@ const PopupModel = ({ isModalOpen, setIsModalOpen = () => {} }) => {
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div className="modal-body">Modal body content goes here...</div>
+              <div className="modal-body">{title}</div>
               <div className="modal-footer">
                 <button
                   type="button"
                   className="btn btn-secondary"
                   onClick={closeModal} // React event handler for closing the modal
                 >
-                  Close
+                  Cancel
                 </button>
                 <button type="button" className="btn btn-primary">
-                  Save changes
+                  Delete
                 </button>
               </div>
             </div>

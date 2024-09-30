@@ -48,6 +48,9 @@ const AdmissionForm = ({
   const [photoPreview, setPhotoPreview] = useState(null);
   const [adharPreview, setAdharPreview] = useState(null);
   const [certificationPreview, setCertificationPreview] = useState(null);
+  const [isPhotoEdit, setIsPhotEdit] = useState(false);
+  const [isAdharEdit, setIsAdharEdit] = useState(false);
+  const [isCertiEdit, setIsCertiEdit] = useState(false);
   const [imageSrc, setImageSrc] = useState("");
   const [pdfSrc, setPdfSrc] = useState("");
   useEffect(() => {
@@ -118,6 +121,7 @@ const AdmissionForm = ({
   const handlePhotoDocument = (e) => {
     const file = e.target.files[0];
     handleAdmission("photo_document", file);
+    setIsPhotEdit(true);
     if (file) {
       setPhotoPreview(URL.createObjectURL(file));
     }
@@ -125,12 +129,14 @@ const AdmissionForm = ({
   const handleAdharDocument = (e) => {
     const file = e.target.files[0];
     handleAdmission("adharcard_document", file);
+    setIsAdharEdit(true);
     if (file) {
       setAdharPreview(URL.createObjectURL(file));
     }
   };
   const handleCertificationDocument = (e) => {
     const file = e.target.files[0];
+    setIsCertiEdit(true);
     handleAdmission("certification_document", file);
     if (file) {
       setCertificationPreview(URL.createObjectURL(file));
@@ -167,6 +173,11 @@ const AdmissionForm = ({
             zip_code: editAdmisson?.zip_code,
             current_state: editAdmisson?.current_state,
             current_nationality: editAdmisson?.current_nationality,
+            passport_number: editAdmisson?.passport_number,
+            passport_expirydate: editAdmisson?.passport_expirydate,
+            photo_document: editAdmisson?.photo_document,
+            adharcard_document: editAdmisson?.adharcard_document,
+            certification_document: editAdmisson?.certification_document,
           });
         }
         setIsEdit(true);
@@ -192,6 +203,8 @@ const AdmissionForm = ({
             zip_code: createAdmission?.zip_code,
             current_state: createAdmission?.current_state,
             current_nationality: createAdmission?.current_nationality,
+            passport_number: createAdmission?.passport_number,
+            passport_expirydate: createAdmission?.passport_expirydate,
           });
         }
         setIsEdit(false);
@@ -199,6 +212,56 @@ const AdmissionForm = ({
     };
     getData();
   }, [editAdmissionId, createAdmission]);
+
+  useEffect(() => {
+    if (editAdmissionId) {
+      const fetchFile = async (id, type) => {
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/api/file/${id}`,
+            {
+              responseType: "blob",
+            }
+          );
+          return URL.createObjectURL(response.data);
+        } catch (error) {
+          console.error("Error fetching file:", error);
+        }
+      };
+
+      const fetchFiles = async () => {
+        if (admissionDetail?.photo_document && !isPhotoEdit) {
+          const photoUrl = await fetchFile(
+            admissionDetail.photo_document,
+            "photo"
+          );
+          setPhotoPreview(photoUrl);
+        }
+        if (admissionDetail?.adharcard_document && !isAdharEdit) {
+          const adharUrl = await fetchFile(
+            admissionDetail.adharcard_document,
+            "adhar"
+          );
+          setAdharPreview(adharUrl);
+        }
+        if (admissionDetail?.certification_document && !isCertiEdit) {
+          const certificationUrl = await fetchFile(
+            admissionDetail.certification_document,
+            "certification"
+          );
+          setCertificationPreview(certificationUrl);
+        }
+      };
+
+      fetchFiles();
+    }
+  }, [
+    admissionDetail?.photo_document,
+    admissionDetail?.adharcard_document,
+    admissionDetail?.certification_document,
+    editAdmissionId,
+    isPhotoEdit,
+  ]);
 
   useEffect(() => {
     const getAdmission = async () => {
@@ -216,22 +279,7 @@ const AdmissionForm = ({
     };
     getAdmission();
   }, []);
-
-  const commonStyle = {
-    height: "150px",
-  };
-
-  const inputStyle = {
-    ...commonStyle,
-    padding: "40px 10px",
-    width: "100%",
-  };
-
-  const imageStyle = {
-    ...commonStyle,
-    width: "100%",
-    objectFit: "cover",
-  };
+  console.log(admissionDetail);
   return (
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">

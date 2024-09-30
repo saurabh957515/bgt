@@ -98,6 +98,8 @@ const EducationForm = ({
             current_designation: editAdmisson?.current_designation,
             current_monthly_salary: editAdmisson?.current_monthly_salary || 0,
             total_experience_years: editAdmisson?.total_experience_years || 0,
+            state:editAdmisson?.state,
+            city:editAdmisson?.city,
             // past_rejection_country_name:
             //   editAdmisson?.past_rejection_country_name,
             ielts_score: editAdmisson?.ielts_score,
