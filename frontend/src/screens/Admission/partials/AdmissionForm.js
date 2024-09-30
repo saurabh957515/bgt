@@ -45,15 +45,21 @@ const AdmissionForm = ({
   const [createAdmission, setCreateAdmission] = useState(
     location.state?.makeAdmission
   );
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const [adharPreview, setAdharPreview] = useState(null);
+  const [certificationPreview, setCertificationPreview] = useState(null);
   const [imageSrc, setImageSrc] = useState("");
-  const [pdfSrc, setPdfSrc] = useState('');
+  const [pdfSrc, setPdfSrc] = useState("");
   useEffect(() => {
     const fetchFile = async () => {
       try {
         // Assuming your backend is running on localhost:9000
-        const response = await axios.get(`http://localhost:5000/api/file/${10}`, {
-          responseType: "blob", // Get the file as a Blob
-        });
+        const response = await axios.get(
+          `http://localhost:5000/api/file/${10}`,
+          {
+            responseType: "blob", // Get the file as a Blob
+          }
+        );
         // const imageURL = URL.createObjectURL(response.data);
         // setImageSrc(imageURL);
         const pdfURL = URL.createObjectURL(response.data);
@@ -112,14 +118,23 @@ const AdmissionForm = ({
   const handlePhotoDocument = (e) => {
     const file = e.target.files[0];
     handleAdmission("photo_document", file);
+    if (file) {
+      setPhotoPreview(URL.createObjectURL(file));
+    }
   };
-  const handlAdharDocument = (e) => {
+  const handleAdharDocument = (e) => {
     const file = e.target.files[0];
     handleAdmission("adharcard_document", file);
+    if (file) {
+      setAdharPreview(URL.createObjectURL(file));
+    }
   };
   const handleCertificationDocument = (e) => {
     const file = e.target.files[0];
     handleAdmission("certification_document", file);
+    if (file) {
+      setCertificationPreview(URL.createObjectURL(file));
+    }
   };
 
   useEffect(() => {
@@ -201,28 +216,25 @@ const AdmissionForm = ({
     };
     getAdmission();
   }, []);
+
+  const commonStyle = {
+    height: "150px",
+  };
+
+  const inputStyle = {
+    ...commonStyle,
+    padding: "40px 10px",
+    width: "100%",
+  };
+
+  const imageStyle = {
+    ...commonStyle,
+    width: "100%",
+    objectFit: "cover",
+  };
   return (
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">
-        <div>
-        {pdfSrc && (
-        <iframe
-          src={pdfSrc}
-          width="100%"
-          height="600px"
-          title="PDF Viewer"
-        />
-      )}
-          {imageSrc ? (
-            <img
-              src={imageSrc}
-              alt="File"
-              style={{ width: "300px", height: "auto" }}
-            />
-          ) : (
-            <p>Loading image...</p>
-          )}
-        </div>
         <div className="col-md-12">
           <div className="card" style={{ borderRadius: "0 8px 8px 0" }}>
             <div className="header">
@@ -526,46 +538,174 @@ const AdmissionForm = ({
             </div>
             <div className="body">
               <div className="row">
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Upload Photo</label>
-                    <input
-                      type="file"
-                      name="photo_document"
-                      className={`form-control`}
-                      onChange={handlePhotoDocument}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["photo_document"]}
-                    </p>
+                <div className="col-md-12">
+                  <div
+                    className="form-group"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center", // Aligns input and preview vertically
+                      gap: "20px", // Space between input and preview
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: "0 0 50%",
+                        height: "200px",
+                        borderRight: "2px solid #ccc", // Add border between input and preview
+                        paddingRight: "20px", // Add some padding for a clean look
+                      }}
+                    >
+                      <label>Upload Photo</label>
+                      <input
+                        type="file"
+                        name="photo_document"
+                        className="form-control"
+                        onChange={handlePhotoDocument}
+                        style={{ padding: "10px" }} // Padding for better height alignment
+                      />
+                      <p className="mt-2 text-danger">
+                        {errors["photo_document"]}
+                      </p>
+                    </div>
+
+                    <div
+                      className="form-group"
+                      style={{ flex: "0 0 50%", height: "200px" }}
+                    >
+                      <label>Photo Preview</label>
+                      <div className="mb-3">
+                        <img
+                          src={
+                            photoPreview ||
+                            "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBA=="
+                          }
+                          alt="Photo Preview"
+                          className="img-thumbnail"
+                          style={{
+                            width: "40%",
+                            height: "190px",
+                            objectFit: "cover",
+                            borderRadius: "5px",
+                            backgroundColor: !photoPreview
+                              ? "#f8f9fa"
+                              : "transparent",
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Upload Aadhar Card</label>
-                    <input
-                      name="adharcard_document"
-                      type="file"
-                      className={`form-control`}
-                      onChange={handlAdharDocument}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["adharcard_document"]}
-                    </p>
+                  <div
+                    className="form-group"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center", // Aligns input and preview vertically
+                      gap: "20px", // Space between input and preview
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: "0 0 50%",
+                        height: "200px",
+                        borderRight: "2px solid #ccc", // Add border between input and preview
+                        paddingRight: "20px", // Add some padding for a clean look
+                      }}
+                    >
+                      <label>Upload Aadhar Card</label>
+                      <input
+                        name="adharcard_document"
+                        type="file"
+                        className="form-control"
+                        onChange={handleAdharDocument}
+                        style={{ padding: "10px" }} // Padding for better height alignment
+                      />
+                      <p className="mt-2 text-danger">
+                        {errors["adharcard_document"]}
+                      </p>
+                    </div>
+
+                    <div
+                      className="form-group"
+                      style={{ flex: "0 0 50%", height: "200px" }}
+                    >
+                      <label>AdharCard Preview</label>
+                      <div className="mb-3">
+                        <img
+                          src={
+                            adharPreview ||
+                            "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBA=="
+                          }
+                          alt="Photo Preview"
+                          className="img-thumbnail"
+                          style={{
+                            width: "40%",
+                            height: "190px",
+                            objectFit: "cover",
+                            borderRadius: "5px",
+                            backgroundColor: !adharPreview
+                              ? "#f8f9fa"
+                              : "transparent",
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label>Upload Certification</label>
-                    <input
-                      name="certification_document"
-                      type="file"
-                      className={`form-control`}
-                      onChange={handleCertificationDocument}
-                    />
-                    <p className="mt-2 text-danger">
-                      {errors["certification_document"]}
-                    </p>
+                  <div
+                    className="form-group"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center", // Aligns input and preview vertically
+                      gap: "20px", // Space between input and preview
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: "0 0 50%",
+                        height: "200px",
+                        borderRight: "2px solid #ccc", // Add border between input and preview
+                        paddingRight: "20px", // Add some padding for a clean look
+                      }}
+                    >
+                      <label>Upload Certification </label>
+                      <input
+                        type="file"
+                        name="photo_document"
+                        className="form-control"
+                        onChange={handleCertificationDocument}
+                        style={{ padding: "10px" }} // Padding for better height alignment
+                      />
+                      <p className="mt-2 text-danger">
+                        {errors["photo_document"]}
+                      </p>
+                    </div>
+
+                    <div
+                      className="form-group"
+                      style={{ flex: "0 0 50%", height: "200px" }}
+                    >
+                      <label>Certification Preview</label>
+                      <div className="mb-3">
+                        <img
+                          src={
+                            certificationPreview ||
+                            "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBA=="
+                          }
+                          alt="Photo Preview"
+                          className="img-thumbnail"
+                          style={{
+                            width: "40%",
+                            height: "190px",
+                            objectFit: "cover",
+                            borderRadius: "5px",
+                            backgroundColor: !certificationPreview
+                              ? "#f8f9fa"
+                              : "transparent",
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

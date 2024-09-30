@@ -13,7 +13,7 @@ import PopupModel from "../../components/PopupModel";
 import { connect } from "react-redux";
 
 const TotalAdmission = ({ nationalities }) => {
-  const [selected, setSelected] = useState(2);
+  const [selected, setSelected] = useState(1);
   const [addmissionId, setAdmissionId] = useState("");
   const history = useHistory();
   const { getRoute, editRoute, postRoute, deleteById } = useApi();
@@ -232,7 +232,7 @@ const TotalAdmission = ({ nationalities }) => {
               { name: "Show", navigate: "" },
             ]}
           />
-          <ul style={{borderBottom:'0px'}} className="nav nav-tabs">
+          <ul style={{ borderBottom: "0px" }} className="nav nav-tabs">
             {[
               "Admission Details",
               "Education Details",
