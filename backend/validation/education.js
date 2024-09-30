@@ -7,9 +7,9 @@ export const educationSchema = Joi.object({
   inquiry_id: Joi.string().length(36).allow(null).messages({
     "string.length": "Inquiry ID must be a 36-character string.",
   }),
-  highest_qualification: Joi.string().max(255).required().messages({
-    "string.max": "Highest qualification cannot exceed 255 characters.",
-    "any.required": "Highest qualification is required.",
+  course_details: Joi.string().max(255).required().messages({
+    "string.max": "Course Details cannot exceed 255 characters.",
+    "any.required": "Course Details is required.",
   }),
   passing_year: Joi.number()
     .integer()
@@ -63,6 +63,26 @@ export const educationSchema = Joi.object({
       otherwise: Joi.string().max(255).allow(null), // Allow null if is_employed is not 1
     }),
 
+  city: Joi.string()
+    .pattern(/^[a-zA-Z\s]+$/)
+    .max(100)
+    .required()
+    .messages({
+      "string.empty": "City is required.",
+      "string.base": "City must be a string.",
+      "string.pattern.base": "City must contain only alphabetic characters.",
+      "string.max": "City cannot exceed 100 characters.",
+    }),
+  state: Joi.string()
+    .pattern(/^[a-zA-Z\s]+$/)
+    .max(100)
+    .required()
+    .messages({
+      "string.empty": "State is required.",
+      "string.base": "State must be a string.",
+      "string.pattern.base": "State must contain only alphabetic characters.",
+      "string.max": "State cannot exceed 100 characters.",
+    }),
   current_designation: Joi.string()
     .max(255)
     .when("is_employed", {
@@ -117,9 +137,9 @@ export const educationSchema = Joi.object({
       }),
       otherwise: Joi.number().precision(1).min(0).allow(null),
     }),
-  past_rejection_country_name: Joi.string().max(255).allow(null).messages({
-    "string.max": "Past rejection country name cannot exceed 255 characters.",
-  }),
+  // past_rejection_country_name: Joi.string().max(255).allow(null).messages({
+  //   "string.max": "Past rejection country name cannot exceed 255 characters.",
+  // }),
   ielts_score: Joi.number().precision(1).min(0).max(9).allow(null).messages({
     "number.base": "IELTS score must be a number.",
     "number.min": "IELTS score must be at least 0.",
@@ -169,26 +189,26 @@ export const educationSchema = Joi.object({
     otherwise: Joi.allow(null), // Allow null if employed_type is not "business"
   }),
 
-  place_of_birth: Joi.string()
-    .max(255)
-    .required() // Makes place_of_birth required
-    .messages({
-      "string.max": "Place of birth cannot exceed 255 characters.",
-      "any.required": "Place of birth is required.", // Custom error message when the field is missing
-    }),
-  gender: Joi.string()
-    .valid("male", "female", "others")
-    .required() // Makes gender required
-    .messages({
-      "any.only": "Gender must be one of 'male', 'female', or 'others'.",
-      "any.required": "Gender is required.",
-      "string.base": "Gender must be a string.",
-    }),
-  current_nationality: Joi.string()
-    .max(255)
-    .required() // Makes current_nationality required
-    .messages({
-      "string.max": "Current nationality cannot exceed 255 characters.",
-      "any.required": "Current nationality is required.", // Custom error message when the field is missing
-    }),
+  // place_of_birth: Joi.string()
+  //   .max(255)
+  //   .required() // Makes place_of_birth required
+  //   .messages({
+  //     "string.max": "Place of birth cannot exceed 255 characters.",
+  //     "any.required": "Place of birth is required.", // Custom error message when the field is missing
+  //   }),
+  // gender: Joi.string()
+  //   .valid("male", "female", "others")
+  //   .required() // Makes gender required
+  //   .messages({
+  //     "any.only": "Gender must be one of 'male', 'female', or 'others'.",
+  //     "any.required": "Gender is required.",
+  //     "string.base": "Gender must be a string.",
+  //   }),
+  // current_nationality: Joi.string()
+  //   .max(255)
+  //   .required() // Makes current_nationality required
+  //   .messages({
+  //     "string.max": "Current nationality cannot exceed 255 characters.",
+  //     "any.required": "Current nationality is required.", // Custom error message when the field is missing
+  //   }),
 });

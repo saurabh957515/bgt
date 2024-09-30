@@ -12,6 +12,7 @@ const Admissions = () => {
   const { getRoute, deleteById } = useApi();
   const getData = async () => {
     const { data } = await getRoute("api/admission/getall");
+    console.log(data)
     setAdmissions(data);
   };
 

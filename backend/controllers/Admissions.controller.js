@@ -303,6 +303,7 @@ export async function getAdmissionDetail(req, res) {
 export async function getAllDetails(req, res) {
   try {
     const result = await Admission?.getAllDetails();
+    console.log(result)
     res.send(result);
   } catch (err) {
     res.status(500).send({

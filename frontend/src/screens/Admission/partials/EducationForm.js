@@ -7,16 +7,17 @@ import RadioGroup from "../../../components/RadioGroup";
 import ReactSelect from "../../../components/ReactSelect";
 const education_Object = {
   admission_id: "",
-  highest_qualification: "",
+  course_details:"",
   passing_year: 2012,
   name_of_institute: "",
+  city:"",
+  state:"",
   percentage_cgpa: "",
   is_employed: 0,
   current_company: null,
   current_designation: null,
   current_monthly_salary: 0,
   total_experience_years: 0,
-  past_rejection_country_name: "",
   ielts_score: "",
   business_name: null,
   business_type: null,
@@ -60,7 +61,6 @@ const EducationForm = ({
     setEducationDetail(newEducation);
   };
   const handleSubmit = async (e) => {
-    return;
     e.preventDefault();
     const { errors, data } = isEdit
       ? await editRoute(
@@ -75,7 +75,6 @@ const EducationForm = ({
       setSelected(3);
     }
   };
-
   useEffect(() => {
     const getData = async () => {
       if (editAdmissionId) {
@@ -90,7 +89,7 @@ const EducationForm = ({
             id: editAdmisson?.id,
             admission_id: editAdmisson?.admission_id,
             inquiry_id: editAdmisson?.inquiry_id || null,
-            highest_qualification: editAdmisson?.highest_qualification,
+            course_details: editAdmisson?.course_details,
             passing_year: editAdmisson?.passing_year,
             name_of_institute: editAdmisson?.name_of_institute,
             percentage_cgpa: editAdmisson?.percentage_cgpa,
@@ -99,16 +98,16 @@ const EducationForm = ({
             current_designation: editAdmisson?.current_designation,
             current_monthly_salary: editAdmisson?.current_monthly_salary || 0,
             total_experience_years: editAdmisson?.total_experience_years || 0,
-            past_rejection_country_name:
-              editAdmisson?.past_rejection_country_name,
+            // past_rejection_country_name:
+            //   editAdmisson?.past_rejection_country_name,
             ielts_score: editAdmisson?.ielts_score,
             business_name: editAdmisson?.business_name,
             business_type: editAdmisson?.business_type,
             business_start_date: editAdmisson?.business_start_date,
             employed_type: editAdmisson?.employed_type,
-            gender: editAdmisson?.gender,
-            place_of_birth: editAdmisson?.place_of_birth,
-            current_nationality: editAdmisson?.current_nationality,
+            // gender: editAdmisson?.gender,
+            // place_of_birth: editAdmisson?.place_of_birth,
+            // current_nationality: editAdmisson?.current_nationality,
           });
           setIsEdit(true);
         } else {
@@ -196,19 +195,19 @@ const EducationForm = ({
                     <label>Course Details</label>
                     <input
                       className={`form-control`}
-                      value={educationDetails?.highest_qualification}
-                      name="highest_qualification"
+                      value={educationDetails?.course_details}
+                      name="course_details"
                       required="required"
                       type="text"
                       onChange={(e) => {
                         handleEducation(
-                          "highest_qualification",
+                          "course_details",
                           e.target.value
                         );
                       }}
                     />
                     <p className="mt-2 text-danger">
-                      {errors["highest_qualification"]}
+                      {errors["course_details"]}
                     </p>
                   </div>
                 </div>
@@ -217,15 +216,15 @@ const EducationForm = ({
                     <label>City</label>
                     <input
                       className={`form-control`}
-                      value={educationDetails?.name_of_institute}
-                      name="name_of_institute"
+                      value={educationDetails?.city}
+                      name="city"
                       required="required"
                       onChange={(e) => {
-                        handleEducation("name_of_institute", e.target.value);
+                        handleEducation("city", e.target.value);
                       }}
                     />
                     <p className="mt-2 text-danger">
-                      {errors["name_of_institute"]}
+                      {errors["city"]}
                     </p>
                   </div>
                 </div>{" "}
@@ -234,15 +233,15 @@ const EducationForm = ({
                     <label>State</label>
                     <input
                       className={`form-control`}
-                      value={educationDetails?.name_of_institute}
-                      name="name_of_institute"
+                      value={educationDetails?.state}
+                      name="state"
                       required="required"
                       onChange={(e) => {
-                        handleEducation("name_of_institute", e.target.value);
+                        handleEducation("state", e.target.value);
                       }}
                     />
                     <p className="mt-2 text-danger">
-                      {errors["name_of_institute"]}
+                      {errors["state"]}
                     </p>
                   </div>
                 </div>

@@ -5,6 +5,7 @@ import useApi from "../../../utils/UseApi";
 import ReactSelect from "../../../components/ReactSelect";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import RadioGroup from "../../../components/RadioGroup";
+import axios from "axios";
 const admissionObject = {
   inquiry_id: "",
   first_name: "",
@@ -44,6 +45,26 @@ const AdmissionForm = ({
   const [createAdmission, setCreateAdmission] = useState(
     location.state?.makeAdmission
   );
+  const [imageSrc, setImageSrc] = useState("");
+  const [pdfSrc, setPdfSrc] = useState('');
+  useEffect(() => {
+    const fetchFile = async () => {
+      try {
+        // Assuming your backend is running on localhost:9000
+        const response = await axios.get(`http://localhost:5000/api/file/${10}`, {
+          responseType: "blob", // Get the file as a Blob
+        });
+        // const imageURL = URL.createObjectURL(response.data);
+        // setImageSrc(imageURL);
+        const pdfURL = URL.createObjectURL(response.data);
+        setPdfSrc(pdfURL); // Set PDF source to blob URL
+      } catch (error) {
+        console.error("Error fetching file:", error);
+      }
+    };
+
+    fetchFile();
+  }, []);
 
   const [isEdit, setIsEdit] = useState(false);
   const handleSubmit = async (e) => {
@@ -78,7 +99,7 @@ const AdmissionForm = ({
       setErrors(errors);
     } else {
       setAdmissionId(data?.admission_id);
-      // setSelected(2); 
+      setSelected(2);
     }
   };
 
@@ -183,6 +204,25 @@ const AdmissionForm = ({
   return (
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">
+        <div>
+        {pdfSrc && (
+        <iframe
+          src={pdfSrc}
+          width="100%"
+          height="600px"
+          title="PDF Viewer"
+        />
+      )}
+          {imageSrc ? (
+            <img
+              src={imageSrc}
+              alt="File"
+              style={{ width: "300px", height: "auto" }}
+            />
+          ) : (
+            <p>Loading image...</p>
+          )}
+        </div>
         <div className="col-md-12">
           <div className="card" style={{ borderRadius: "0 8px 8px 0" }}>
             <div className="header">
