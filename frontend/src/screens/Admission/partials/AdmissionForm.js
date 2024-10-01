@@ -429,7 +429,7 @@ const AdmissionForm = ({
                   <div className="form-group">
                     <label>Upload Photo</label>
                     <input
-                    type="file"
+                      type="file"
                       className={`form-control`}
                       value={admissionDetail?.first_name || ""}
                       required="required"
@@ -444,7 +444,7 @@ const AdmissionForm = ({
                   <div className="form-group">
                     <label>Upload Aadhar Card</label>
                     <input
-                       type="file"
+                      type="file"
                       className={`form-control`}
                       value={admissionDetail?.last_name || ""}
                       required="required"
@@ -459,7 +459,7 @@ const AdmissionForm = ({
                   <div className="form-group">
                     <label>Upload Certification</label>
                     <input
-                       type="file"  
+                      type="file"
                       className={`form-control`}
                       value={admissionDetail?.last_name || ""}
                       required="required"
