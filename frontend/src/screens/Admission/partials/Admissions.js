@@ -10,7 +10,7 @@ const Admissions = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [admissions, setAdmissions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [deletedAdmission, setDeleteAdmission] = useState({});
   const history = useHistory();
   const { getRoute, deleteById } = useApi();
   const getData = async () => {
@@ -25,10 +25,14 @@ const Admissions = () => {
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
-  const handleDeleteAdmission = async (id) => {
-    const { data } = await deleteById(`api/admission/${id}`);
+  const handleDeleteAdmission = async (e) => {
+    e.preventDefault();
+    console.log('i am comming ')
+    const { data } = await deleteById(`api/admission/${deletedAdmission?.id}`);
     if (data?.status == "success") {
       getData();
+      setIsModalOpen(false);
+      setDeleteAdmission({})
     }
   };
   const handleEditAdmission = (id) => {
@@ -44,7 +48,12 @@ const Admissions = () => {
         document.body.classList.remove("offcanvas-active");
       }}
     >
-      <PopupModel isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      <PopupModel
+        title={`do you want to delete the admission of ${deletedAdmission?.first_name} ${deletedAdmission?.last_name}`}
+        onClick={handleDeleteAdmission}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
       <div>
         <div className="container-fluid">
           <PageHeader
@@ -69,14 +78,16 @@ const Admissions = () => {
                 <div className="teaser">
                   <div className="time">
                     <h5>
-                      {moment(admissionDetails?.admission?.created_at).format(
-                        "YYYY-MM-DD"
-                      )}
+                      {moment(
+                        admissionDetails?.admission?.date_of_admission
+                      ).format("YYYY-MM-DD")}
                     </h5>
                   </div>
-
                   <div className="title">
-                    <h3>{admissionDetails?.admission?.name}</h3>
+                    <h3>
+                      {admissionDetails?.admission?.first_name}
+                      {admissionDetails?.admission?.last_name}
+                    </h3>
                     <h6 className="theme">
                       {admissionDetails?.admission?.telecaller_name}
                     </h6>
@@ -124,12 +135,11 @@ const Admissions = () => {
                         Edit
                       </button>
                       <button
-                        onClick={() =>
-                        { 
+                        onClick={() => {
                           setIsModalOpen(true);
+                          setDeleteAdmission(admissionDetails?.admission);
                           // handleDeleteAdmission(admissionDetails?.admission?.id)
-                        }
-                        }
+                        }}
                         className="ml-2 btn btn-danger"
                       >
                         Delete

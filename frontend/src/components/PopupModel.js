@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const PopupModel = ({ isModalOpen,title="empty title", setIsModalOpen = () => {} }) => {
+const PopupModel = ({ isModalOpen,title="empty title", onClick,setIsModalOpen = () => {} }) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -40,7 +40,7 @@ const PopupModel = ({ isModalOpen,title="empty title", setIsModalOpen = () => {}
                 >
                   Cancel
                 </button>
-                <button type="button" className="btn btn-primary">
+                <button onClick={onClick} type="button" className="btn btn-primary">
                   Delete
                 </button>
               </div>

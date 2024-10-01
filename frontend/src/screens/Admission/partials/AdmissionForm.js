@@ -679,17 +679,15 @@ const AdmissionForm = ({
                     >
                       <label>AdharCard Preview</label>
                       <div className="mb-3">
-                        <img
+                        <embed
                           src={
                             adharPreview ||
-                            "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBA=="
+                            "data:application/pdf;base64,JVBERi0xLjcKJYGBgYEKC..." /* Placeholder Base64 PDF */
                           }
-                          alt="Photo Preview"
-                          className="img-thumbnail"
+                          type="application/pdf"
+                          width="40%"
+                          height="190px"
                           style={{
-                            width: "40%",
-                            height: "190px",
-                            objectFit: "cover",
                             borderRadius: "5px",
                             backgroundColor: !adharPreview
                               ? "#f8f9fa"
@@ -735,23 +733,21 @@ const AdmissionForm = ({
                     >
                       <label>Certification Preview</label>
                       <div className="mb-3">
-                        <img
-                          src={
-                            certificationPreview ||
-                            "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBA=="
-                          }
-                          alt="Photo Preview"
-                          className="img-thumbnail"
-                          style={{
-                            width: "40%",
-                            height: "190px",
-                            objectFit: "cover",
-                            borderRadius: "5px",
-                            backgroundColor: !certificationPreview
-                              ? "#f8f9fa"
-                              : "transparent",
-                          }}
-                        />
+                      <embed
+  src={
+    certificationPreview || "data:application/pdf;base64,JVBERi0xLjcKJYGBgYEKC..." /* Placeholder Base64 PDF */
+  }
+  type="application/pdf"
+  alt="Certification Preview"
+  className="embed-thumbnail"
+  style={{
+    width: "40%",
+    height: "190px",
+    borderRadius: "5px",
+    backgroundColor: !certificationPreview ? "#f8f9fa" : "transparent",
+  }}
+/>
+
                       </div>
                     </div>
                   </div>
