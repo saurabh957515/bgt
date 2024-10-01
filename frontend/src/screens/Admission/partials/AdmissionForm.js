@@ -101,14 +101,12 @@ const AdmissionForm = ({
     const response = isEdit
       ? await editRoute(url, formData)
       : await postRoute(url, formData, true, false);
-
     const { errors, data } = response;
-
     if (errors) {
       setErrors(errors);
     } else {
       setAdmissionId(data?.admission_id);
-      setSelected(2);
+      // setSelected(2);
     }
   };
 
@@ -120,26 +118,112 @@ const AdmissionForm = ({
   };
   const handlePhotoDocument = (e) => {
     const file = e.target.files[0];
-    handleAdmission("photo_document", file);
-    setIsPhotEdit(true);
+
     if (file) {
-      setPhotoPreview(URL.createObjectURL(file));
+      const MAX_PHOTO_SIZE = 500 * 1024; // 500KB
+      const allowedTypes = ["image/jpeg", "image/png"]; // Allowed image types
+
+      // Check if file size exceeds 500KB
+      if (file.size > MAX_PHOTO_SIZE) {
+        setErrors({
+          photo_document:
+            "File size exceeds 500KB. Please upload a smaller image.",
+        });
+        handleAdmission("photo_document", null); // Clear the file in the admission form
+        setIsPhotEdit(false);
+        setPhotoPreview(null); // Clear the preview
+        return; // Stop further processing
+      }
+
+      // Check if file type is valid
+      if (!allowedTypes.includes(file.type)) {
+        setErrors({
+          photo_document:
+            "Invalid file type. Only JPEG and PNG images are allowed.",
+        });
+        handleAdmission("photo_document", null); // Clear the file in the admission form
+        setIsPhotEdit(false);
+        setPhotoPreview(null); // Clear the preview
+        return; // Stop further processing
+      }
+
+      handleAdmission("photo_document", file);
+      setIsPhotEdit(true);
+      setPhotoPreview(URL.createObjectURL(file)); // Show the preview of the uploaded image
     }
   };
+
   const handleAdharDocument = (e) => {
     const file = e.target.files[0];
-    handleAdmission("adharcard_document", file);
-    setIsAdharEdit(true);
+
     if (file) {
-      setAdharPreview(URL.createObjectURL(file));
+      const MAX_PDF_SIZE = 2 * 1024 * 1024; // 2MB
+      const allowedTypes = ["application/pdf"]; // Allowed file type (PDF)
+
+      // Check if file size exceeds 2MB
+      if (file.size > MAX_PDF_SIZE) {
+        setErrors({
+          adharcard_document:
+            "File size exceeds 2MB. Please upload a smaller PDF file.",
+        });
+        handleAdmission("adharcard_document", null); // Clear the file in the admission form
+        setIsAdharEdit(false);
+        setAdharPreview(null); // Clear the preview
+        return; // Stop further processing
+      }
+
+      // Check if file type is valid (PDF)
+      if (!allowedTypes.includes(file.type)) {
+        setErrors({
+          adharcard_document:
+            "Invalid file type. Only PDF files are allowed for Adhar card documents.",
+        });
+        handleAdmission("adharcard_document", null); // Clear the file in the admission form
+        setIsAdharEdit(false);
+        setAdharPreview(null); // Clear the preview
+        return; // Stop further processing
+      }
+
+      handleAdmission("adharcard_document", file);
+      setIsAdharEdit(true);
+      setAdharPreview(URL.createObjectURL(file)); // Show the preview of the uploaded file
     }
   };
+
   const handleCertificationDocument = (e) => {
     const file = e.target.files[0];
-    setIsCertiEdit(true);
-    handleAdmission("certification_document", file);
+
     if (file) {
-      setCertificationPreview(URL.createObjectURL(file));
+      const MAX_PDF_SIZE = 2 * 1024 * 1024; // 2MB
+      const allowedTypes = ["application/pdf"]; // Allowed file type (PDF)
+
+      // Check if file size exceeds 2MB
+      if (file.size > MAX_PDF_SIZE) {
+        setErrors({
+          certification_document:
+            "File size exceeds 2MB. Please upload a smaller PDF file.",
+        });
+        handleAdmission("certification_document", null); // Clear the file in the admission form
+        setIsCertiEdit(false);
+        setCertificationPreview(null); // Clear the preview
+        return; // Stop further processing
+      }
+
+      // Check if file type is valid (PDF)
+      if (!allowedTypes.includes(file.type)) {
+        setErrors({
+          certification_document:
+            "Invalid file type. Only PDF files are allowed for certification documents.",
+        });
+        handleAdmission("certification_document", null); // Clear the file in the admission form
+        setIsCertiEdit(false);
+        setCertificationPreview(null); // Clear the preview
+        return; // Stop further processing
+      }
+
+      handleAdmission("certification_document", file);
+      setIsCertiEdit(true);
+      setCertificationPreview(URL.createObjectURL(file)); // Show the preview of the uploaded file
     }
   };
 
@@ -733,21 +817,23 @@ const AdmissionForm = ({
                     >
                       <label>Certification Preview</label>
                       <div className="mb-3">
-                      <embed
-  src={
-    certificationPreview || "data:application/pdf;base64,JVBERi0xLjcKJYGBgYEKC..." /* Placeholder Base64 PDF */
-  }
-  type="application/pdf"
-  alt="Certification Preview"
-  className="embed-thumbnail"
-  style={{
-    width: "40%",
-    height: "190px",
-    borderRadius: "5px",
-    backgroundColor: !certificationPreview ? "#f8f9fa" : "transparent",
-  }}
-/>
-
+                        <embed
+                          src={
+                            certificationPreview ||
+                            "data:application/pdf;base64,JVBERi0xLjcKJYGBgYEKC..." /* Placeholder Base64 PDF */
+                          }
+                          type="application/pdf"
+                          alt="Certification Preview"
+                          className="embed-thumbnail"
+                          style={{
+                            width: "40%",
+                            height: "190px",
+                            borderRadius: "5px",
+                            backgroundColor: !certificationPreview
+                              ? "#f8f9fa"
+                              : "transparent",
+                          }}
+                        />
                       </div>
                     </div>
                   </div>

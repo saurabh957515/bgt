@@ -106,7 +106,6 @@ const FeeLists = () => {
                 admissions?.map((admission, index) => (
                   <li
                     onClick={() => {
-                      console.log(admission);
                       setSelectedAdmission(admission);
                       setSelectedFeeDetails(admission?.fee_details);
                       setRemainingAmount(admission?.remaining_amount);
@@ -118,7 +117,10 @@ const FeeLists = () => {
                     }`}
                   >
                     <div className="about">
-                      <div className="name">{admission?.admission?.name}</div>
+                      <div className="name">
+                        {admission?.admission?.first_name}{" "}
+                        {admission?.admission?.last_name}
+                      </div>
                       <div className="status">
                         <i className="fa fa-circle offline"></i>
                         Created at:{" "}

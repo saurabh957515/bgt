@@ -53,11 +53,11 @@ const admissionSchema = Joi.object({
       "string.empty": "ZipCode number is required.",
       "string.pattern.base":
         "Invalid ZipCode (must be numeric, between 5 and 10 digits).",
-      "string.min": "ZipCode must be at least 5 characters.", 
+      "string.min": "ZipCode must be at least 5 characters.",
       "string.max": "ZipCode cannot exceed 10 characters.",
     }),
   date_of_admission: Joi.date()
-    .max(maxAdmissionDate) 
+    .max(maxAdmissionDate)
     .min(minAdmissionDate)
     .required()
     .messages({
@@ -165,9 +165,26 @@ const admissionSchema = Joi.object({
 export async function createAdmission(req, res) {
   upload(req, res, async function (err) {
     if (err) {
+      console.log(err);
+      
+      let errorMessage = "File upload failed";
+      const errors={}
+      if (err.message) {
+        if (err.message.includes("Only .jpeg and .png images are allowed")) {
+          errors['photo_document'] =
+            "Invalid image format. Only JPEG and PNG are allowed for photos.";
+        } else if (err.message.includes("Only PDF files are allowed")) {
+          errors['adharcard_document'] =
+            "Invalid document format. Only PDF files are allowed for the adharcard and certification documents.";
+        } else if (err.message.includes("File too large")) {
+          errors['certification_document']  =
+            "File too large. Photos must be less than 500KB, and documents must be less than 2MB.";
+        }
+      }
+
       return res
         .status(400)
-        .send({ message: "File upload failed", error: err });
+        .send({errors: errors });
     }
 
     const files = req.files;
