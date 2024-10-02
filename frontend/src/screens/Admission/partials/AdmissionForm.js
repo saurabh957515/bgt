@@ -363,7 +363,6 @@ const AdmissionForm = ({
     };
     getAdmission();
   }, []);
-  console.log(admissionDetail);
   return (
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">
@@ -690,6 +689,7 @@ const AdmissionForm = ({
                     >
                       <label>Upload Photo</label>
                       <input
+                           disabled={editAdmissionId}
                         type="file"
                         name="photo_document"
                         className="form-control"
@@ -746,6 +746,7 @@ const AdmissionForm = ({
                     >
                       <label>Upload Aadhar Card</label>
                       <input
+                      disabled={editAdmissionId}
                         name="adharcard_document"
                         type="file"
                         className="form-control"
@@ -800,6 +801,7 @@ const AdmissionForm = ({
                     >
                       <label>Upload Certification </label>
                       <input
+                         disabled={editAdmissionId}
                         type="file"
                         name="photo_document"
                         className="form-control"
