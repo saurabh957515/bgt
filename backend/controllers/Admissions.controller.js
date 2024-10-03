@@ -166,25 +166,23 @@ export async function createAdmission(req, res) {
   upload(req, res, async function (err) {
     if (err) {
       console.log(err);
-      
+
       let errorMessage = "File upload failed";
-      const errors={}
+      const errors = {};
       if (err.message) {
         if (err.message.includes("Only .jpeg and .png images are allowed")) {
-          errors['photo_document'] =
+          errors["photo_document"] =
             "Invalid image format. Only JPEG and PNG are allowed for photos.";
         } else if (err.message.includes("Only PDF files are allowed")) {
-          errors['adharcard_document'] =
+          errors["adharcard_document"] =
             "Invalid document format. Only PDF files are allowed for the adharcard and certification documents.";
         } else if (err.message.includes("File too large")) {
-          errors['certification_document']  =
+          errors["certification_document"] =
             "File too large. Photos must be less than 500KB, and documents must be less than 2MB.";
         }
       }
 
-      return res
-        .status(400)
-        .send({errors: errors });
+      return res.status(400).send({ errors: errors });
     }
 
     const files = req.files;
@@ -318,8 +316,10 @@ export async function getAdmissionDetail(req, res) {
   }
 }
 export async function getAllDetails(req, res) {
+  const { order, ...goodQuery } = req?.query;
+
   try {
-    const result = await Admission?.getAllDetails();
+    const result = await Admission?.getAllDetails(goodQuery, order);
     res.send(result);
   } catch (err) {
     res.status(500).send({

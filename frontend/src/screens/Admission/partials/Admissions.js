@@ -11,28 +11,32 @@ const Admissions = () => {
   const [admissions, setAdmissions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletedAdmission, setDeleteAdmission] = useState({});
+  const [filterField, setFilterField] = useState({
+    date: "",
+    first_name: "",
+    order: "",
+    telecaller_name: "",
+  });
   const history = useHistory();
   const { getRoute, deleteById } = useApi();
   const getData = async () => {
-    const { data } = await getRoute("api/admission/getall");
-    console.log(data);
+    const { data } = await getRoute("api/admission/getall",filterField);
     setAdmissions(data);
   };
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [filterField]);
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
   const handleDeleteAdmission = async (e) => {
     e.preventDefault();
-    console.log('i am comming ')
     const { data } = await deleteById(`api/admission/${deletedAdmission?.id}`);
     if (data?.status == "success") {
       getData();
       setIsModalOpen(false);
-      setDeleteAdmission({})
+      setDeleteAdmission({});
     }
   };
   const handleEditAdmission = (id) => {
@@ -57,6 +61,8 @@ const Admissions = () => {
       <div>
         <div className="container-fluid">
           <PageHeader
+            filterField={filterField}
+            setFilterField={setFilterField}
             showFilter={true}
             HeaderText="Admissions"
             Breadcrumb={[
@@ -85,7 +91,7 @@ const Admissions = () => {
                   </div>
                   <div className="title">
                     <h3>
-                      {admissionDetails?.admission?.first_name}
+                      {admissionDetails?.admission?.first_name + " "}
                       {admissionDetails?.admission?.last_name}
                     </h3>
                     <h6 className="theme">
