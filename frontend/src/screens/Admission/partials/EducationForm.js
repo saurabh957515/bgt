@@ -7,11 +7,11 @@ import RadioGroup from "../../../components/RadioGroup";
 import ReactSelect from "../../../components/ReactSelect";
 const education_Object = {
   admission_id: "",
-  course_details:"",
+  course_details: "",
   passing_year: 2012,
   name_of_institute: "",
-  city:"",
-  state:"",
+  city: "",
+  state: "",
   percentage_cgpa: "",
   is_employed: 0,
   current_company: null,
@@ -98,8 +98,8 @@ const EducationForm = ({
             current_designation: editAdmisson?.current_designation,
             current_monthly_salary: editAdmisson?.current_monthly_salary || 0,
             total_experience_years: editAdmisson?.total_experience_years || 0,
-            state:editAdmisson?.state,
-            city:editAdmisson?.city,
+            state: editAdmisson?.state,
+            city: editAdmisson?.city,
             // past_rejection_country_name:
             //   editAdmisson?.past_rejection_country_name,
             ielts_score: editAdmisson?.ielts_score,
@@ -171,7 +171,9 @@ const EducationForm = ({
         <div className="col-md-12">
           <div className="card">
             <div className="header">
-              <h2 className=" font-weight-bold">Current Education Information</h2>
+              <h2 className=" font-weight-bold">
+                Current Education Information
+              </h2>
             </div>
             <div className="body">
               <div className="row">
@@ -202,10 +204,7 @@ const EducationForm = ({
                       required="required"
                       type="text"
                       onChange={(e) => {
-                        handleEducation(
-                          "course_details",
-                          e.target.value
-                        );
+                        handleEducation("course_details", e.target.value);
                       }}
                     />
                     <p className="mt-2 text-danger">
@@ -225,9 +224,7 @@ const EducationForm = ({
                         handleEducation("city", e.target.value);
                       }}
                     />
-                    <p className="mt-2 text-danger">
-                      {errors["city"]}
-                    </p>
+                    <p className="mt-2 text-danger">{errors["city"]}</p>
                   </div>
                 </div>{" "}
                 <div className="col-md-4">
@@ -242,9 +239,7 @@ const EducationForm = ({
                         handleEducation("state", e.target.value);
                       }}
                     />
-                    <p className="mt-2 text-danger">
-                      {errors["state"]}
-                    </p>
+                    <p className="mt-2 text-danger">{errors["state"]}</p>
                   </div>
                 </div>
                 <div className="col-md-4">
@@ -310,21 +305,21 @@ const EducationForm = ({
                 </div>
                 <div className="col-md-4">
                   <div className=" form-group">
-                      <label>Employed Type</label>
-                      <ReactSelect
-                        options={[
-                          { label: "Working", value: 1 },
-                          {
-                            label: "Not Working",
-                            value: 0,
-                          },
-                        ]}
-                        required
-                        value={educationDetails?.is_employed}
-                        onChange={(e) => {
-                          handleEducation("is_employed", e.value);
-                        }}
-                      />{" "}
+                    <label>Employed Type</label>
+                    <ReactSelect
+                      options={[
+                        { label: "Working", value: 1 },
+                        {
+                          label: "Not Working",
+                          value: 0,
+                        },
+                      ]}
+                      required
+                      value={educationDetails?.is_employed}
+                      onChange={(e) => {
+                        handleEducation("is_employed", e.value);
+                      }}
+                    />{" "}
                   </div>
                 </div>
                 {educationDetails?.is_employed ? (
@@ -519,10 +514,9 @@ const EducationForm = ({
                   Save
                 </button>
                 <button
-                  // disabled={progressCount < 2}
+                  disabled={isEdit ? false : progressCount < 2}
                   onClick={() => {
-                    setIsModalOpen(true);
-                    // setSelected(3);
+                    setSelected(3);
                   }}
                   className="btn btn-outline-secondary "
                   type="button"

@@ -233,7 +233,7 @@ const UniversityDetails = ({
                   Save
                 </button>
                 <button
-                  disabled={progressCount < 3}
+                disabled={isEdit ? false : progressCount < 3}
                   onClick={() => {
                     setSelected(4);
                   }}

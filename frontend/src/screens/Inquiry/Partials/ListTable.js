@@ -15,7 +15,7 @@ const ListTable = ({ filterField }) => {
       filterField,
       false
     );
-    console.log(inquiresData)
+    console.log(inquiresData);
     setInquiryList(inquiresData?.data);
   };
 
@@ -63,13 +63,17 @@ const ListTable = ({ filterField }) => {
               <tbody>
                 {inquiryList.map((inquiry, index) => (
                   <tr key={inquiry?.id}>
-                    <th style={{ textAlign: "center" }} scope="row">
-                      {index + 1}
-                    </th>
+                    <td style={{ textAlign: "center",
+                      fontWeight:'bold'
+                     }}>
+                    {index + 1}
+                    </td>
                     <td style={{ textAlign: "center" }}>
                       {moment(inquiry?.date).format("YYYY-MM-DD")}
                     </td>
-                    <td style={{ textAlign: "center" }}>{inquiry?.first_name  }</td>
+                    <td style={{ textAlign: "center" }}>
+                      {inquiry?.first_name} {inquiry?.last_name}
+                    </td>
                     <td style={{ textAlign: "center" }}>
                       {inquiry?.contact_no}
                     </td>
@@ -79,10 +83,12 @@ const ListTable = ({ filterField }) => {
                     <td style={{ textAlign: "center" }}>
                       {inquiry?.visa_type?.replace(/visa/gi, "Type")}
                     </td>
-                  
 
                     <td>
-                      <div   style={{ userSelect: "none", cursor: "pointer" }} className="d-flex justify-content-center">
+                      <div
+                        style={{ userSelect: "none", cursor: "pointer" }}
+                        className="d-flex justify-content-center"
+                      >
                         <span
                           onClick={() => {
                             history.push({
@@ -104,7 +110,6 @@ const ListTable = ({ filterField }) => {
                           onClick={() => {
                             makeAdmission(inquiry);
                           }}
-                        
                           className="cursor-pointer text-success"
                         >
                           Confirm
@@ -112,8 +117,9 @@ const ListTable = ({ filterField }) => {
                       </div>
                     </td>
                     <td style={{ textAlign: "center" }}>
-                    <ProgressBarComponent completedPhases={inquiry?.progress_count} />
-
+                      <ProgressBarComponent
+                        completedPhases={inquiry?.progress_count}
+                      />
                     </td>
                   </tr>
                 ))}

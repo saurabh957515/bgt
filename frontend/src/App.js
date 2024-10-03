@@ -107,16 +107,18 @@ const App = ({ isLoggedin, history }) => {
       try {
         const response = await axios.get("https://restcountries.com/v3.1/all");
         const data = response.data;
-      
+
         const extractedNationalities = data.map((country) => ({
           value: country.demonyms?.eng?.m || country.name.common,
           label: country.demonyms?.eng?.m || country.name.common,
         }));
-    
+
         const uniqueNationalities = Array.from(
-          new Map(extractedNationalities.map(item => [item.value, item])).values()
+          new Map(
+            extractedNationalities.map((item) => [item.value, item])
+          ).values()
         );
-    
+
         dispatch(setNationalities(uniqueNationalities));
       } catch (err) {}
     };

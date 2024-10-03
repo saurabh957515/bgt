@@ -3,7 +3,7 @@ class University {
   static async create(newUniversity) {
     try {
       const result = await sql("INSERT INTO university SET ?", newUniversity);
- 
+
       return result.insertId;
     } catch (error) {
       throw error;
@@ -33,10 +33,12 @@ class University {
     try {
       const query = `
         UPDATE university 
-        SET institute_name = ?, country = ?, course_detail = ?, city = ?, stay_in_type = ?, stay_in_address = ?
+        SET inquiry_id = ? , admission_id = ? , institute_name = ?, country = ?, course_detail = ?, city = ?, stay_in_type = ?, stay_in_address = ?
         WHERE id = ?
       `;
       const {
+        inquiry_id,
+        admission_id,
         institute_name,
         country,
         course_detail,
@@ -45,6 +47,8 @@ class University {
         stay_in_address,
       } = newInquiry;
       const result = await sql(query, [
+        inquiry_id,
+        admission_id,
         institute_name,
         country,
         course_detail,

@@ -59,7 +59,7 @@ const FeePayment = ({
     }
     updatedDetails[name] = value;
     setFeePaymentDetails(updatedDetails);
-    setErrors({})
+    setErrors({});
   };
 
   useEffect(() => {
@@ -148,7 +148,10 @@ const FeePayment = ({
                       required="required"
                       type="number"
                       onChange={(e) => {
-                        handleFeePayment("total_amount", e.target.value);
+                        const value = e.target.value;
+                        if (/^\+?[0-9,\.]*$/.test(value)) {
+                          handleFeePayment("total_amount", e.target.value);
+                        }
                       }}
                     />
                     <p className="mt-2 text-danger">{errors["total_amount"]}</p>
@@ -162,9 +165,12 @@ const FeePayment = ({
                       value={feePaymentDetails?.current_amount || ""}
                       required="required"
                       type="number"
-                      onChange={(e) =>
-                        handleFeePayment("current_amount", e.target.value)
-                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (/^\+?[0-9.,]*$/.test(value)) {
+                          handleFeePayment("current_amount", e.target.value);
+                        }
+                      }}
                     />
                     <p className="mt-2 text-danger">
                       {errors["current_amount"]}

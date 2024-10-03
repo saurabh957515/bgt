@@ -20,7 +20,7 @@ const inquiryObject = {
   current_nationality: "",
   first_name: "",
   last_name: "",
-  zip_code:"",
+  zip_code: "",
   telecaller_name: "",
   visa_type: "",
   progress_count: "0",
@@ -201,7 +201,7 @@ const Form = ({ inquiryEdit, nationalities }) => {
                     maxLength="12"
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (/^\+?[0-9]*$/.test(value)) {
+                      if (/^\+?[0-9,\.]*$/.test(value)) {
                         handleInquiry("contact_no", value.slice(0, 12));
                       }
                     }}
@@ -218,7 +218,7 @@ const Form = ({ inquiryEdit, nationalities }) => {
                     maxLength="12"
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (/^\+?[0-9]*$/.test(value)) {
+                      if (/^\+?[0-9,\.]*$/.test(value)) {
                         handleInquiry("alternate_no", value.slice(0, 12));
                       }
                     }}
@@ -251,12 +251,6 @@ const Form = ({ inquiryEdit, nationalities }) => {
                     className="form-control"
                     value={inquiry?.address}
                     onChange={(e) => handleInquiry("address", e.target.value)}
-                    style={{
-                      maxHeight: "50px",
-                      resize: "vertical",
-                      overflowY: "auto",
-                      height: "30px",
-                    }} // Allow resizing vertically up to 50px
                   />
 
                   <p className="mt-2 text-danger">{errors["address"]}</p>
@@ -297,9 +291,7 @@ const Form = ({ inquiryEdit, nationalities }) => {
                     className="form-control"
                     value={inquiry?.zip_code}
                     type="text"
-                    onChange={(e) =>
-                      handleInquiry("zip_code", e.target.value)
-                    }
+                    onChange={(e) => handleInquiry("zip_code", e.target.value)}
                   />{" "}
                   <p className="mt-2 text-danger">{errors["zip_code"]}</p>
                 </div>

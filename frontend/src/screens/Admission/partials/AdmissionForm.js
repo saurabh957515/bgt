@@ -489,7 +489,7 @@ const AdmissionForm = ({
                       maxLength="12"
                       onChange={(e) => {
                         const value = e.target.value;
-                        if (/^\+?[0-9]*$/.test(value)) {
+                        if (/^\+?[0-9,\.]*$/.test(value)) {
                           handleAdmission("contact_no", value.slice(0, 12));
                         }
                       }}
@@ -505,9 +505,13 @@ const AdmissionForm = ({
                       value={admissionDetail?.alternate_no || ""}
                       required="required"
                       type="number"
-                      onChange={(e) =>
-                        handleAdmission("alternate_no", e.target.value)
-                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (/^\+?[0-9,\.]*$/.test(value)) {
+                          handleAdmission("alternate_no", e.target.value);
+                        }
+                 
+                      }}
                     />
                     <p className="mt-2 text-danger">{errors["alternate_no"]}</p>
                   </div>
@@ -689,7 +693,7 @@ const AdmissionForm = ({
                     >
                       <label>Upload Photo</label>
                       <input
-                           disabled={editAdmissionId}
+                        disabled={editAdmissionId}
                         type="file"
                         name="photo_document"
                         className="form-control"
@@ -746,7 +750,7 @@ const AdmissionForm = ({
                     >
                       <label>Upload Aadhar Card</label>
                       <input
-                      disabled={editAdmissionId}
+                        disabled={editAdmissionId}
                         name="adharcard_document"
                         type="file"
                         className="form-control"
@@ -801,7 +805,7 @@ const AdmissionForm = ({
                     >
                       <label>Upload Certification </label>
                       <input
-                         disabled={editAdmissionId}
+                        disabled={editAdmissionId}
                         type="file"
                         name="photo_document"
                         className="form-control"

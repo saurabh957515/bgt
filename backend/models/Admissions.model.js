@@ -45,11 +45,12 @@ class Admission {
     try {
       const query = `
         UPDATE admission 
-        SET name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,current_city = ?,telecaller_name = ?,visa_type = ?,inquiry_id =?
-        WHERE id = ?
+        SET first_name = ?,last_name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,current_city = ?,telecaller_name = ?,visa_type = ?,date_of_admission =?,inquiry_id = ? ,gender = ?, zip_code = ? , current_state = ? ,
+         current_nationality = ? , passport_number = ? , passport_expirydate = ? , photo_document = ? , adharcard_document = ? , certification_document = ?  WHERE id = ?
       `;
       const {
-        name,
+        first_name,
+        last_name,
         email,
         contact_no,
         alternate_no,
@@ -58,10 +59,21 @@ class Admission {
         current_city,
         telecaller_name,
         visa_type,
+        date_of_admission,
         inquiry_id,
+        gender,
+        zip_code,
+        current_state,
+        current_nationality,
+        passport_number,
+        passport_expirydate,
+        photo_document,
+        adharcard_document,
+        certification_document,
       } = newAdmission;
       const result = await sql(query, [
-        name,
+        first_name,
+        last_name,
         email,
         contact_no,
         alternate_no,
@@ -70,7 +82,17 @@ class Admission {
         current_city,
         telecaller_name,
         visa_type,
+        date_of_admission,
         inquiry_id,
+        gender,
+        zip_code,
+        current_state,
+        current_nationality,
+        passport_number,
+        passport_expirydate,
+        photo_document,
+        adharcard_document,
+        certification_document,
         id,
       ]);
       if (result?.error) {
@@ -117,7 +139,7 @@ class Admission {
       throw error;
     }
   }
-  
+
   // static async getAllDetails(fields, sortDirection = "DESC") {
   //   try {
   //     const conditions = [];
@@ -128,7 +150,7 @@ class Admission {
   //     )
   //       ? sortDirection.toUpperCase()
   //       : "DESC";
-  
+
   //     // Build the dynamic WHERE conditions based on fields
   //     if (fields) {
   //       if (Object?.keys(fields)) {
@@ -140,9 +162,9 @@ class Admission {
   //         }
   //       }
   //     }
-  
+
   //     const query = `
-  //       SELECT 
+  //       SELECT
   //         admission.id AS admission_id,
   //         admission.inquiry_id AS admission_inquiry_id,
   //         admission.first_name AS admission_first_name,
@@ -166,7 +188,7 @@ class Admission {
   //         admission.photo_document AS admission_photo_document,
   //         admission.adharcard_document AS admission_adharcard_document,
   //         admission.certification_document AS admission_certification_document,
-  
+
   //         education.id AS education_id,
   //         education.admission_id AS education_admission_id,
   //         education.city AS education_city,
@@ -186,7 +208,7 @@ class Admission {
   //         education.business_name AS education_business_name,
   //         education.business_type AS education_business_type,
   //         education.business_start_date AS education_business_start_date,
-  
+
   //         university.id AS university_id,
   //         university.institute_name AS university_institute_name,
   //         university.country AS university_country,
@@ -198,7 +220,7 @@ class Admission {
   //         university.admission_id AS university_admission_id,
   //         university.created_at AS university_created_at,
   //         university.updated_at AS university_updated_at,
-  
+
   //         fee_details.id AS fee_details_id,
   //         fee_details.admission_id AS fee_details_admission_id,
   //         fee_details.inquiry_id AS fee_details_inquiry_id,
@@ -207,7 +229,7 @@ class Admission {
   //         fee_details.remaining_amount AS fee_details_remaining_amount,
   //         fee_details.total_amount AS fee_details_total_amount,
   //         fee_details.updated_at AS fee_details_updated_at
-    
+
   //       FROM admission
   //       LEFT JOIN education ON admission.id = education.admission_id
   //       LEFT JOIN university ON admission.id = university.admission_id
@@ -215,16 +237,14 @@ class Admission {
   //       ${conditions.length ? "WHERE " + conditions.join(" AND ") : ""}
   //       ORDER BY admission.created_at ${direction}
   //     `;
-  
+
   //     const result = await sql(query, values);
   //     return result;
   //   } catch (error) {
   //     throw error;
   //   }
   // }
-  
-  
-  
+
   static async getAllDetails() {
     try {
       const query = `
@@ -242,6 +262,7 @@ class Admission {
         admission.telecaller_name AS admission_telecaller_name,
         admission.visa_type AS admission_visa_type,
         admission.created_at AS admission_created_at,
+        admission.updated_at AS admission_updated_at,
         admission.date_of_admission AS admission_date_of_admission,
         admission.zip_code AS admission_zip_code,
         admission.gender AS admission_gender,
@@ -302,15 +323,13 @@ class Admission {
         AND university.id IS NOT NULL
         AND fee_details.id IS NOT NULL
     `;
-    ;
-
       const rows = await sql(query);
-      console.log(rows)
       const results = rows.map((row) => ({
         admission: {
           id: row.admission_id,
+          first_name: row?.admission_first_name ,
+          last_name:row?.admission_last_name ,
           inquiry_id: row.admission_inquiry_id,
-          name: row.admission_name,
           email: row.admission_email,
           contact_no: row.admission_contact_no,
           alternate_no: row.admission_alternate_no,
@@ -320,6 +339,7 @@ class Admission {
           telecaller_name: row.admission_telecaller_name,
           visa_type: row.admission_visa_type,
           created_at: row.admission_created_at,
+          updated_at :row?.admission_updated_at
         },
         education: {
           id: row.education_id,

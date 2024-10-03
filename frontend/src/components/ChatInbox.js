@@ -13,8 +13,8 @@ const ChatInbox = () => {
   const [selected, setSelected] = useState(1);
   const [selectedAdmission, setSelectedAdmission] = useState({});
   const getAdmissions = async () => {
-    const {data} = await getRoute("/api/admission");
-    console.log(data)
+    const { data } = await getRoute("/api/admission");
+    console.log(data);
     setAdmissions(data);
   };
   useEffect(() => {
@@ -91,7 +91,7 @@ const ChatInbox = () => {
         </ul>
         <div
           className="bg-blue-500 card chat-app d-flex flex-column"
-          style={{ height: "93%" }}
+          style={{ height: "95%" }}
         >
           <div className="people-list" style={{ maxHeight: "100%" }}>
             <div
@@ -223,7 +223,7 @@ const ChatInbox = () => {
                     <h6 className="m-b-0">
                       {numbers?.length > 1
                         ? "Multiple Recepient Selected"
-                        : selectedAdmission?.name || "No Admission Selected"}
+                        : selectedAdmission?.name || "No Chat Selected"}
                     </h6>
                     <small>Last changed: </small>
                   </div>

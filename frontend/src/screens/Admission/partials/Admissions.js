@@ -138,7 +138,6 @@ const Admissions = () => {
                         onClick={() => {
                           setIsModalOpen(true);
                           setDeleteAdmission(admissionDetails?.admission);
-                          // handleDeleteAdmission(admissionDetails?.admission?.id)
                         }}
                         className="ml-2 btn btn-danger"
                       >

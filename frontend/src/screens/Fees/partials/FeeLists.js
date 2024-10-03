@@ -144,11 +144,14 @@ const FeeLists = () => {
                 <div className="col-lg-6">
                   <div className="chat-about">
                     <h6 className="m-b-0">
-                      {selectedAdmission?.name || "No Admission Selected"}
+                      {selectedAdmission?.admission?.first_name ? selectedAdmission?.admission?.first_name +
+                        " " +
+                        selectedAdmission?.admission?.last_name :
+                        "No Admission Selected"}
                     </h6>
                     <small>
                       Last changed:{" "}
-                      {moment(selectedAdmission?.updated_at)
+                      {moment(selectedAdmission?.admission?.updated_at)
                         .startOf("day")
                         .fromNow()}
                     </small>

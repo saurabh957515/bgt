@@ -133,7 +133,7 @@ class Inquiry {
         AND TABLE_SCHEMA = ? 
         AND COLUMN_NAME = ?`;
 
-      const [result] = await sql(query, [table, process.env.database, column]);
+      const [result] = await sql(query, [table, process.env.DATABASE, column]);
 
       if (!result.COLUMN_TYPE) {
         throw new Error("Column not found or it is not of ENUM type");

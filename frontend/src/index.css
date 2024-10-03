@@ -102,7 +102,7 @@ code {
 }
 
 .form-control {
-  height: calc(1.5em + 0.75rem + 5px) !important;
+ max-height: 200px;
 }
 
 .hide-toggle .btn-outline-secondary {
