@@ -106,7 +106,7 @@ const AdmissionForm = ({
       setErrors(errors);
     } else {
       setAdmissionId(data?.admission_id);
-      // setSelected(2);
+      setSelected(2);
     }
   };
 
@@ -510,7 +510,6 @@ const AdmissionForm = ({
                         if (/^\+?[0-9,\.]*$/.test(value)) {
                           handleAdmission("alternate_no", e.target.value);
                         }
-                 
                       }}
                     />
                     <p className="mt-2 text-danger">{errors["alternate_no"]}</p>

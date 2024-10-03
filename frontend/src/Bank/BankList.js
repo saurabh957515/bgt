@@ -52,11 +52,19 @@ const BankList = () => {
                     className="overflow-hidden card number-chart"
                     style={{ position: "relative" }}
                   >
-
                     <div className="body">
                       <div className="number">
                         <h6>{bank?.account_holder_name}</h6>
-                        <span>{bank?.bank_name}</span>
+                        <div  style={{
+                            fontSize: "14px",
+                          }}>{bank?.bank_name}</div>
+                        <span
+                          style={{
+                            fontSize: "12px",
+                          }}
+                        >
+                          {bank?.account_number}
+                        </span>
                       </div>
                       <small className="text-muted">{bank?.account_type}</small>
                     </div>
@@ -94,10 +102,13 @@ const BankList = () => {
                         Delete
                       </button>
                     </div>
-                
-                    
                   </div>
-                  <p style={{marginTop:'-20px'}} className="absolute text-danger">{errors[bank?.id]}</p>
+                  <p
+                    style={{ marginTop: "-20px" }}
+                    className="absolute text-danger"
+                  >
+                    {errors[bank?.id]}
+                  </p>
                 </div>
               ))
             ) : (

@@ -3,13 +3,13 @@ import { useHistory } from "react-router-dom";
 import ReactSelect from "../../components/ReactSelect";
 import useApi from "../../utils/UseApi";
 const bankObject = {
-  account_holder_name: "Good Holder",
-  account_number: "12345678910",
-  bank_name: "State bank of india",
-  branch_name: "SBI Branch",
-  ifsc_code: "SBIN0523698",
-  account_type: "Savings",
-  branch_address: "Good Addres",
+  account_holder_name: "",
+  account_number: "",
+  bank_name: "",
+  branch_name: "",
+  ifsc_code: "",
+  account_type: "",
+  branch_address: "",
 };
 
 const BankForm = ({ bankDetails }) => {
@@ -22,7 +22,7 @@ const BankForm = ({ bankDetails }) => {
 
   useEffect(() => {
     const getTypes = async () => {
-      const { data } = await getRoute("/api/bank/gettypes",);
+      const { data } = await getRoute("/api/bank/gettypes");
       setTypeOptions(
         Object.entries(data)?.map(([key, value]) => ({
           label: key,
