@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "scripts": {
-    "server": "nodemon backend/server.js",
-    "start": "npm run build && npm run start-server",
-    "build": "npm install --legacy-peer-deps && npm run build-frontend",
-    "build-frontend": "npm install --prefix frontend --legacy-peer-deps && npm run build --prefix frontend",
-    "start-server": "node backend/server.js"
-  },
+    "scripts": {
+      "server": "nodemon backend/server.js",
+      "start": "npm run build && npm run start-server",
+      "build": "npm install && npm run build-frontend",
+      "build-frontend": "npm install --prefix frontend && npm run build --prefix frontend",
+      "start-server": "node backend/server.js"
+    },
   "type": "module",
   "author": "",
   "license": "ISC",

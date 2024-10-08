@@ -1,8 +1,9 @@
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import axios from "axios";
 import _ from "lodash";
-import { useDispatch } from "react-redux";
-import { tostMessageLoad, setToastMessage } from "../actions";
+import { FlashContext } from "../FlashContext";
+// import { useDispatch } from "react-redux";
+// import { tostMessageLoad, setToastMessage } from "../actions";
 
 const getErrors = (errorObj) => {
   let newErrors = {};
@@ -13,7 +14,8 @@ const getErrors = (errorObj) => {
 };
 
 const useApi = () => {
-  const dispatch = useDispatch();
+  //   const dispatch = useDispatch();
+  const { setFlash } = useContext(FlashContext);
 
   const handleError = (err) => {
     let errors = {};
@@ -47,15 +49,16 @@ const useApi = () => {
           params,
         });
         if (toast) {
-          dispatch(tostMessageLoad(true));
-          dispatch(setToastMessage(data?.message));
+          //   dispatch(tostMessageLoad(true));
+          //   dispatch(setToastMessage(data?.message));
         }
         return { data }; // Return the data on success
       } catch (err) {
+        console.log(err);
         return handleError(err); // Return errors on failure
       }
     },
-    [dispatch]
+    []
   );
 
   const postRoute = useCallback(
@@ -66,13 +69,12 @@ const useApi = () => {
           }
         : {};
       try {
-        const { data } = await axios.post(url, postData, {
+        const { data } = await axios.post(url, postData,
+           {
           headers,
         });
-
         if (toast) {
-          dispatch(tostMessageLoad(true));
-          dispatch(setToastMessage(data?.message));
+        setFlash(data?.message, data?.description);
         }
         return { data }; // Return the data on success
       } catch (err) {
@@ -80,50 +82,43 @@ const useApi = () => {
         return handleError(err); // Return errors on failure
       }
     },
-    [dispatch]
+    []
   );
 
-  const deleteById = useCallback(
-    async (url, popup) => {
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      try {
-        const { data } = await axios.delete(url, {
-          headers,
-        });
-        if (popup) {
-          dispatch(tostMessageLoad(true));
-          dispatch(setToastMessage(data?.message));
-        }
-
-        return { data }; // Return the data on success
-      } catch (err) {
-        return handleError(err); // Return errors on failure
+  const deleteById = useCallback(async (url, toast) => {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    try {
+      const { data } = await axios.delete(url, {
+        headers,
+      });
+      if (toast) {
+        setFlash(data?.message, data?.description);
       }
-    },
-    [dispatch]
-  );
 
-  const editRoute = useCallback(
-    async (url, formData, params = {}) => {
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      try {
-        const { data } = await axios.patch(url, formData, {
-          params,
-          headers,
-        });
-        dispatch(tostMessageLoad(true));
-        dispatch(setToastMessage(data?.message));
-        return { data }; // Return the data on success
-      } catch (err) {
-        return handleError(err); // Return errors on failure
-      }
-    },
-    [dispatch]
-  );
+      return { data }; // Return the data on success
+    } catch (err) {
+      return handleError(err); // Return errors on failure
+    }
+  }, []);
+
+  const editRoute = useCallback(async (url, formData, params = {}) => {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    try {
+      const { data } = await axios.patch(url, formData, {
+        params,
+        headers,
+      });
+      // dispatch(tostMessageLoad(true));
+      // dispatch(setToastMessage(data?.message));
+      return { data }; // Return the data on success
+    } catch (err) {
+      return handleError(err); // Return errors on failure
+    }
+  }, []);
 
   return {
     getRoute,
