@@ -1,0 +1,28 @@
+.cls-1 {
+    fill: #06114f;
+  }
+
+  .cls-2 {
+    fill: url(#linear-gradient-3);
+  }
+
+  .cls-3 {
+    fill: url(#linear-gradient-2);
+  }
+
+  .cls-4 {
+    font-family: UniNeueBold, 'Uni Neue';
+    font-size: 78.1px;
+  }
+
+  .cls-4, .cls-5 {
+    fill: #606060;
+  }
+
+  .cls-4, .cls-6 {
+    isolation: isolate;
+  }
+
+  .cls-7 {
+    fill: url(#linear-gradient);
+  }
