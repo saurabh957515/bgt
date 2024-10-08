@@ -28,9 +28,9 @@ app.use("/api/bank", bankRoutes);
 app.use("/api/admission", admissionRoutes);
 app.use("/api/education", educationRoutes);
 app.use("/api/file", fileRoutes);
-app.use(express.static(path.join(__dirname, "/frontend/build")));
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
+  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
 app.listen(PORT, async () => {
   console.log(`Server Running on port ${PORT}`);
