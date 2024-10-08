@@ -181,6 +181,7 @@ export async function createInquiry(req, res) {
       message: "New Inquiry Added !",
       added_Inquiry: added_Inquiry,
       status: "success  ",
+      description:"Go to "
     });
   } catch (err) {
     res.status(500).send({

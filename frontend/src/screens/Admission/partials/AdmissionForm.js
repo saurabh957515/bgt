@@ -363,6 +363,7 @@ const AdmissionForm = ({
     };
     getAdmission();
   }, []);
+  console.log(admissionDetail);
   return (
     <form onSubmit={handleSubmit}>
       <div className="clearfix row">

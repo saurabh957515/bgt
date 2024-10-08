@@ -405,6 +405,7 @@ class Admission {
           place_of_birth: row.education_place_of_birth,
           gender: row.education_gender,
           current_nationality: row.education_current_nationality,
+          course_details:row.education_course_details
         },
         university: {
           id: row.university_id,

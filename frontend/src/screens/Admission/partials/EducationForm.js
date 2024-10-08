@@ -273,8 +273,8 @@ const EducationForm = ({
                       type="number"
                       onChange={(e) => {
                         const value = e.target.value;
+                        handleEducation("percentage_cgpa", e.target.value);
                         if (/^\+?[0-9]*$/.test(value)) {
-                          handleEducation("percentage_cgpa", value.slice(0, 4));
                         }
                       }}
                     />
@@ -292,12 +292,14 @@ const EducationForm = ({
                       name="ielts_score"
                       required="required"
                       type="number"
-                      maxLength="4"
+                      minlength="3"
+                      maxlength="20"
                       onChange={(e) => {
                         const value = e.target.value;
-                        if (/^\+?[0-9]*$/.test(value)) {
-                          handleEducation("ielts_score", value.slice(0, 4));
-                        }
+                        
+                        // if (/^\+?[0-9]*$/.test(value)) {
+                        handleEducation("ielts_score", e.target.value);
+                        // }
                       }}
                     />
                     <p className="mt-2 text-danger">{errors["ielts_score"]}</p>

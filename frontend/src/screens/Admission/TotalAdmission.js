@@ -242,7 +242,7 @@ const TotalAdmission = ({ nationalities }) => {
               <li
                 key={index}
                 className="cursor-pointer nav-item"
-                // onClick={() => setSelected(index + 1)}
+                onClick={() => setSelected(index + 1)}
               >
                 <div
                   style={{ userSelect: "none", cursor: "pointer" }}
