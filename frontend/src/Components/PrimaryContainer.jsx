@@ -51,7 +51,7 @@ const navigation = [
   { name: 'Admission', path: '/total-admission', image: Membership, refPath: "/admission" },
   { name: 'Messages', path: '/messages', image: Financials },
   { name: 'Fees', path: '/fees', image: Chapters },
-  { name: 'BankDetails', path: '/bankdetails', image: Commities },
+  { name: 'BankDetails', path: '/bankdetails', image: Commities, refPath: "/create-bank" },
   { name: 'SETTINGS', path: '/settings', image: Settings },
 ];
 
