@@ -64,7 +64,7 @@ const BankDetails = () => {
                     </div>
                 </div>
                 <div className='grid grid-cols-4 gap-4 overflow-auto grow scrollbar-hide'>
-                    {banks?.map(bank => <div className='flex flex-col p-4 space-y-2 bg-white rounded-lg shadow-sm h-fit min-h-40'>
+                    {banks?.map(bank => <div key={bank?.id} className='flex flex-col p-4 space-y-2 bg-white rounded-lg shadow-sm h-fit min-h-40'>
                         <h1 className='flex text-base font-medium'>Name : <span className='ml-2 text-base text-blue-500 text-semibold'>
                             {bank?.
                                 account_holder_name

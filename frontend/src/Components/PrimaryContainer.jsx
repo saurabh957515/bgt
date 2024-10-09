@@ -65,7 +65,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function PrimaryContainer({ children }) {
+function PrimaryContainer({ children ,className }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -221,7 +221,7 @@ function PrimaryContainer({ children }) {
             </div>
           </div>
           <main className="w-full h-full overflow-hidden lg:w-[85.75%] bg-seamlessGray-300">
-            <div className="w-full h-full px-4 py-4 overflow-auto sm:py-10 sm:px-12 scrollbar-hide">
+            <div className={classNames("w-full h-full px-4 py-4 overflow-auto sm:py-10 sm:px-12 scrollbar-hide" ,className)}>
               {children}{" "}
             </div>
           </main>

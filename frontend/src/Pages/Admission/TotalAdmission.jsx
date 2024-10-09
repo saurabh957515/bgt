@@ -47,7 +47,6 @@ const TotalAdmission = () => {
             state: { admissionId: id },
         });
     };
-    console.log(admissions)
     return (
         <PrimaryContainer>
             <div className='flex flex-col w-full h-full gap-8'>
@@ -62,19 +61,22 @@ const TotalAdmission = () => {
                     </div>
                 </div>
                 <div className='flex flex-col gap-4 overflow-auto grow scrollbar-hide'>
-                    {admissions?.map(allDetails => <Disclosure key={allDetails?.admission?.id} as='div' className='w-full '>
+                    {admissions?.map((allDetails, index) => <Disclosure key={allDetails?.admission?.id} as='div' className='w-full '>
                         {({ open }) => (
                             <>
                                 <DisclosureButton className={classNames("flex items-center text-base font-medium bg-white justify-between w-full gap-2 py-3 px-4  ", open ? 'rounded-t-lg' : 'rounded-lg')}>
-                                    <div className='flex flex-col items-start'>
-                                        {allDetails?.admission?.first_name}
-                                        <div className='text-sm text-gray-500'>
-                                            {allDetails?.admission?.telecaller_name}
+                                    <div className='flex items-start'>
+                                        <div className='text-blue-700'>
+                                            {index + 1}{")  "}
                                         </div>
+                                        <div className='flex flex-col items-start ml-1'>
+                                            {allDetails?.admission?.first_name}
+                                            <div className='text-sm text-gray-500'>
+                                                {allDetails?.admission?.telecaller_name}
+                                            </div>
+                                        </div>
+
                                     </div>
-
-
-
                                     <div className='flex gap-x-2'>
                                         <span onClick={(e) => {
                                             e.preventDefault();
@@ -94,6 +96,7 @@ const TotalAdmission = () => {
 
                                     <ViewImage imageDoc={allDetails?.admission?.photo_document} />
                                     <div className='flex flex-col w-full col-span-3 gap-4 p-4 '>
+
                                         <div className='flex items-center w-full text-sm font-semibold capitalize'><span className='w-1/5 mr-2'>Insitute Name</span> : <span className='ml-2 text-sm font-medium capitalize'>
                                             {allDetails?.education?.name_of_institute}</span></div>
 
@@ -103,7 +106,7 @@ const TotalAdmission = () => {
                                             {allDetails?.education?.percentage_cgpa}</span></div>
                                         <div className='flex items-center w-full text-sm font-semibold capitalize'><span className='w-1/5 mr-2'>IELTS Score</span> : <span className='ml-2 text-sm font-medium capitalize'>
                                             {allDetails?.education?.ielts_score}</span></div>
-                                            <div className='flex items-center w-full text-sm font-semibold capitalize'><span className='w-1/5 mr-2'>Passing Year</span> : <span className='ml-2 text-sm font-medium capitalize'>
+                                        <div className='flex items-center w-full text-sm font-semibold capitalize'><span className='w-1/5 mr-2'>Passing Year</span> : <span className='ml-2 text-sm font-medium capitalize'>
                                             {allDetails?.education?.passing_year}</span></div>
                                     </div>
                                 </DisclosurePanel>
