@@ -77,7 +77,7 @@ const Fees = () => {
                     Fee Payment
                 </h1>
                 <div className='py-5 grow'>
-                    <div className='flex w-full h-full border rounded-lg border-seamlessGray-700 overflow-clip'>
+                    <div className='flex w-full h-full bg-white border rounded-lg border-seamlessGray-700 overflow-clip'>
                         <div className='w-1/4 h-full border-r border-gray-300 divide-y'>
                             {admissions?.length > 0 ? admissions?.map(admission => <div
                                 onClick={() => {
@@ -111,7 +111,7 @@ const Fees = () => {
                             {admissions?.length > 0 ?
                                 <>
 
-                                    <div className='w-full px-8 py-5 text-base font-semibold bg-white'>
+                                    <div className='w-full px-8 py-5 text-base font-semibold bg-white border-b'>
                                         {selectedAdmission?.admission?.first_name ? selectedAdmission?.admission?.first_name +
                                             " " +
                                             selectedAdmission?.admission?.last_name :
