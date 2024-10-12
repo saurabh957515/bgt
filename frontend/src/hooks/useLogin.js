@@ -22,6 +22,7 @@ const useLogin = () => {
         return data;
       } 
       if (data?.status === "success") {
+        localStorage.setItem("user_name", data.username);
         setFlash(data?.message, data?.description);
         return data;
       }
