@@ -19,8 +19,10 @@ const PORT = process.env.PORT || 5001;
 
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "backend", "views"));
+
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
 app.use(express.static(path.join(__dirname, "backend", "public")));
-  
+
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -33,7 +35,6 @@ app.use("/api/admission", admissionRoutes);
 app.use("/api/education", educationRoutes);
 app.use("/api/file", fileRoutes);
 
-app.use(express.static(path.join(__dirname, "/frontend/dist")));
 app.get("*", protectRoute, (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
