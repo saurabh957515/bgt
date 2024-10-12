@@ -10,6 +10,7 @@ import BankDetails from './Pages/BankDetails/BankDetails.jsx'
 import CreateInquiry from "./Pages/Inquiry/Partials/CreateInquiry.jsx";
 import TotalAdmission from "./Pages/Admission/TotalAdmission.jsx";
 import CreateBank from "./Pages/BankDetails/Partials/CreateBank.jsx";
+import Registration from "./Pages/Registration.jsx";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/registration" element={<Registration />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/inquiry" element={<Inquiry />} />
         <Route path="/create-bank" element={<CreateBank />} />
