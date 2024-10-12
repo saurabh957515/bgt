@@ -7,7 +7,7 @@ const ProgressBarComponent = ({ completedPhases }) => {
         <div key={index} className="flex items-center w-full">
           {/* Phase Circle */}
           <div
-            className={`flex items-center justify-center w-10 h-10 rounded-full text-white font-bold ${
+            className={`flex items-center justify-center w-5 lg:w-10 lg:h-10 h-5 rounded-full text-white font-bold ${
               index < completedPhases ? 'bg-green-500' : 'bg-gray-300'
             }`}
           >
