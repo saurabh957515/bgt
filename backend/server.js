@@ -30,7 +30,7 @@ app.use("/api/admission", admissionRoutes);
 app.use("/api/education", educationRoutes);
 app.use("/api/file", fileRoutes);
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
-app.get("*", (req, res) => {
+app.get("*",protectRoute, (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
 app.get("/api/check-auth", protectRoute, (req, res) => {

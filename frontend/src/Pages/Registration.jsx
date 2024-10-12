@@ -20,7 +20,7 @@ const Registration = () => {
         e.preventDefault();
         const isSignup = await signup(data);
         if (!isSignup?.errors) {
-            navigate('/dashboard')
+            navigate('/')
             setErrors({});
         } else {
             setErrors(isSignup?.errors);
