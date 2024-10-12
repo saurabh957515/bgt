@@ -10,23 +10,25 @@ import { classNames } from '../../provider';
 const Fees = () => {
 
     const { getRoute, postRoute } = useApi();
+    const [feePayment, setFeePayement] = useState({});
+    const [totalPaiedAmount, setTotalPaiedAmount] = useState(0)
     const [lastFeePayment, setLastFeePayment] = useState([])
     const [admissionOptions, setAdmissionOptions] = useState([])
     const [selectedAdmission, setSelectedAdmission] = useState({});
     const [errors, setErrors] = useState({});
     const [bankOptions, setBankOptions] = useState([]);
     const [selectedFeeDatails, setSelectedFeeDetails] = useState({});
+    const [remainingAmount, setRemainingAmount] = useState(0);
 
     const getAdmissions = async () => {
         const { data } = await getRoute("api/admission");
-        const admission_options = data?.map(admission => ({
+        const admission_options = data?.filter(admission => admission?.fee_status !== 'completed').map(admission => ({
             value: admission?.id, label: `${admission?.first_name} ${admission?.last_name}`
         }))
         setAdmissionOptions(admission_options)
     };
-    const [remainingAmount, setRemainingAmount] = useState(0);
     const handleFeePayment = (name, value) => {
-        setSelectedFeeDetails((pre) => ({
+        setFeePayement((pre) => ({
             ...pre,
             [name]: value,
         }));
@@ -47,11 +49,15 @@ const Fees = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (+selectedFeeDatails?.remaining_amount !== +remainingAmount) {
+        const newremainingAmount = parseFloat(remainingAmount) || 0;
+        const newtotalPaiedAmount = parseFloat(totalPaiedAmount) || 0;
+        const newlastFeeTotalAmount = parseFloat(lastFeePayment?.total_amount) || 0;
+        const currentRemaingAmount = newlastFeeTotalAmount - totalPaiedAmount - newremainingAmount;
+        if (newremainingAmount + newtotalPaiedAmount > newlastFeeTotalAmount) {
             setErrors({ remaining_amount: "Remaining Amount is not valid" });
             return;
         } else {
-            getAdmissions();
+            const { data } = await postRoute(`api/feepayment`, { ...lastFeePayment, current_amount: newremainingAmount, remaining_amount: currentRemaingAmount });
         }
     };
 
@@ -62,14 +68,21 @@ const Fees = () => {
                     : selectedAdmission
             }, false,);
             if (data) {
-                console.log(data)
-                setLastFeePayment(data[data?.length - 1]);
+                const sortedData = data.sort((a, b) => {
+                    return moment(b.updated_at).diff(moment(a.updated_at));
+                });
+                const lastFeePayment = sortedData[0];
+                const totalPaiedAmount = sortedData?.reduce(
+                    (sum, admission) => sum + (parseFloat(admission?.current_amount || 0)),
+                    0
+                );
+                setTotalPaiedAmount(totalPaiedAmount)
+                setRemainingAmount(lastFeePayment?.remaining_amount)
+                setLastFeePayment(lastFeePayment);
             }
         };
         getFeeHistory();
     }, [selectedAdmission])
-
-    
     return (
         <PrimaryContainer>
             <div className='flex flex-col w-full h-full '>
@@ -113,13 +126,11 @@ const Fees = () => {
                                             <InputLabel value={'Add Remaining Amount'}></InputLabel>
                                             <input
                                                 className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-                                                value={selectedFeeDatails?.remaining_amount || ""}
+                                                value={remainingAmount}
                                                 required="required"
                                                 type="number"
                                                 onChange={(e) =>
-                                                    handleFeePayment(
-                                                        "remaining_amount",
-                                                        e.target.value
+                                                    setRemainingAmount(e.target.value
                                                     )
                                                 }
                                             />
@@ -128,10 +139,11 @@ const Fees = () => {
                                         <div className="form-group">
                                             <InputLabel value={'Select BankAccount'}></InputLabel>
                                             <ReactSelect
+                                                disabled={true}
                                                 className='mt-1'
                                                 value={lastFeePayment?.
                                                     bank_details_id
-                                                     || ""}
+                                                    || ""}
                                                 required="required"
                                                 onChange={(e) =>
                                                     handleFeePayment("bank_detail_id", e.value)

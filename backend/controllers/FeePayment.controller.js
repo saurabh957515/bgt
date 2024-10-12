@@ -2,6 +2,7 @@ import FeePayment from "../models/FeePayment.model.js";
 import { v4 as uuidv4 } from "uuid";
 import feePaymentSchema from "../validation/feepayment.js";
 import Inquiry from "../models/Inquiry.model.js";
+import Admission from "../models/Admissions.model.js";
 export async function createFeePayment(req, res) {
   if (!req.body) {
     return res.status(400).send({
@@ -30,28 +31,32 @@ export async function createFeePayment(req, res) {
 
   try {
     const admissionExists = await FeePayment?.findByFields({
-      inquiry_id: newFeePayment?.inquiry_id,
+      admission_id: newFeePayment?.admission_id,
     });
-
+    const newtotalAmount = parseFloat(newFeePayment?.total_amount);
+    const newCurrentAmount = parseFloat(newFeePayment?.current_amount);
     if (admissionExists?.length > 0) {
       const currentPayment = admissionExists?.reduce(
-        (sum, admission) => sum + (admission?.current_amount || 0),
+        (sum, admission) => sum + (parseFloat(admission?.current_amount) || 0),
         0
       );
-      if (currentPayment < newFeePayment?.total_amount) {
-        if (
-          currentPayment + newFeePayment?.current_amount >
-          newFeePayment?.total_amount
-        ) {
+      if (currentPayment < newtotalAmount) {
+        if (currentPayment + newCurrentAmount > newtotalAmount) {
           return res.status(400).send({
             current_amount: "Amount Can not be more than remaining Amount",
           });
         }
-      } else if (currentPayment >= newFeePayment?.total_amount) {
-        res.status(300).send({
-          message: "Fee Payment already Completed",
+      } else if (currentPayment >= newtotalAmount) {
+        return res.status(400).send({
+          current_amount: "Fee Payment already Completed",
         });
+      } 
+      if (currentPayment + newCurrentAmount === newtotalAmount) {
+        console.log('did i come here');
+        await Admission.updateFeeStatusToCompleted(newFeePayment?.admission_id);
       }
+    } else if (newCurrentAmount === newtotalAmount) {
+      await Admission.updateFeeStatusToCompleted(newFeePayment?.admission_id);
     }
 
     const result = await FeePayment.create(newFeePayment);
@@ -89,7 +94,7 @@ export async function getFeePaymentDetails(req, res) {
 
 export async function getByFilter(req, res) {
   const { order, ...goodQuery } = req?.query;
-  console.log(req?.query)
+  console.log(req?.query);
   try {
     const result = await FeePayment?.findByFields(goodQuery);
     if (result?.error) {

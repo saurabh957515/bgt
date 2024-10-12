@@ -99,6 +99,26 @@ class Admission {
       throw error;
     }
   }
+  static async updateFeeStatusToCompleted(id) {
+    try {
+      const query = `
+        UPDATE admission 
+        SET fee_status = ? 
+        WHERE id = ?
+      `;
+      
+      const result = await sql(query, ["completed", id]);
+  
+      if (result?.error) {
+        return { error: result?.error };
+      } else {
+        return result;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+  
 
   static async findByFields(fields, sortDirection = "DESC") {
     try {
