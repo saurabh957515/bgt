@@ -16,25 +16,18 @@ class Admission {
   static async findAll() {
     try {
       const query = `
-      SELECT 
-        admission.id AS admissionDetails_id, 
-        admission.*, 
-        education.*, 
-        education.id AS educationDetails_id
-      FROM admission
-      LEFT JOIN education ON admission.id = education.admission_id
-    `;
-
+        SELECT * FROM admission
+      `;
       const result = await sql(query);
       return result;
     } catch (error) {
       throw error;
     }
   }
+  
   static async deleteByID(id) {
     try {
       const query = `DELETE FROM admission WHERE id = ?`;
-
       const result = await sql(query, [id]);
       return result;
     } catch (error) {
@@ -134,8 +127,7 @@ class Admission {
        ${conditions.length ? "WHERE " + conditions.join(" AND ") : ""}
         ORDER BY created_at ${direction}
       `;
-
-      const result = await sql(query, values);
+       const result = await sql(query, values);
       return result;
     } catch (error) {
       throw error;

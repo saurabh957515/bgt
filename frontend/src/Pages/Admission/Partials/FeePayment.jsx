@@ -39,7 +39,7 @@ const FeePayment = ({
       setErrors(errors);
     } else {
       setTimeout(() => {
-        navigate("/totalAdmission");
+        navigate("/total-admission");
       }, 1500);
 
       setAdmissionId(data?.admission_id);

@@ -9,17 +9,20 @@ import InputError from '../../Components/InputError';
 import { classNames } from '../../provider';
 const Fees = () => {
 
-    const [admissions, setAdmissions] = useState([]);
-    const { getRoute, editRoute } = useApi();
+    const { getRoute, postRoute } = useApi();
+    const [lastFeePayment, setLastFeePayment] = useState([])
+    const [admissionOptions, setAdmissionOptions] = useState([])
     const [selectedAdmission, setSelectedAdmission] = useState({});
     const [errors, setErrors] = useState({});
     const [bankOptions, setBankOptions] = useState([]);
     const [selectedFeeDatails, setSelectedFeeDetails] = useState({});
+
     const getAdmissions = async () => {
-        const { data } = await getRoute("api/admission/getall");
-        setAdmissions(
-            data?.filter((admission) => admission?.fee_details?.remaining_amount)
-        );
+        const { data } = await getRoute("api/admission");
+        const admission_options = data?.map(admission => ({
+            value: admission?.id, label: `${admission?.first_name} ${admission?.last_name}`
+        }))
+        setAdmissionOptions(admission_options)
     };
     const [remainingAmount, setRemainingAmount] = useState(0);
     const handleFeePayment = (name, value) => {
@@ -48,28 +51,25 @@ const Fees = () => {
             setErrors({ remaining_amount: "Remaining Amount is not valid" });
             return;
         } else {
-            let newpaidAmount = +selectedFeeDatails?.paid_amount + +remainingAmount;
-
-            // const { errors, data } = await editRoute(
-            //   `/api/feepayment/${selectedFeeDatails?.id}`,
-            //   { ...selectedFeeDatails, paid_amount: `${newpaidAmount}` }
-            // );
-
-            const updatedAdmission = await editRoute(
-                `api/admission/${selectedAdmission?.admissionDetails_id}`,
-                {
-                    ...selectedAdmission,
-                    remaining_amount: "0",
-                    date_of_birth: moment(selectedAdmission?.date_of_birth).format(
-                        "YYYY-MM-DD"
-                    ),
-                    paid_amount: `${newpaidAmount}`,
-                }
-            );
             getAdmissions();
-            setSelectedAdmission({});
         }
     };
+
+    useEffect(() => {
+        const getFeeHistory = async () => {
+            const { data } = await getRoute("/api/feepayment/filter", {
+                admission_id
+                    : selectedAdmission
+            }, false,);
+            if (data) {
+                console.log(data)
+                setLastFeePayment(data[data?.length - 1]);
+            }
+        };
+        getFeeHistory();
+    }, [selectedAdmission])
+
+    
     return (
         <PrimaryContainer>
             <div className='flex flex-col w-full h-full '>
@@ -85,8 +85,8 @@ const Fees = () => {
                                     <div className='grid w-full grid-cols-2 gap-4 mt-4 '>
                                         <div className='flex items-center col-span-2 gap-x-4'>
                                             <InputLabel value={"Name   :"} className="font-weight-bold">
-                                            </InputLabel> 
-                                            <ReactSelect className='w-1/3'/>
+                                            </InputLabel>
+                                            <ReactSelect onChange={(option) => setSelectedAdmission(option?.value)} value={selectedAdmission} options={admissionOptions} className='w-1/3' />
                                         </div>
                                         <div className='flex '>
                                             <label className="font-weight-bold">
@@ -95,7 +95,7 @@ const Fees = () => {
                                                 :
                                             </span>
                                             <p className="mb-0 text-muted">
-                                                {selectedFeeDatails.paid_amount || "N/A"}
+                                                {lastFeePayment.current_amount || "N/A"}
                                             </p>
                                         </div>
                                         <div className='flex '>
@@ -106,7 +106,7 @@ const Fees = () => {
                                                 :
                                             </span>
                                             <p className="mb-0 text-muted">
-                                                {selectedFeeDatails.total_amount || "N/A"}
+                                                {lastFeePayment.total_amount || "N/A"}
                                             </p>
                                         </div>
                                         <div className="form-group">
@@ -129,7 +129,9 @@ const Fees = () => {
                                             <InputLabel value={'Select BankAccount'}></InputLabel>
                                             <ReactSelect
                                                 className='mt-1'
-                                                value={selectedFeeDatails?.bank_detail_id || ""}
+                                                value={lastFeePayment?.
+                                                    bank_details_id
+                                                     || ""}
                                                 required="required"
                                                 onChange={(e) =>
                                                     handleFeePayment("bank_detail_id", e.value)
