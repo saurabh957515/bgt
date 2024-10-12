@@ -11,7 +11,7 @@ import CreateInquiry from "./Pages/Inquiry/Partials/CreateInquiry.jsx";
 import TotalAdmission from "./Pages/Admission/TotalAdmission.jsx";
 import CreateBank from "./Pages/BankDetails/Partials/CreateBank.jsx";
 import Registration from "./Pages/Registration.jsx";
-
+import ProtectedRoute from "./ProtectRoute.jsx";
 
 function App() {
 
@@ -20,16 +20,16 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/inquiry" element={<Inquiry />} />
-        <Route path="/create-bank" element={<CreateBank />} />
-        <Route path="/admission" element={<Admission />} />
-        <Route path="/total-admission" element={<TotalAdmission />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/create-inquiry" element={<CreateInquiry />} />
-        <Route path="/fees" element={<Fees />} />
-        <Route path="/bankdetails" element={<BankDetails />} />
-        <Route path="/settings" element={<Dashboard />} />
+        <Route path="/dashboard" element={<ProtectedRoute element={Dashboard} />} />
+        <Route path="/inquiry" element={<ProtectedRoute element={Inquiry} />} />
+        <Route path="/create-bank" element={<ProtectedRoute element={CreateBank} />} />
+        <Route path="/admission" element={<ProtectedRoute element={Admission} />} />
+        <Route path="/total-admission" element={<ProtectedRoute element={TotalAdmission} />} />
+        <Route path="/messages" element={<ProtectedRoute element={Messages} />} />
+        <Route path="/create-inquiry" element={<ProtectedRoute element={CreateInquiry} />} />
+        <Route path="/fees" element={<ProtectedRoute element={Fees} />} />
+        <Route path="/bankdetails" element={<ProtectedRoute element={BankDetails} />} />
+        <Route path="/settings" element={<ProtectedRoute element={Dashboard} />} />
       </Routes>
     </Router>
   );

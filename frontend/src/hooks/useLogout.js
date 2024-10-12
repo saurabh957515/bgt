@@ -9,15 +9,14 @@ const useLogout = () => {
   const logout = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("api/auth/logout", {
+      const {data} = await axios.post("api/auth/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
-      const data = await res.json();
-      if (data.error) {
+      if (data.errors) {
         throw new Error(data.error);
       }
-      localStorage.removeItem("login-user");
+   setFlash(data?.message,data?.description);
       return true;
     } catch (error) {
     } finally {

@@ -10,10 +10,10 @@ import {
 
 import protectRoute from "../middleware/protectRoute.js";
 const router = express.Router();
-router.post("/", createAdmission); 
-router.get("/", getAdmissionDetail);
-router.delete("/:id", deleteAdmission);
-router.patch("/:id", updateAdmission);
-router.get("/filter", getByFilter);
-router.get("/getall", getAllDetails);
+router.post("/",protectRoute, createAdmission); 
+router.get("/",protectRoute, getAdmissionDetail);
+router.delete("/:id",protectRoute, deleteAdmission);
+router.patch("/:id", protectRoute,updateAdmission);
+router.get("/filter", protectRoute,getByFilter);
+router.get("/getall",protectRoute, getAllDetails);
 export default router;

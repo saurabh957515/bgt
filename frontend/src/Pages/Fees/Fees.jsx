@@ -18,7 +18,6 @@ const Fees = () => {
     const [errors, setErrors] = useState({});
     const [bankOptions, setBankOptions] = useState([]);
     const [remainingAmount, setRemainingAmount] = useState(0);
-    console.log(selectedAdmission)
     const getAdmissions = async () => {
         const { data } = await getRoute("api/admission");
         const admission_options = data?.filter(admission => admission?.fee_status !== 'completed').map(admission => ({

@@ -8,9 +8,9 @@ import {
 } from "../controllers/FeePayment.controller.js";
 import protectRoute from "../middleware/protectRoute.js";
 const router = express.Router();
-router.post("/", createFeePayment);
-router.get("/", getFeePaymentDetails);
-router.delete("/:id", deleteFeePayment);
-router.patch("/:id", updateFeePayment);
-router.get("/filter", getByFilter);
+router.post("/",protectRoute, createFeePayment);
+router.get("/",protectRoute, getFeePaymentDetails);
+router.delete("/:id",protectRoute, deleteFeePayment);
+router.patch("/:id",protectRoute, updateFeePayment);
+router.get("/filter", protectRoute,getByFilter);
 export default router;

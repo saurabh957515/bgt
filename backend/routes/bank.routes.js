@@ -9,10 +9,10 @@ import {
   getBankTypes,
 } from "../controllers/BankController.js";
 const router = express.Router();
-router.post("/", createBank);
-router.get("/", getBank);
-router.get("/gettypes", getBankTypes);
-router.delete("/:id", deleteBank);
-router.patch("/:id", updateBank);
-router.get("/filter", getByFilter);
+router.post("/",protectRoute, createBank);
+router.get("/",protectRoute, getBank);
+router.get("/gettypes",protectRoute, getBankTypes);
+router.delete("/:id",protectRoute, deleteBank);
+router.patch("/:id", protectRoute,updateBank);
+router.get("/filter", protectRoute,getByFilter);
 export default router;

@@ -8,9 +8,9 @@ import {
 } from "../controllers/University.controller.js";
 import protectRoute from "../middleware/protectRoute.js";
 const router = express.Router();
-router.post("/", createUniversity);
-router.get("/", getUniversityDetails);
-router.delete("/:id", deleteUniversity);
-router.patch("/:id", updateUniversity);
-router.get("/filter", getByFilter);
+router.post("/",protectRoute, createUniversity);
+router.get("/", protectRoute,getUniversityDetails);
+router.delete("/:id",protectRoute, deleteUniversity);
+router.patch("/:id", protectRoute,updateUniversity);
+router.get("/filter",protectRoute, getByFilter);
 export default router;

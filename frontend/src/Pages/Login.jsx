@@ -21,15 +21,10 @@ const Login = () => {
     const isLoggedIn = await login(data?.user_name, data?.password);
 
     if (!isLoggedIn?.errors) {
-      // dispatch({
-      //   type: "LOGIN_SUCCESS",
-      //   payload: { user: isLoggedIn?.username, token: isLoggedIn?.id },
-      // });
       setTimeout(() => {
         navigate("/inquiry");
 
       }, 1000)
-      // setErrorMessage("");
       setErrors({});
     } else {
       setErrors(isLoggedIn?.errors);
@@ -38,7 +33,6 @@ const Login = () => {
 
 
 
-  console.log(errors)
   return (
     <div
       style={{

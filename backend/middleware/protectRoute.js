@@ -3,7 +3,6 @@ import User from "../models/authuser.model.js";
 
 const protectRoute = async (req, res, next) => {
   try {
-    console.log(req.cookies.jwt)
     const token = req.cookies.jwt;
     if (!token) {
       return res
@@ -21,7 +20,6 @@ const protectRoute = async (req, res, next) => {
       return res.status(404).json({ error: "User not found" });
     }
     req.user = user;
-    console.log("verified");
     next();
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });

@@ -13,7 +13,7 @@ function FlashMessages() {
             setTimeout(() => {
                 clearFlash()
                 setShow(false);
-            }, 3000)
+            }, 1000)
             setShow(true)
         } else {
             setShow(false)

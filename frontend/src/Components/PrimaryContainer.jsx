@@ -73,9 +73,9 @@ function PrimaryContainer({ children ,className }) {
   const navigate = useNavigate();
   const handleLogout = () => {
     logout()
-    // setTimeout(() => {
-    //   navigate("/");
-    // }, 100);
+    setTimeout(() => {
+      navigate("/");
+    }, 100);
   };
 
   const { flash, setFlash } = useContext(FlashContext);
@@ -180,7 +180,7 @@ function PrimaryContainer({ children ,className }) {
                             }}
                             href={item.path}
                             className={`${active ? "bg-gray-50" : ""
-                              } block px-2 py-1 text-sm cursor-pointer leading-6 text-gray-900`}
+                              } block px-3 py-1 text-sm cursor-pointer leading-6 text-gray-900`}
                           >
                             {item.name}
                           </div>

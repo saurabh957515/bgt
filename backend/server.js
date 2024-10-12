@@ -12,6 +12,7 @@ import feePaymentRoutes from "./routes/FeePayment.routes.js";
 import bankRoutes from "./routes/bank.routes.js";
 import educationRoutes from "./routes/Education.routes.js";
 import fileRoutes from "./routes/file.routes.js";
+import protectRoute from "./middleware/protectRoute.js";
 const app = express();
 dotenv.config();
 const __dirname = path.resolve();
@@ -31,6 +32,9 @@ app.use("/api/file", fileRoutes);
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+});
+app.get("/api/check-auth", protectRoute, (req, res) => {
+  res.status(200).json({ message: "Authenticated", user: req.user });
 });
 app.listen(PORT, async () => {
   console.log(`Server Running on port ${PORT}`);
