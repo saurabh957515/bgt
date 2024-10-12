@@ -26,12 +26,7 @@ const Fees = () => {
         }))
         setAdmissionOptions(admission_options)
     };
-    const handleFeePayment = (name, value) => {
-        setFeePayement((pre) => ({
-            ...pre,
-            [name]: value,
-        }));
-    };
+
     useEffect(() => {
         getAdmissions();
         const getBankOption = async () => {
@@ -84,7 +79,7 @@ const Fees = () => {
         };
         if (selectedAdmission) {
             getFeeHistory();
-        }else{
+        } else {
             setTotalPaiedAmount('')
             setRemainingAmount('')
             setLastFeePayment('');
@@ -106,7 +101,10 @@ const Fees = () => {
                                         <div className='flex items-center col-span-2 gap-x-4'>
                                             <InputLabel value={"Name   :"} className="font-weight-bold">
                                             </InputLabel>
-                                            <ReactSelect onChange={(option) => setSelectedAdmission(option?.value)} value={selectedAdmission || ""} options={admissionOptions} className='w-1/3' />
+                                            <ReactSelect
+                                                isClearable={true}
+                                                onChange={(option) => setSelectedAdmission(option?.value)} value={selectedAdmission || " "}
+                                                options={admissionOptions} className='w-1/3' />
                                         </div>
                                         <div className='flex '>
                                             <label className="font-weight-bold">

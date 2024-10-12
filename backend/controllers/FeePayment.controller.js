@@ -28,7 +28,7 @@ export async function createFeePayment(req, res) {
     admission_id: req?.body?.admission_id,
     bank_details_id: req?.body?.bank_details_id,
   };
-
+  let allFeesCompleted = false;
   try {
     const admissionExists = await FeePayment?.findByFields({
       admission_id: newFeePayment?.admission_id,
@@ -50,12 +50,13 @@ export async function createFeePayment(req, res) {
         return res.status(400).send({
           current_amount: "Fee Payment already Completed",
         });
-      } 
+      }
       if (currentPayment + newCurrentAmount === newtotalAmount) {
-        console.log('did i come here');
+        allFeesCompleted = true;
         await Admission.updateFeeStatusToCompleted(newFeePayment?.admission_id);
       }
     } else if (newCurrentAmount === newtotalAmount) {
+      allFeesCompleted = true;
       await Admission.updateFeeStatusToCompleted(newFeePayment?.admission_id);
     }
 
@@ -73,6 +74,7 @@ export async function createFeePayment(req, res) {
       res.send({
         message: "Fee Details Added !",
         status: "success",
+        description: allFeesCompleted ? "" : "All Fees Completed",
       });
     }
   } catch (err) {
