@@ -14,12 +14,11 @@ const Fees = () => {
     const [totalPaiedAmount, setTotalPaiedAmount] = useState(0)
     const [lastFeePayment, setLastFeePayment] = useState([])
     const [admissionOptions, setAdmissionOptions] = useState([])
-    const [selectedAdmission, setSelectedAdmission] = useState({});
+    const [selectedAdmission, setSelectedAdmission] = useState('');
     const [errors, setErrors] = useState({});
     const [bankOptions, setBankOptions] = useState([]);
-    const [selectedFeeDatails, setSelectedFeeDetails] = useState({});
     const [remainingAmount, setRemainingAmount] = useState(0);
-
+    console.log(selectedAdmission)
     const getAdmissions = async () => {
         const { data } = await getRoute("api/admission");
         const admission_options = data?.filter(admission => admission?.fee_status !== 'completed').map(admission => ({
@@ -58,6 +57,8 @@ const Fees = () => {
             return;
         } else {
             const { data } = await postRoute(`api/feepayment`, { ...lastFeePayment, current_amount: newremainingAmount, remaining_amount: currentRemaingAmount });
+            setSelectedAdmission('')
+
         }
     };
 
@@ -81,7 +82,13 @@ const Fees = () => {
                 setLastFeePayment(lastFeePayment);
             }
         };
-        getFeeHistory();
+        if (selectedAdmission) {
+            getFeeHistory();
+        }else{
+            setTotalPaiedAmount('')
+            setRemainingAmount('')
+            setLastFeePayment('');
+        }
     }, [selectedAdmission])
     return (
         <PrimaryContainer>
@@ -99,7 +106,7 @@ const Fees = () => {
                                         <div className='flex items-center col-span-2 gap-x-4'>
                                             <InputLabel value={"Name   :"} className="font-weight-bold">
                                             </InputLabel>
-                                            <ReactSelect onChange={(option) => setSelectedAdmission(option?.value)} value={selectedAdmission} options={admissionOptions} className='w-1/3' />
+                                            <ReactSelect onChange={(option) => setSelectedAdmission(option?.value)} value={selectedAdmission || ""} options={admissionOptions} className='w-1/3' />
                                         </div>
                                         <div className='flex '>
                                             <label className="font-weight-bold">
@@ -145,9 +152,6 @@ const Fees = () => {
                                                     bank_details_id
                                                     || ""}
                                                 required="required"
-                                                onChange={(e) =>
-                                                    handleFeePayment("bank_detail_id", e.value)
-                                                }
                                                 options={bankOptions}
                                             />
                                             <InputError message={errors["bank_detail_id"]} />
