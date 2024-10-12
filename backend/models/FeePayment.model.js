@@ -4,14 +4,14 @@ class FeePayment {
   static async create(newFee) {
     try {
       const result = await sql("INSERT INTO fee_details SET ?", newFee);
-      const updated_history = await sql(
-        "INSERT INTO fee_update_history SET ?",
-        {
-          fee_details_id: newFee?.id,
-          id: uuidv4(),
-          amount: newFee?.current_amount,
-        }
-      );
+      // const updated_history = await sql(
+      //   "INSERT INTO fee_update_history SET ?",
+      //   {
+      //     fee_details_id: newFee?.id,
+      //     id: uuidv4(),
+      //     amount: newFee?.current_amount,
+      //   }
+      // );
       return result.insertId;
     } catch (error) {
       throw error;

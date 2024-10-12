@@ -46,7 +46,7 @@ class Admission {
       const query = `
         UPDATE admission 
         SET first_name = ?,last_name = ?, email = ?, contact_no = ?, alternate_no = ?, address = ?, date_of_birth = ?,current_city = ?,telecaller_name = ?,visa_type = ?,date_of_admission =?,inquiry_id = ? ,gender = ?, zip_code = ? , current_state = ? ,
-         current_nationality = ? , passport_number = ? , passport_expirydate = ? , photo_document = ? , adharcard_document = ? , certification_document = ?  WHERE id = ?
+         current_nationality = ? , passport_number = ? , passport_expirydate = ? , photo_document = ? , adharcard_document = ? , certification_document = ? ,fee_status = ?   WHERE id = ?
       `;
       const {
         first_name,
@@ -70,6 +70,7 @@ class Admission {
         photo_document,
         adharcard_document,
         certification_document,
+        fee_status,
       } = newAdmission;
       const result = await sql(query, [
         first_name,
@@ -93,6 +94,7 @@ class Admission {
         photo_document,
         adharcard_document,
         certification_document,
+        fee_status,
         id,
       ]);
       if (result?.error) {
@@ -346,7 +348,7 @@ class Admission {
       // if (fields.order) {
       //   query += ` ORDER BY ${fields.order} ${direction}`; // Change created_at to fields.order
       // } else {
-        // query += ` ORDER BY admission.created_at ${direction}`;
+      // query += ` ORDER BY admission.created_at ${direction}`;
       // }
 
       // Append conditions to the query if any exist
@@ -405,7 +407,7 @@ class Admission {
           place_of_birth: row.education_place_of_birth,
           gender: row.education_gender,
           current_nationality: row.education_current_nationality,
-          course_details:row.education_course_details
+          course_details: row.education_course_details,
         },
         university: {
           id: row.university_id,

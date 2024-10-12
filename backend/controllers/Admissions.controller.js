@@ -262,8 +262,8 @@ export async function createAdmission(req, res) {
         photo_document: photoDocumentId,
         adharcard_document: adharcardDocumentId,
         certification_document: certificationDocumentId,
+        fee_status:req.body.fee_status || 'remaining'
       };
-
       const emailExists = await Admission.findByFields({
         email: newAdmission.email,
       });

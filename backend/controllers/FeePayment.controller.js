@@ -34,9 +34,24 @@ export async function createFeePayment(req, res) {
     });
 
     if (admissionExists?.length > 0) {
-      res.status(300).send({
-        message: "admission already exists bad request or malfunctioning",
-      });
+      const currentPayment = admissionExists?.reduce(
+        (sum, admission) => sum + (admission?.current_amount || 0),
+        0
+      );
+      if (currentPayment < newFeePayment?.total_amount) {
+        if (
+          currentPayment + newFeePayment?.current_amount >
+          newFeePayment?.total_amount
+        ) {
+          return res.status(400).send({
+            current_amount: "Amount Can not be more than remaining Amount",
+          });
+        }
+      } else if (currentPayment >= newFeePayment?.total_amount) {
+        res.status(300).send({
+          message: "Fee Payment already Completed",
+        });
+      }
     }
 
     const result = await FeePayment.create(newFeePayment);
@@ -47,7 +62,9 @@ export async function createFeePayment(req, res) {
         status: "Failed",
       });
     } else {
-      await Inquiry.deleteByID(req?.body?.inquiry_id);
+      if (admissionExists) {
+        await Inquiry.deleteByID(req?.body?.inquiry_id);
+      }
       res.send({
         message: "Fee Details Added !",
         status: "success",
@@ -69,8 +86,10 @@ export async function getFeePaymentDetails(req, res) {
     });
   }
 }
+
 export async function getByFilter(req, res) {
   const { order, ...goodQuery } = req?.query;
+  console.log(req?.query)
   try {
     const result = await FeePayment?.findByFields(goodQuery);
     if (result?.error) {
