@@ -23,6 +23,7 @@ import { BiRupee } from "react-icons/bi";
 import { BsBank } from "react-icons/bs";
 import { FlashContext } from "../FlashContext";
 import FlashMessages from "./FlashMessages";
+import useLogout from "../hooks/useLogout";
 
 function getIcon(name) {
   switch (name) {
@@ -66,13 +67,15 @@ function classNames(...classes) {
 }
 
 function PrimaryContainer({ children ,className }) {
+  const {logout}=useLogout()
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const handleLogout = () => {
-    setTimeout(() => {
-      navigate("/");
-    }, 100);
+    logout()
+    // setTimeout(() => {
+    //   navigate("/");
+    // }, 100);
   };
 
   const { flash, setFlash } = useContext(FlashContext);
@@ -125,7 +128,7 @@ function PrimaryContainer({ children ,className }) {
         </div>
       </Dialog>
       <div className="w-[100vw] flex flex-col h-[100vh]">
-        <FlashMessages />
+       
 
         <div className="w-full px-4 bg-white border-b border-gray-200 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 sm:px-6 lg:px-7">
           <div className="flex items-center justify-between py-1 my-1 w-fll">
@@ -171,6 +174,7 @@ function PrimaryContainer({ children ,className }) {
                           <div
                             onClick={() => {
                               if (index === 1) {
+                                
                                 handleLogout();
                               }
                             }}

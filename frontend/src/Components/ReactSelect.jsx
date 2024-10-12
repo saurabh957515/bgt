@@ -41,7 +41,7 @@ function ReactSelect({
     <Select
       id={id}
       className={
-        `rounded-md focus:border-latisSecondary-800 focus:ring-latisSecondary-800  sm:text-sm  ` +
+        `rounded-md py-1 focus:border-latisSecondary-800 focus:ring-latisSecondary-800  sm:text-sm  ` +
         className +
         (altInput ? ' bg-white' : ' bg-white')
       }

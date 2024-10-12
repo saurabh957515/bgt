@@ -1,6 +1,33 @@
+import _ from 'lodash';
 export function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
+export const handleError = (err) => {
+  const getErrors = (errorObj) => {
+    let newErrors = {};
+    _.forIn(errorObj, function (value, key) {
+      newErrors[key] = value.message || value;
+    });
+    return { errors: newErrors };
+  };
+  
+  let errors = {};
+  if (err.response) {
+    const status = err.response.status;
+    if (status === 400) {
+      errors = getErrors(err.response.data.errors || {});
+    } else {
+      errors.message =
+        err.response.data.message || "An error occurred on the server.";
+    }
+  } else if (err.request) {
+    errors.message =
+      "No response received from the server. Please check your network.";
+  } else {
+    errors.message = err.message || "An unknown error occurred.";
+  }
+  return errors;
+};
 export const countries = {
   AFG: "Afghanistan",
   ALB: "Albania",

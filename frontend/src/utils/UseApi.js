@@ -69,12 +69,11 @@ const useApi = () => {
           }
         : {};
       try {
-        const { data } = await axios.post(url, postData,
-           {
+        const { data } = await axios.post(url, postData, {
           headers,
         });
         if (toast) {
-        setFlash(data?.message, data?.description);
+          setFlash(data?.message, data?.description);
         }
         return { data }; // Return the data on success
       } catch (err) {

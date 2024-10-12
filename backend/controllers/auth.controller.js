@@ -19,9 +19,9 @@ export const signup = async (req, res) => {
     if (emailUser) {
       errors["email"] = "Email already exists";
     }
-    console.log(password, errors);
     if (Object.keys(errors)?.length > 0) {
-      return res.status(400).json({ error: errors });
+      console.log(errors)
+      return res.status(400).json({ errors: errors });
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -38,7 +38,9 @@ export const signup = async (req, res) => {
     const result = await User.create(newUser);
     if (newUser) {
       generateTokenAndSetCookie(result?.id, res);
-      res.status(201).json({
+      res.status(200).send({
+        message: "Registration successfull !",
+        status: "success",
         id: result?.id,
         fullName: newUser.full_name,
         username: newUser.username,
@@ -48,7 +50,6 @@ export const signup = async (req, res) => {
       res.status(400).json({ error: "Invalid user data" });
     }
   } catch (error) {
-    console.log("Error in signup controller", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -69,20 +70,24 @@ export const login = async (req, res) => {
         user?.password || ""
       );
       if (!user || !isPasswordCorrect) {
-        return res.status(400).json({ error: "Invalid username or password" });
+        return res
+          .status(400)
+          .send({ errors: { password: "Incorrect Password" } });
       }
       generateTokenAndSetCookie(user.id, res);
-      res.status(200).json({
-        id: user.id,
+      res.status(200).send({
+        message: "Login successfull!",
+        status: "success",
         full_name: user.fullName,
         username: user.username,
         profile_pic: user.profile_pic,
       });
     } else {
-      res.json({ error: "No User Found for this name" });
+      return res.status(400).send({
+        errors: { username: "No User Found for this name" },
+      });
     }
   } catch (error) {
-    console.log("Error in login controller", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -90,7 +95,10 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
-    res.status(200).json({ message: "Logged out successfully" });
+    res.status(200).send({
+      message: "Logged out successfully",
+      status: "success",
+    });
   } catch (error) {
     console.log("Error in logout controller", error.message);
     res.status(500).json({ error: "Internal Server Error" });

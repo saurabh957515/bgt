@@ -163,6 +163,7 @@ const CreateInquiry = () => {
                                     <InputLabel value={'Gender'} required />
                                     <ReactSelect
                                         required
+                                        className=''
                                         onChange={(e) => handleInquiry("gender", e.value)}
                                         value={inquiry?.gender || ""}
                                         options={genderOptions}
@@ -171,7 +172,6 @@ const CreateInquiry = () => {
                                 </div>
                                 <div className="form-group">
                                     <InputLabel value={'Current Nationality'} required />
-
                                     <ReactSelect
                                         options={nationalities}
                                         value={inquiry?.current_nationality || ""}

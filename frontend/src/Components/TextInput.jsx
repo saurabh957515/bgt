@@ -1,10 +1,10 @@
 import React from "react";
 
-const TextInput = ({ placeholder, value, required, className,onChange,...props }) => {
+const TextInput = ({ placeholder, value, required, className, onChange, ...props }) => {
   return (
     <input
-    {...props}
-    onChange={onChange}
+      {...props}
+      onChange={onChange}
       required={required}
       value={value}
       placeholder={placeholder}

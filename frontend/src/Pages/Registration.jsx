@@ -3,22 +3,28 @@ import TextInput from "../Components/TextInput";
 import Image from "../Images/Login.png";
 import { Link, useNavigate } from "react-router-dom";
 import InquiryLogo from "../Icons/InquiryLogo";
-import { LockClosedIcon } from "@heroicons/react/24/solid";
+import useSignup from "../hooks/useSignup";
+import InputError from "../Components/InputError";
 const Registration = () => {
     const navigate = useNavigate();
-    const [errors,setError]=useState({})
+    const [errors, setErrors] = useState({})
     const [data, setData] = useState({
-        OrganizationName: "",
-        user_name: "",
+        full_name: "",
+        username: "",
         password: "",
+        confirmPassword: "",
+        email: "",
     });
-    const handleRegister = (e) => {
+    const { signup, loading } = useSignup();
+    const handleRegister = async (e) => {
         e.preventDefault();
-        console.log(data?.user_name);
-        localStorage.setItem("user_name", data.user_name);
-        setTimeout(() => {
-            navigate("/dashboard");
-        }, 100);
+        const isSignup = await signup(data);
+        if (!isSignup?.errors) {
+            navigate('/dashboard')
+            setErrors({});
+        } else {
+            setErrors(isSignup?.errors);
+        }
     };
     return (
         <div
@@ -33,7 +39,7 @@ const Registration = () => {
             className="h-[100vh] w-[100vw] bg-white flex items-center justify-center"
         >
             <form onSubmit={handleRegister} className="flex flex-col space-y-4">
-            <InquiryLogo className={"text-gray-900"} />
+                <InquiryLogo className={"text-gray-900"} />
                 <div className="form-group">
                     <TextInput
                         value={data?.full_name}
@@ -47,6 +53,7 @@ const Registration = () => {
                         placeholder="Full name"
                         className="p-2 border"
                     />
+                    <InputError message={errors["full_name"]} />
                 </div>
 
                 <div className="form-group">
@@ -62,7 +69,8 @@ const Registration = () => {
                         placeholder="Username"
                         className="p-2 border"
                     />
-                    <p className="mt-2 text-danger">{errors["username"]}</p>
+
+                    <InputError message={errors["username"]} />
                 </div>
 
                 <div className="form-group">
@@ -79,7 +87,8 @@ const Registration = () => {
                         placeholder="Your email"
                         className="p-2 border"
                     />
-                    <p className="mt-2 text-danger">{errors["email"]}</p>
+                    <InputError message={errors["email"]} />
+
                 </div>
 
                 <div className="form-group">
@@ -97,7 +106,7 @@ const Registration = () => {
                         maxLength={7}
                         className="p-2 border"
                     />
-                    <p className="mt-2 text-danger">{errors["password"]}</p>
+                    <InputError message={errors["password"]} />
                 </div>
 
                 <div className="form-group">
@@ -115,7 +124,7 @@ const Registration = () => {
                         maxLength={7}
                         className="p-2 border"
                     />
-                    <p className="mt-2 text-danger">{errors["confirmPassword"]}</p>
+                    <InputError message={errors["confirmPassword"]} />
                 </div>
 
                 <button

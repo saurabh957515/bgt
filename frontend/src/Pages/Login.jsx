@@ -4,22 +4,41 @@ import Image from "../Images/Login.png";
 import { Link, useNavigate } from "react-router-dom";
 import InquiryLogo from "../Icons/InquiryLogo";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
+import useLogin from "../hooks/useLogin";
+import InputError from "../Components/InputError";
 const Login = () => {
   const navigate = useNavigate();
-
   const [data, setData] = useState({
     OrganizationName: "",
     user_name: "",
     password: "",
   });
-  const handleSubmit = (e) => {
+  const { loading, login } = useLogin();
+  const [errors, setErrors] = useState({})
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data?.user_name);
-    localStorage.setItem("user_name", data.user_name);
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 100);
+    const isLoggedIn = await login(data?.user_name, data?.password);
+
+    if (!isLoggedIn?.errors) {
+      // dispatch({
+      //   type: "LOGIN_SUCCESS",
+      //   payload: { user: isLoggedIn?.username, token: isLoggedIn?.id },
+      // });
+      setTimeout(() => {
+        navigate("/inquiry");
+
+      }, 1000)
+      // setErrorMessage("");
+      setErrors({});
+    } else {
+      setErrors(isLoggedIn?.errors);
+    }
   };
+
+
+
+  console.log(errors)
   return (
     <div
       style={{
@@ -44,6 +63,7 @@ const Login = () => {
           placeholder={"User"}
           className="mt-5 border"
         />
+        <InputError message={errors['username']} />
         <TextInput
           type="password"
           value={data?.password}
@@ -53,8 +73,8 @@ const Login = () => {
           required={true}
           placeholder={"Password"}
           className="border "
-        />
-     
+        /> <InputError className='ml-4' message={errors['password']} />
+
         <button
           type="submit"
           className="px-6 py-3 text-sm font-semibold text-white bg-inquiryBlue-900 rounded-3xl"
