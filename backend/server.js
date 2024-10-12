@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
-// import messageRoutes from "./routes/message.routes.js";
 import admissionRoutes from "./routes/admission.routes.js";
 import universityRoutes from "./routes/University.routes.js";
 import inquiryRoutes from "./routes/inquiry.routes.js";
@@ -17,10 +16,14 @@ const app = express();
 dotenv.config();
 const __dirname = path.resolve();
 const PORT = process.env.PORT || 5001;
+
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "backend", "views"));
+app.use(express.static(path.join(__dirname, "backend", "public")));
+  
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-// app.use("/api/message", messageRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/feepayment", feePaymentRoutes);
 app.use("/api/university", universityRoutes);
@@ -29,8 +32,9 @@ app.use("/api/bank", bankRoutes);
 app.use("/api/admission", admissionRoutes);
 app.use("/api/education", educationRoutes);
 app.use("/api/file", fileRoutes);
+
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
-app.get("*",protectRoute, (req, res) => {
+app.get("*", protectRoute, (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
 app.get("/api/check-auth", protectRoute, (req, res) => {
