@@ -21,7 +21,7 @@ app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "backend", "views"));
 
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
-app.use(express.static(path.join(__dirname, "backend", "public")));
+// app.use(express.static(path.join(__dirname, "backend", "public")));
 
 app.use(cors());
 app.use(express.json());
