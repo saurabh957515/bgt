@@ -13,7 +13,6 @@ import { MdHideImage } from "react-icons/md";
 import SaveButton from "../../../Components/SaveButton";
 import SecondaryButton from "../../../Components/SecondaryButton";
 import { PiEmptyFill } from "react-icons/pi";
-import CancelButton from "../../../Components/CancelButton";
 const admissionObject = {
   inquiry_id: "",
   first_name: "",
@@ -26,11 +25,11 @@ const admissionObject = {
   current_city: "",
   visa_type: "",
   telecaller_name: "",
-  date_of_admission: "2024-09-30",
+  date_of_admission: "",
   gender: "",
   zip_code: "",
-  passport_number: "333223",
-  passport_expirydate: "2024-09-30",
+  passport_number: "",
+  passport_expirydate: "",
   photo_document: "",
   adharcard_document: "",
   certification_document: "",
@@ -61,32 +60,9 @@ const AdmissionForm = ({
   const [isPhotoEdit, setIsPhotEdit] = useState(false);
   const [isAdharEdit, setIsAdharEdit] = useState(false);
   const [isCertiEdit, setIsCertiEdit] = useState(false);
-  const [imageSrc, setImageSrc] = useState("");
-  const [pdfSrc, setPdfSrc] = useState("");
   const [showImagePreview, setShowImagePreview] = useState(false);
   const [showAdharPreview, setShowAdharPreview] = useState(false);
   const [showDocPreview, setShowDocPreview] = useState(false)
-  useEffect(() => {
-    const fetchFile = async () => {
-      try {
-        // Assuming your backend is running on localhost:9000
-        const response = await axios.get(
-          `http://localhost:5000/api/file/${10}`,
-          {
-            responseType: "blob", // Get the file as a Blob
-          }
-        );
-        // const imageURL = URL.createObjectURL(response.data);
-        // setImageSrc(imageURL);
-        const pdfURL = URL.createObjectURL(response.data);
-        setPdfSrc(pdfURL); // Set PDF source to blob URL
-      } catch (error) {
-        console.error("Error fetching file:", error);
-      }
-    };
-
-    fetchFile();
-  }, []);
 
   const [isEdit, setIsEdit] = useState(false);
   const handleSubmit = async (e) => {
@@ -110,11 +86,11 @@ const AdmissionForm = ({
     const url = isEdit
       ? `api/admission/${admissionDetail?.id}`
       : `api/admission`;
-
     const response = isEdit
-      ? await editRoute(url, formData)
+      ? await editRoute(url, admissionDetail, {}, true)
       : await postRoute(url, formData, true, false);
     const { errors, data } = response;
+
     if (errors) {
       setErrors(errors);
     } else {
@@ -269,18 +245,19 @@ const AdmissionForm = ({
             current_city: editAdmisson?.current_city,
             visa_type: editAdmisson?.visa_type,
             telecaller_name: editAdmisson?.telecaller_name,
-            date_of_admission: editAdmisson?.date_of_admission,
+            date_of_admission: moment(editAdmisson?.date_of_admission).format("YYYY-MM-DD"),
             gender: editAdmisson?.gender,
             zip_code: editAdmisson?.zip_code,
             current_state: editAdmisson?.current_state,
             current_nationality: editAdmisson?.current_nationality,
             passport_number: editAdmisson?.passport_number,
-            passport_expirydate: editAdmisson?.passport_expirydate,
+            passport_expirydate: moment(editAdmisson?.passport_expirydate).format("YYYY-MM-DD"),
             photo_document: editAdmisson?.photo_document,
             adharcard_document: editAdmisson?.adharcard_document,
             certification_document: editAdmisson?.certification_document,
           });
         }
+
         setIsEdit(true);
         setEditAdmission(true)
       } else {
@@ -383,7 +360,7 @@ const AdmissionForm = ({
     };
     getAdmission();
   }, []);
-
+  console.log(isEdit)
   return (
     <form className="mt-4" onSubmit={handleSubmit}>
       <h1 className="text-base font-bold">Basic Information</h1>
@@ -656,7 +633,7 @@ const AdmissionForm = ({
             }}>
               Preview
             </SecondaryButton>
-            <SaveButton disabled={!photoPreview}>
+            <SaveButton disabled={editAdmissionId || !photoPreview}>
               Delete
             </SaveButton>
 
@@ -723,7 +700,7 @@ const AdmissionForm = ({
             }}>
               Preview
             </SecondaryButton>
-            <SaveButton disabled={!adharPreview}>
+            <SaveButton disabled={editAdmissionId || !adharPreview}>
               Delete
             </SaveButton>
 
@@ -784,7 +761,7 @@ const AdmissionForm = ({
             }}>
               Preview
             </SecondaryButton>
-            <SaveButton disabled={!certificationPreview}>
+            <SaveButton disabled={editAdmissionId || !certificationPreview}>
               Delete
             </SaveButton>
           </div>

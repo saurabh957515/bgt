@@ -12,8 +12,9 @@ const Messages = () => {
   // create conversation table with the
   // create mass conversatin table with the selected ids
   const { getRoute } = useApi();
+  const [searchName, setSearchName] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [selectedNumber,setSelectedNumber]=useState({})
+  const [selectedNumber, setSelectedNumber] = useState({})
   const [messageList, setMessagesLists] = useState([]);
   const getData = async () => {
     const response = selectedIndex ? await getRoute('/api/admission') : await getRoute(
@@ -21,20 +22,29 @@ const Messages = () => {
       {},
       false
     );
-    setMessagesLists(response?.data)
+    if (searchName) {
+      console.log(searchName  )
+      const newLists = response?.data?.filter(message => 
+        message.first_name.toLowerCase().includes(searchName.toLowerCase())
+      )
+      setMessagesLists(newLists)
+    } else {
+      setMessagesLists(response?.data)
+    }
+
   }
 
   useEffect(() => {
     getData();
-  }, [selectedIndex])
+  }, [selectedIndex, searchName])
   const tabs = [
     "Inquiry", "Admission"
   ]
+
   return (
     <PrimaryContainer className={'w-full flex h-full'}>
       <div className='flex flex-col h-full px-4 py-3 bg-white border-r rounded-l-lg lg:w-1/3 xl:1/4'>
         <Tab.Group
-
           onChange={setSelectedIndex}
           as='div' className={'h-full flex flex-col'}>
           <Tab.List className="sticky flex flex-col border-b-2 border-gray-300 sm:flex-row sm:space-x-9">
@@ -60,10 +70,10 @@ const Messages = () => {
           </Tab.List>
           <Tab.Panels as='div' className={'grow overflow-auto'}>
             <Tab.Panel as='div' className={'h-full '}>
-              <ListsNames selectedNumber={selectedNumber} setSelectedNumber={setSelectedNumber} messageList={messageList} className='h-full' />
+              <ListsNames setSearchName={setSearchName} searchName={searchName} selectedNumber={selectedNumber} setSelectedNumber={setSelectedNumber} messageList={messageList} className='h-full' />
             </Tab.Panel>
             <Tab.Panel as='div' className={'h-full '}>
-              <ListsNames selectedNumber={selectedNumber} setSelectedNumber={setSelectedNumber} messageList={messageList} />
+              <ListsNames setSearchName={setSearchName} searchName={searchName} selectedNumber={selectedNumber} setSelectedNumber={setSelectedNumber} messageList={messageList} />
             </Tab.Panel>
 
           </Tab.Panels>

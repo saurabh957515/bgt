@@ -42,8 +42,7 @@ function ReactSelect({
       id={id}
       className={
         `rounded-md py-1 focus:border-latisSecondary-800 focus:ring-latisSecondary-800  sm:text-sm  ` +
-        className +
-        (altInput ? ' bg-white' : ' bg-white')
+        className 
       }
       // styles={colorStyles}
       isMulti={isMulti}

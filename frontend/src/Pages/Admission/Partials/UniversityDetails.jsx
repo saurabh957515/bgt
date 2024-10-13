@@ -46,7 +46,7 @@ const UniversityDetails = ({
     const { errors, data } = isEdit
       ? await editRoute(
         `api/university/${universityDetails?.id}`,
-        universityDetails
+        universityDetails,{},true
       )
       : await postRoute(`api/university`, universityDetails);
     if (errors) {

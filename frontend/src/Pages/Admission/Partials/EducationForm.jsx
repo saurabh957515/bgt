@@ -71,19 +71,19 @@ const EducationForm = ({
     const { errors, data } = isEdit
       ? await editRoute(
         `api/education/${educationDetails?.id}`,
-        educationDetails
+        educationDetails,{},true
       )
       : await postRoute(`api/education`, educationDetails);
-
     if (errors) {
       setErrors(errors);
     } else {
       setProgressCount(2)
       setTimeout(() => {
-        setSelected(2);
-      }, 300)
+         setSelected(2);
+      }, 1000)
     }
   };
+
   useEffect(() => {
     const getData = async () => {
       if (editAdmissionId) {

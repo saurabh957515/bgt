@@ -3,11 +3,11 @@ import SearchBar from '../../../Components/SearchBar';
 import CheckBox from '../../../Components/CheckBox'
 import { ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
 import { classNames } from '../../../provider';
-const ListsNames = ({ className, selectedNumber, placeholder, messageList, setSelectedNumber }) => {
+const ListsNames = ({ className, selectedNumber, placeholder, messageList, setSelectedNumber, setSearchName, searchName }) => {
     return (
         <div className='flex flex-col h-full '>
             <div className='py-4 bg-white '>
-                <SearchBar placeholder={placeholder} className="py-2 " />
+                <SearchBar value={searchName} onChange={(e) => setSearchName(e.target.value)} placeholder={placeholder} className="py-2 " />
             </div>
             <div className='flex flex-col overflow-auto divide-y cursor-pointer grow'>
                 {messageList?.map((message, index) => <div key={message?.id} onClick={() => setSelectedNumber(message)} className={classNames('flex items-center justify-between px-3 py-3',

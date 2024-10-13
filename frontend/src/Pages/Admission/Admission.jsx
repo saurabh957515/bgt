@@ -6,13 +6,15 @@ import AdmissionForm from './Partials/AdmissionForm';
 import EducationForm from './Partials/EducationForm';
 import FeePayment from './Partials/FeePayment';
 import UniversityDetails from './Partials/UniversityDetails';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useApi from '../../utils/UseApi';
 import { NationalitiesContext } from '../../Nationalities';
+import PrimaryButton from '../../Components/PrimaryButton';
 
 const Admission = () => {
     const tabs = ["Admission", "Education", "University", "Fee Details"]
-    const [isEditAdmission,setEditAdmission]=useState(false);
+    const navigate =useNavigate();
+    const [isEditAdmission, setEditAdmission] = useState(false);
     const [selected, setSelected] = useState(0);
     const [addmissionId, setAdmissionId] = useState("");
     const { getRoute, editRoute, postRoute, deleteById } = useApi();
@@ -129,19 +131,27 @@ const Admission = () => {
         optionValues();
     }, []);
 
-  
+
     return (
         <PrimaryContainer>
             <h2 className="sm:text-xl flex items-center justify-between w-full md:text-2xl font-extrabold text-[#283275] mb-4">
                 <div>
-                    Admission
+                    {isEditAdmission ? "Edit Admission" : "Admission"}
                 </div>
+                <div className='font-semibold'>
+                    <PrimaryButton onClick={() => {
+                        { isEditAdmission ? navigate('/total-admission') : navigate('/inquiry') }
+                    }}>
+                        Back
+                    </PrimaryButton>
+                </div>
+
             </h2>
             <Tab.Group selectedIndex={selected} onChange={setSelected}>
                 <Tab.List className="flex flex-col border-b-2 border-gray-300 sm:flex-row sm:space-x-9">
                     {tabs.map((tab, index) => (
                         <Tab
-                            disabled={ isEditAdmission? false : progressCount < index}
+                            disabled={isEditAdmission ? false : progressCount < index}
                             key={tab}
                             className={({ selected }) =>
                                 classNames(
@@ -165,7 +175,7 @@ const Admission = () => {
                 <Tab.Panels>
                     <Tab.Panel>
                         <AdmissionForm
-                        setEditAdmission={setEditAdmission}
+                            setEditAdmission={setEditAdmission}
                             nationalities={nationalities}
                             visaOptions={visaOptions}
                             admissionDetail={admissionDetail}
@@ -180,8 +190,8 @@ const Admission = () => {
                     </Tab.Panel>
                     <Tab.Panel>
                         <EducationForm
-                        setEditAdmission={setEditAdmission}
-                         setProgressCount={setProgressCount}
+                            setEditAdmission={setEditAdmission}
+                            setProgressCount={setProgressCount}
                             setIsModalOpen={setIsModalOpen}
                             progressCount={progressCount}
                             setAdmissionId={setAdmissionId}
@@ -196,8 +206,8 @@ const Admission = () => {
                     </Tab.Panel>
                     <Tab.Panel>
                         <UniversityDetails
-                        setEditAdmission={setEditAdmission}
-                         setProgressCount={setProgressCount}
+                            setEditAdmission={setEditAdmission}
+                            setProgressCount={setProgressCount}
                             progressCount={progressCount}
                             stayInOptions={stayInOptions}
                             universityDetails={admissionDetail}
@@ -210,7 +220,7 @@ const Admission = () => {
                     </Tab.Panel>
                     <Tab.Panel>
                         <FeePayment
-                        setEditAdmission={setEditAdmission}
+                            setEditAdmission={setEditAdmission}
                             progressCount={progressCount}
                             bankOptions={bankOptions}
                             feePaymentDetails={admissionDetail}

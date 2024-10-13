@@ -6,6 +6,7 @@ import { upload } from "../multerConfig.js";
 import { saveFile } from "./Files.controller.js";
 const currentDate = new Date();
 const maxAdmissionDate = new Date();
+
 maxAdmissionDate.setFullYear(currentDate.getFullYear() + 1); // One year in the future
 async function saveFileAndGetId(file) {
   const filePath = file.path;
@@ -163,10 +164,10 @@ const admissionSchema = Joi.object({
 });
 
 export async function createAdmission(req, res) {
+  console.log('come here 1')
+
   upload(req, res, async function (err) {
     if (err) {
-      console.log(err);
-
       let errorMessage = "File upload failed";
       const errors = {};
       if (err.message) {
@@ -354,7 +355,6 @@ export async function deleteAdmission(req, res) {
 export async function updateAdmission(req, res) {
   try {
     const result = await Admission?.updateByID(req?.body, req.params.id);
-
     if (result?.error) {
       res.send({
         message: result?.error,

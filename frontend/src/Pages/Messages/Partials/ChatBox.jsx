@@ -8,17 +8,21 @@ const ChatBox = ({ className, selectedNumber }) => {
   const [conversation, setConversation] = useState([])
   const [message, setMessage] = useState('');
   const senderNumber = '9595959303'
-  const chatboxRef=useRef(null);
+  const chatboxRef = useRef(null);
   const sendMessage = async (e) => {
-    e.preventDefault();
-    const { data } = await postRoute("/api/whatsapp/message", {
-      sender: senderNumber,
-      recipient: selectedNumber?.contact_no,
-      message: message,
-    });
-    if (data?.status === 'success') {
-      setMessage('');
-      getConversations();
+
+
+    if (selectedNumber?.contact_no) {
+      e.preventDefault();
+      const { data } = await postRoute("/api/whatsapp/message", {
+        sender: senderNumber,
+        recipient: selectedNumber?.contact_no,
+        message: message,
+      });
+      if (data?.status === 'success') {
+        setMessage('');
+        getConversations();
+      }
     }
   }
 
@@ -41,7 +45,7 @@ const ChatBox = ({ className, selectedNumber }) => {
     if (chatboxRef.current) {
       chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
     }
-  }, [conversation]);  
+  }, [conversation]);
 
   return (
     <div className={classNames("flex flex-col justify-between w-3/4 h-full bg-white rounded-r-lg", className)}>
@@ -95,7 +99,7 @@ const ChatBox = ({ className, selectedNumber }) => {
       <div className="inline-flex items-center justify-between gap-2 p-5 py-1 pl-3 pr-1 mx-4 my-4 border border-gray-200 h-fit rounded-3xl">
         <div className="flex items-center w-full gap-2">
           <UserCircleIcon className='w-6 h-6' />
-          <input onKeyDown={(e)=>e?.key === "Enter" && sendMessage(e)} value={message} onChange={(e) => setMessage(e.target.value)} className="w-full text-xs font-medium leading-4 text-black grow shrink basis-0 focus:outline-none" placeholder="Type here..." />
+          <input onKeyDown={(e) => e?.key === "Enter" && sendMessage(e)} value={message} onChange={(e) => setMessage(e.target.value)} className="w-full text-xs font-medium leading-4 text-black grow shrink basis-0 focus:outline-none" placeholder="Type here..." />
         </div>
         <div className="flex items-center gap-2">
           <PaperClipIcon className='w-6 h-5' />

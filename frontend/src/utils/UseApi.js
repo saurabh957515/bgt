@@ -118,6 +118,7 @@ const useApi = () => {
       // dispatch(setToastMessage(data?.message));
       return { data }; // Return the data on success
     } catch (err) {
+      console.log(err,formData,headers,params)
       return handleError(err); // Return errors on failure
     }
   }, []);

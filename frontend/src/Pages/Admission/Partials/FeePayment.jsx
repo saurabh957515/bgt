@@ -33,7 +33,7 @@ const FeePayment = ({
     const { errors, data } = isEdit
       ? await editRoute(
         `/api/feepayment/${feePaymentDetails?.id}`,
-        feePaymentDetails
+        feePaymentDetails,{},true
       )
       : await postRoute(`api/feepayment`, feePaymentDetails);
     if (errors) {
