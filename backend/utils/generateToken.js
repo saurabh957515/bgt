@@ -8,9 +8,9 @@ const generateTokenAndSetCookie = (userId, res) => {
 
     res.cookie("jwt", token, {
       maxAge: 15 * 24 * 60 * 60 * 1000, // MS
-      httpOnly: true, // prevent XSS attacks cross-site scripting attacks
-      sameSite: "strict", // CSRF attacks cross-site request forgery attacks
-      secure: process.env.NODE_ENV !== "development",
+      httpOnly: true, 
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax", // More relaxed in development
+      secure: process.env.NODE_ENV === "production", // Only secure in production (HTTPS)
     });
   } catch (error) {
     console.error("errors in generate tokken", error);
