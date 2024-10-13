@@ -4,12 +4,9 @@ import PrimaryButton from '../../../Components/PrimaryButton';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Flatpickr from "react-flatpickr";
-
 import "flatpickr/dist/flatpickr.css";
 import ReactSelect from '../../../Components/ReactSelect';
 import useApi from '../../../utils/UseApi';
-import axios from 'axios';
-
 import { countries } from '../../../provider';
 import { NationalitiesContext } from '../../../Nationalities';
 import { FlashContext } from '../../../FlashContext';

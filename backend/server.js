@@ -12,6 +12,7 @@ import bankRoutes from "./routes/bank.routes.js";
 import educationRoutes from "./routes/Education.routes.js";
 import fileRoutes from "./routes/file.routes.js";
 import protectRoute from "./middleware/protectRoute.js";
+import whatsappRoutes from "./routes/whatsappRoutes.js"
 const app = express();
 dotenv.config();
 const __dirname = path.resolve();
@@ -32,9 +33,9 @@ app.use("/api/university", universityRoutes);
 app.use("/api/inquiry", inquiryRoutes);
 app.use("/api/bank", bankRoutes);
 app.use("/api/admission", admissionRoutes);
+app.use("/api/whatsapp", whatsappRoutes);
 app.use("/api/education", educationRoutes);
 app.use("/api/file", fileRoutes);
-
 app.get("*", protectRoute, (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
