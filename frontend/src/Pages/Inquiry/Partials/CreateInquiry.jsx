@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PrimaryContainer from '../../../Components/PrimaryContainer';
 import PrimaryButton from '../../../Components/PrimaryButton';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.css";
@@ -30,6 +30,7 @@ const CreateInquiry = () => {
         visa_type: "",
         progress_count: "0",
     };
+    const location = useLocation();
     const { postRoute, editRoute, getRoute } = useApi();
     const { setFlash } = useContext(FlashContext)
     const [inquiry, setInquiry] = useState(inquiryObject);
@@ -40,6 +41,7 @@ const CreateInquiry = () => {
     const handleInquiry = (name, value) => {
         setInquiry((prev) => ({ ...prev, [name]: value }));
     };
+    
     useEffect(() => {
         const optionValues = async () => {
 
@@ -63,6 +65,11 @@ const CreateInquiry = () => {
             );
         };
         optionValues();
+        const inquiryExists=location?.state?.inquiryData;
+        if(inquiryExists){
+            setInquiry(inquiryExists);
+            setIsEdit(true);
+        }
     }, []);
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -72,8 +79,8 @@ const CreateInquiry = () => {
                 date_of_birth: moment(inquiry?.date_of_birth).format("YYYY-MM-DD"),
             };
             const response = isEdit
-                ? await editRoute(`/api/inquiry/${newInquiry?.id}`, newInquiry)
-                : await postRoute("/api/inquiry", newInquiry);
+                ? await editRoute(`/api/inquiry/${newInquiry?.id}`, newInquiry,{},true)
+                : await postRoute("/api/inquiry", newInquiry,true);
             if (response?.errors) {
                 setErrors(response?.errors);
             } else if (response?.data) {
@@ -94,7 +101,7 @@ const CreateInquiry = () => {
                         <h1 onClick={() => {
                             setFlash('message is comming', 'is it')
                         }} className='text-base font-semibold '>
-                            Create Inquiry
+                        {   isEdit ? "Edit Inquiry" : "Create Inquiry"}
                         </h1>
                     </div>
                     <div className='font-semibold'>

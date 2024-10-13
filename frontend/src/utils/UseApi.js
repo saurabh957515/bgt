@@ -102,7 +102,7 @@ const useApi = () => {
     }
   }, []);
 
-  const editRoute = useCallback(async (url, formData, params = {}) => {
+  const editRoute = useCallback(async (url, formData, params = {},toast) => {
     const headers = {
       "Content-Type": "application/json",
     };
@@ -111,6 +111,9 @@ const useApi = () => {
         params,
         headers,
       });
+      if (toast) {
+        setFlash(data?.message, data?.description);
+      }
       // dispatch(tostMessageLoad(true));
       // dispatch(setToastMessage(data?.message));
       return { data }; // Return the data on success

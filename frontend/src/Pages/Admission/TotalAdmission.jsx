@@ -33,13 +33,12 @@ const TotalAdmission = () => {
     const toggleAccordion = (index) => {
         setActiveIndex(activeIndex === index ? null : index);
     };
-    const handleDeleteAdmission = async (e) => {
-        e.preventDefault();
-        const { data } = await deleteById(`api/admission/${deletedAdmission?.id}`);
+    const handleDeleteAdmission = async (id) => {
+        console.log('hello comming')
+        const { data } = await deleteById(`api/admission/${id}`, true);
         if (data?.status == "success") {
             getData();
             setIsModalOpen(false);
-            setDeleteAdmission({});
         }
     };
     const handleEditAdmission = (id) => {
@@ -84,8 +83,10 @@ const TotalAdmission = () => {
                                         }} className='font-medium text-blue-500'>
                                             <MdOutlineModeEditOutline className='w-6 h-6' />
                                         </span>
-                                        <span className='font-medium text-red-500'>
-
+                                        <span onClick={(e) => {
+                                            e.preventDefault();
+                                            handleDeleteAdmission(allDetails?.admission?.id)
+                                        }} className='font-medium text-red-500'>
                                             <MdOutlineDelete className='w-6 h-6' />
                                         </span>
                                         <ChevronDownIcon className={classNames('w-6 h-6', open && 'rotate-180')} />

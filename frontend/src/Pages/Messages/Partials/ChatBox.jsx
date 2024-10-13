@@ -1,5 +1,5 @@
 import { ExclamationTriangleIcon, PaperAirplaneIcon, PaperClipIcon, UserCircleIcon } from '@heroicons/react/24/outline';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { classNames } from '../../../provider';
 import useApi from '../../../utils/UseApi';
 
@@ -7,7 +7,8 @@ const ChatBox = ({ className, selectedNumber }) => {
   const { postRoute, getRoute } = useApi();
   const [conversation, setConversation] = useState([])
   const [message, setMessage] = useState('');
-  const senderNumber='9595959303'
+  const senderNumber = '9595959303'
+  const chatboxRef=useRef(null);
   const sendMessage = async (e) => {
     e.preventDefault();
     const { data } = await postRoute("/api/whatsapp/message", {
@@ -15,6 +16,10 @@ const ChatBox = ({ className, selectedNumber }) => {
       recipient: selectedNumber?.contact_no,
       message: message,
     });
+    if (data?.status === 'success') {
+      setMessage('');
+      getConversations();
+    }
   }
 
   const getConversations = async () => {
@@ -29,20 +34,25 @@ const ChatBox = ({ className, selectedNumber }) => {
   useEffect(() => {
     if (selectedNumber?.contact_no) {
       getConversations()
-
     }
-  }, [selectedNumber])
-  console.log(conversation)
+  }, [selectedNumber]);
+
+  useEffect(() => {
+    if (chatboxRef.current) {
+      chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
+    }
+  }, [conversation]);  
+
   return (
-    <div className={classNames("flex flex-col justify-between w-3/4 h-full py-4 bg-white rounded-r-lg", className)}>
-      <div className='overflow-auto grow scrollbar-hide'>
-        {selectedNumber ? <div className='relative'>
-          <div className='sticky top-0 flex items-center px-4 bg-white shadow gap-x-5 borde-b'>
+    <div className={classNames("flex flex-col justify-between w-3/4 h-full bg-white rounded-r-lg", className)}>
+      <div ref={chatboxRef} className='overflow-auto grow scrollbar-hide'>
+        {selectedNumber?.contact_no ? <div className='relative'>
+          <div className='sticky top-0 flex items-center px-4 py-4 bg-white shadow gap-x-5 borde-b'>
             <img src="https://pagedone.io/asset/uploads/1710412177.png" alt="Shanay image" className="w-10 h-10" /> <h5 className="text-sm font-semibold leading-snug text-gray-900 ">{selectedNumber?.first_name + " " + selectedNumber?.last_name}</h5>
           </div>
-          <div className="grid px-4 pb-11">
+          <div className="grid px-4 py-4">
             {conversation.map((message) => {
-              const isSender = message.sender ===senderNumber;
+              const isSender = message.sender === senderNumber;
 
               return (
                 <div className={`flex gap-2.5 mb-4 ${isSender ? 'justify-end' : 'justify-start'}`} key={message.id}>
@@ -82,10 +92,10 @@ const ChatBox = ({ className, selectedNumber }) => {
             <div className='text-xs'>Please Select A number to start Conversation</div>
           </div>}
       </div>
-      <div className="inline-flex items-center justify-between gap-2 p-5 py-1 pl-3 pr-1 mx-4 border border-gray-200 grow rounded-3xl">
-        <div className="flex items-center gap-2">
+      <div className="inline-flex items-center justify-between gap-2 p-5 py-1 pl-3 pr-1 mx-4 my-4 border border-gray-200 h-fit rounded-3xl">
+        <div className="flex items-center w-full gap-2">
           <UserCircleIcon className='w-6 h-6' />
-          <input value={message} onChange={(e) => setMessage(e.target.value)} className="text-xs font-medium leading-4 text-black grow shrink basis-0 focus:outline-none" placeholder="Type here..." />
+          <input onKeyDown={(e)=>e?.key === "Enter" && sendMessage(e)} value={message} onChange={(e) => setMessage(e.target.value)} className="w-full text-xs font-medium leading-4 text-black grow shrink basis-0 focus:outline-none" placeholder="Type here..." />
         </div>
         <div className="flex items-center gap-2">
           <PaperClipIcon className='w-6 h-5' />

@@ -52,9 +52,9 @@ const Inquiry = () => {
                         <h1 className='text-base font-semibold '>
                             Inquiry
                         </h1>
-                        <FilterBar 
-                        
-                        filterField={filterField} setFilterField = { setFilterField}
+                        <FilterBar
+
+                            filterField={filterField} setFilterField={setFilterField}
                         />
                     </div>
                     <div className='font-semibold'>
@@ -103,8 +103,7 @@ const Inquiry = () => {
                                                 <div className="flex justify-center space-x-2">
                                                     <span
                                                         onClick={() =>
-                                                            history.push({
-                                                                pathname: "/createinquiry",
+                                                            navigate("/create-inquiry", {
                                                                 state: { inquiryData: inquiry },
                                                             })
                                                         }
