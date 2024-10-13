@@ -130,13 +130,13 @@ const Admission = () => {
         };
         optionValues();
     }, []);
-
+console.log('ami comming',isEditAdmission)
 
     return (
         <PrimaryContainer>
             <h2 className="sm:text-xl flex items-center justify-between w-full md:text-2xl font-extrabold text-[#283275] mb-4">
                 <div>
-                    {isEditAdmission ? "Edit Admission" : "Admission"}
+                 {isEditAdmission ? "Edit Admission" : "Admission"}
                 </div>
                 <div className='font-semibold'>
                     <PrimaryButton onClick={() => {

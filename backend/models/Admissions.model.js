@@ -323,28 +323,18 @@ class Admission {
           university.inquiry_id AS university_inquiry_id,
           university.admission_id AS university_admission_id,
           university.created_at AS university_created_at,
-          university.updated_at AS university_updated_at,
-  
-          fee_details.id AS fee_details_id,
-          fee_details.admission_id AS fee_details_admission_id,
-          fee_details.inquiry_id AS fee_details_inquiry_id,
-          fee_details.bank_details_id AS fee_details_bank_details_id,
-          fee_details.current_amount AS fee_details_current_amount,
-          fee_details.remaining_amount AS fee_details_remaining_amount,
-          fee_details.total_amount AS fee_details_total_amount,
-          fee_details.updated_at AS fee_details_updated_at
+          university.updated_at AS university_updated_at
   
         FROM admission
         LEFT JOIN education ON admission.id = education.admission_id
         LEFT JOIN university ON admission.id = university.admission_id
-        LEFT JOIN fee_details ON admission.id = fee_details.admission_id
         WHERE 1=1
       `;
-
+  
       // Collect filter conditions and parameters
       const conditions = [];
       const params = [];
-
+  
       if (fields.date) {
         conditions.push("admission.date_of_admission = ?");
         params.push(fields.date);
@@ -357,17 +347,12 @@ class Admission {
         conditions.push("admission.telecaller_name LIKE ?");
         params.push(`%${fields.telecaller_name}%`);
       }
-      // if (fields.order) {
-      //   query += ` ORDER BY ${fields.order} ${direction}`; // Change created_at to fields.order
-      // } else {
-      // query += ` ORDER BY admission.created_at ${direction}`;
-      // }
-
+  
       // Append conditions to the query if any exist
       if (conditions.length > 0) {
         query += " AND " + conditions.join(" AND ");
       }
-
+  
       // Execute the query with parameters
       const rows = await sql(query, params);
       const results = rows.map((row) => ({
@@ -409,8 +394,7 @@ class Admission {
           current_designation: row.education_current_designation,
           current_monthly_salary: row.education_current_monthly_salary,
           total_experience_years: row.education_total_experience_years,
-          past_rejection_country_name:
-            row.education_past_rejection_country_name,
+          past_rejection_country_name: row.education_past_rejection_country_name,
           ielts_score: row.education_ielts_score,
           employed_type: row.education_employed_type,
           business_name: row.education_business_name,
@@ -433,25 +417,16 @@ class Admission {
           admission_id: row.university_admission_id,
           created_at: row.university_created_at,
           updated_at: row.university_updated_at,
-        },
-        fee_details: {
-          id: row.fee_details_id,
-          admission_id: row.fee_details_admission_id,
-          inquiry_id: row.fee_details_inquiry_id,
-          bank_details_id: row.fee_details_bank_details_id,
-          current_amount: row.fee_details_current_amount,
-          remaining_amount: row.fee_details_remaining_amount,
-          total_amount: row.fee_details_total_amount,
-          updated_at: row.fee_details_updated_at,
-        },
+        }
       }));
-
+  
       return results;
     } catch (error) {
       console.error("Error fetching data:", error);
       throw error;
     }
   }
+  
 }
 
 export default Admission;
