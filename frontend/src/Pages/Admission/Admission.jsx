@@ -12,7 +12,7 @@ import { NationalitiesContext } from '../../Nationalities';
 
 const Admission = () => {
     const tabs = ["Admission", "Education", "University", "Fee Details"]
-
+    const [isEditAdmission,setEditAdmission]=useState(false);
     const [selected, setSelected] = useState(0);
     const [addmissionId, setAdmissionId] = useState("");
     const { getRoute, editRoute, postRoute, deleteById } = useApi();
@@ -141,7 +141,7 @@ const Admission = () => {
                 <Tab.List className="flex flex-col border-b-2 border-gray-300 sm:flex-row sm:space-x-9">
                     {tabs.map((tab, index) => (
                         <Tab
-                            disabled={progressCount < index}
+                            disabled={ isEditAdmission? false : progressCount < index}
                             key={tab}
                             className={({ selected }) =>
                                 classNames(
@@ -165,6 +165,7 @@ const Admission = () => {
                 <Tab.Panels>
                     <Tab.Panel>
                         <AdmissionForm
+                        setEditAdmission={setEditAdmission}
                             nationalities={nationalities}
                             visaOptions={visaOptions}
                             admissionDetail={admissionDetail}
@@ -179,6 +180,7 @@ const Admission = () => {
                     </Tab.Panel>
                     <Tab.Panel>
                         <EducationForm
+                        setEditAdmission={setEditAdmission}
                          setProgressCount={setProgressCount}
                             setIsModalOpen={setIsModalOpen}
                             progressCount={progressCount}
@@ -194,6 +196,7 @@ const Admission = () => {
                     </Tab.Panel>
                     <Tab.Panel>
                         <UniversityDetails
+                        setEditAdmission={setEditAdmission}
                          setProgressCount={setProgressCount}
                             progressCount={progressCount}
                             stayInOptions={stayInOptions}
@@ -207,6 +210,7 @@ const Admission = () => {
                     </Tab.Panel>
                     <Tab.Panel>
                         <FeePayment
+                        setEditAdmission={setEditAdmission}
                             progressCount={progressCount}
                             bankOptions={bankOptions}
                             feePaymentDetails={admissionDetail}

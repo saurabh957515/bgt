@@ -42,7 +42,8 @@ const AdmissionForm = ({
   genderOptions,
   progressCount,
   nationalities,
-  setProgressCount
+  setProgressCount,
+  setEditAdmission
 }) => {
   const [admissionDetail, setAdmissionDetail] = useState(admissionObject);
   const [errors, setErrors] = useState({});
@@ -281,6 +282,7 @@ const AdmissionForm = ({
           });
         }
         setIsEdit(true);
+        setEditAdmission(true)
       } else {
         if (createAdmission) {
           setAdmissionDetail({
@@ -308,6 +310,7 @@ const AdmissionForm = ({
           });
         }
         setIsEdit(false);
+        setEditAdmission(false)
       }
     };
     getData();
@@ -374,6 +377,7 @@ const AdmissionForm = ({
         if (!errors && data?.length === 1) {
           setEditAdmissionId(data[0]?.id);
           setIsEdit(true);
+          setEditAdmission(true)
         }
       }
     };

@@ -110,7 +110,6 @@ const CreateInquiry = () => {
                         }}>
                             Back
                         </PrimaryButton>
-
                     </div>
                 </div>
                 <div className=' grow scrollbar-hide'>

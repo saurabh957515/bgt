@@ -36,7 +36,8 @@ const EducationForm = ({
   employedOptions,
   progressCount,
   setIsModalOpen,
-  setProgressCount
+  setProgressCount,
+  setEditAdmission
 }) => {
   const location = useLocation();
   const [admissionId, setAdmissionId] = useState("");
@@ -120,6 +121,7 @@ const EducationForm = ({
             // current_nationality: editAdmisson?.current_nationality,
           });
           setIsEdit(true);
+          setEditAdmission(true)
         } else {
           setEducationDetail({
             ...education_Object,
@@ -136,6 +138,7 @@ const EducationForm = ({
           });
         }
         setIsEdit(false);
+        setEditAdmission(false)
       }
     };
     getData();

@@ -14,6 +14,7 @@ const FeePayment = ({
   feePaymentDetails,
   setFeePaymentDetails,
   bankOptions,
+  setEditAdmission
 }) => {
   const [admissionId, setAdmissionId] = useState("");
   const { postRoute, editRoute, getRoute } = useApi();
@@ -83,6 +84,7 @@ const FeePayment = ({
             admission_id: admissionId,
           });
           setIsEdit(true);
+          setEditAdmission(true)
         } else {
           setFeePaymentDetails({
             inquiry_id: createAdmission?.id,
@@ -94,6 +96,7 @@ const FeePayment = ({
             admission_id: admissionId,
           });
           setIsEdit(false);
+          setEditAdmission(false)
         }
       } else {
         if (createAdmission) {
@@ -108,6 +111,7 @@ const FeePayment = ({
           });
         }
         setIsEdit(false);
+        setEditAdmission(false)
       }
     };
     getData();

@@ -34,7 +34,6 @@ const TotalAdmission = () => {
         setActiveIndex(activeIndex === index ? null : index);
     };
     const handleDeleteAdmission = async (id) => {
-        console.log('hello comming')
         const { data } = await deleteById(`api/admission/${id}`, true);
         if (data?.status == "success") {
             getData();

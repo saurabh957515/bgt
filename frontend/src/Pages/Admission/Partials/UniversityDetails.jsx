@@ -27,7 +27,8 @@ const UniversityDetails = ({
   setUniversityDetails,
   stayInOptions,
   progressCount,
-  setProgressCount
+  setProgressCount,
+  setEditAdmission
 }) => {
   const [admissionId, setAdmissionId] = useState("");
   const { postRoute, editRoute, getRoute } = useApi();
@@ -86,6 +87,7 @@ const UniversityDetails = ({
             stay_in_address: editAdmisson?.stay_in_address,
           });
           setIsEdit(true);
+          setEditAdmission(true);
         } else {
           setUniversityDetails({
             inquiry_id: createAdmission?.id,
@@ -104,6 +106,7 @@ const UniversityDetails = ({
           });
         }
         setIsEdit(false);
+        setEditAdmission(false)
       }
     };
     getData();
