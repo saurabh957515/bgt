@@ -30,6 +30,7 @@ function App() {
         <Route path="/fees" element={<ProtectedRoute element={Fees} />} />
         <Route path="/bankdetails" element={<ProtectedRoute element={BankDetails} />} />
         <Route path="/settings" element={<ProtectedRoute element={Dashboard} />} />
+        <Route path="*" element={<ProtectedRoute element={Dashboard} />} />
       </Routes>
     </Router>
   );
