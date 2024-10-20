@@ -52,8 +52,10 @@ export async function getBank(req, res) {
   }
 }
 export async function getByFilter(req, res) {
+  const { order, ...goodQuery } = req?.query; 
+  let newQuery=goodQuery?.first_name ? {account_holder_name:goodQuery?.first_name,created_at:goodQuery?.date}:{created_at:goodQuery?.date}
   try {
-    const result = await Bank?.findByFields({});
+    const result = await Bank?.findByFields(newQuery,order);
     res.send(result);
   } catch (err) {
     res.status(500).send({

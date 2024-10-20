@@ -19,7 +19,7 @@ const BankDetails = () => {
     const { getRoute, deleteById } = useApi();
     const [errors, setErrors] = useState({});
     const getBanks = async () => {
-        const { data } = await getRoute("/api/bank", "", false);
+        const { data } = await getRoute("/api/bank/filter", filterField,false);
         setBanks(data);
     };
     useEffect(() => {
@@ -49,9 +49,7 @@ const BankDetails = () => {
                         <h1 className='text-base font-semibold '>
                             BankDetails
                         </h1>
-                        <FilterBar
-
-                            filterField={filterField} setFilterField={setFilterField}
+                        <FilterBar filterField={filterField} setFilterField={setFilterField}
                         />
                     </div>
                     <div className='font-semibold'>
@@ -63,7 +61,7 @@ const BankDetails = () => {
 
                     </div>
                 </div>
-                <div className='grid grid-cols-4 gap-4 overflow-auto grow scrollbar-hide'>
+                <div className='grid gap-4 overflow-auto xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grow scrollbar-hide'>
                     {banks?.map(bank => <div key={bank?.id} className='flex flex-col p-4 space-y-2 bg-white rounded-lg shadow-sm h-fit min-h-40'>
                         <h1 className='flex text-base font-medium'>Name : <span className='ml-2 text-base text-blue-500 text-semibold'>
                             {bank?.
@@ -79,7 +77,7 @@ const BankDetails = () => {
                             Account Number : <span className='ml-2 text-base text-blue-500 text-semibold'>
                                 {bank?.account_number}    </span>
                         </div>
-                        <div>
+                        <div className='flex gap-2 max-md:flex-col'>
                             <SecondaryButton onClick={(e) => {
                                 e.preventDefault();
                                 navigate('/create-bank', { state: { bankData: bank } })

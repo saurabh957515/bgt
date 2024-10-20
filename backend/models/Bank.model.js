@@ -65,29 +65,38 @@ class Bank {
       const conditions = [];
       const values = [];
       const validSortDirections = ["ASC", "DESC"];
-      const direction = validSortDirections.includes(
-        sortDirection.toUpperCase()
-      )
+      const direction = validSortDirections.includes(sortDirection.toUpperCase())
         ? sortDirection.toUpperCase()
         : "DESC";
+      
+      // Loop through fields to build query
       for (const [field, value] of Object.entries(fields)) {
         if (value !== undefined && value !== null) {
-          conditions.push(`${field} = ?`);
-          values.push(value);
+          // If value is a string, use LIKE for partial matching
+          if (typeof value === 'string') {
+            conditions.push(`${field} LIKE ?`);
+            values.push(`%${value}%`); // Add wildcards for partial matching
+          } else {
+            // For non-string fields, use exact matching
+            conditions.push(`${field} = ?`);
+            values.push(value);
+          }
         }
       }
+      
       const query = `
         SELECT * FROM bank_details 
         ${conditions.length ? "WHERE " + conditions.join(" AND ") : ""}
         ORDER BY created_at ${direction}
       `;
-
+  
       const result = await sql(query, values);
       return result;
     } catch (error) {
       throw error;
     }
   }
+  
 }
 
 export default Bank;

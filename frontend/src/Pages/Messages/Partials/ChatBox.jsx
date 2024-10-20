@@ -60,7 +60,7 @@ const ChatBox = ({ className, selectedNumber }) => {
           <div className="grid px-4 py-4">
             {conversation.map((message) => {
               const isSender = message.sender === senderNumber;
-                return (
+              return (
                 <div className={`flex gap-2.5 mb-4 ${isSender ? 'justify-end' : 'justify-start'}`} key={message.id}>
                   {!isSender && (
                     <img
