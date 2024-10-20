@@ -103,7 +103,7 @@ const Registration = () => {
                         }
                         required={true}
                         placeholder="Password"
-                        maxLength={7}
+                        maxLength={12}
                         className="p-2 border"
                     />
                     <InputError message={errors["password"]} />
@@ -121,7 +121,7 @@ const Registration = () => {
                         }
                         required={true}
                         placeholder="Confirm Password"
-                        maxLength={7}
+                        maxLength={12}
                         className="p-2 border"
                     />
                     <InputError message={errors["confirmPassword"]} />

@@ -2,6 +2,7 @@ import { ExclamationTriangleIcon, PaperAirplaneIcon, PaperClipIcon, UserCircleIc
 import React, { useEffect, useRef, useState } from 'react';
 import { classNames } from '../../../provider';
 import useApi from '../../../utils/UseApi';
+import ViewImage from '../../Admission/Partials/ViewImage';
 
 const ChatBox = ({ className, selectedNumber }) => {
   const { postRoute, getRoute } = useApi();
@@ -46,19 +47,20 @@ const ChatBox = ({ className, selectedNumber }) => {
       chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
     }
   }, [conversation]);
-
   return (
     <div className={classNames("flex flex-col justify-between w-3/4 h-full bg-white rounded-r-lg", className)}>
       <div ref={chatboxRef} className='overflow-auto grow scrollbar-hide'>
         {selectedNumber?.contact_no ? <div className='relative'>
           <div className='sticky top-0 flex items-center px-4 py-4 bg-white shadow gap-x-5 borde-b'>
-            <img src="https://pagedone.io/asset/uploads/1710412177.png" alt="Shanay image" className="w-10 h-10" /> <h5 className="text-sm font-semibold leading-snug text-gray-900 ">{selectedNumber?.first_name + " " + selectedNumber?.last_name}</h5>
+            <div className='w-8 h-8 overflow-hidden rounded-3xl '>
+              <ViewImage className={'w-10 h-full rounded--3xl'} imageDoc={selectedNumber?.photo_document} />
+            </div>
+            <h5 className="text-sm font-semibold leading-snug text-gray-900 ">{selectedNumber?.first_name + " " + selectedNumber?.last_name}</h5>
           </div>
           <div className="grid px-4 py-4">
             {conversation.map((message) => {
               const isSender = message.sender === senderNumber;
-
-              return (
+                return (
                 <div className={`flex gap-2.5 mb-4 ${isSender ? 'justify-end' : 'justify-start'}`} key={message.id}>
                   {!isSender && (
                     <img

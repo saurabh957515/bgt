@@ -12,7 +12,7 @@ import CancelButton from "../../../Components/CancelButton";
 const education_Object = {
   admission_id: "",
   course_details: "",
-  passing_year: 2012,
+  passing_year: '',
   name_of_institute: "",
   city: "",
   state: "",

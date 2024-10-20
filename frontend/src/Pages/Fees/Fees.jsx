@@ -7,10 +7,12 @@ import { CurrencyRupeeIcon, ExclamationCircleIcon, ExclamationTriangleIcon } fro
 import InputLabel from '../../Components/InputLabel';
 import InputError from '../../Components/InputError';
 import { classNames } from '../../provider';
+import FeeHistoryChart from '../../Components/FeeHistoryChart';
 const Fees = () => {
 
     const { getRoute, postRoute } = useApi();
     const [feePayment, setFeePayement] = useState({});
+    const [feeHistory, setFeeHistory] = useState([])
     const [totalPaiedAmount, setTotalPaiedAmount] = useState(0)
     const [lastFeePayment, setLastFeePayment] = useState([])
     const [admissionOptions, setAdmissionOptions] = useState([])
@@ -66,6 +68,9 @@ const Fees = () => {
                 const sortedData = data.sort((a, b) => {
                     return moment(b.updated_at).diff(moment(a.updated_at));
                 });
+                setFeeHistory(sortedData?.map(fee => ({
+                    date: moment(fee?.updated_at).format('YYYY-MM-DD'), fee: fee?.current_amount
+                })))
                 const lastFeePayment = sortedData[0];
                 const totalPaiedAmount = sortedData?.reduce(
                     (sum, admission) => sum + (parseFloat(admission?.current_amount || 0)),
@@ -84,6 +89,15 @@ const Fees = () => {
             setLastFeePayment('');
         }
     }, [selectedAdmission])
+
+    // Sample fee list data
+    const feeList = [
+        { date: '2024-01-01', fee: 500 },
+        { date: '2024-02-01', fee: 1200 },
+        { date: '2024-03-01', fee: 800 },
+        { date: '2024-04-01', fee: 8000 },
+        { date: '2024-05-01', fee: 1500 },
+    ];
     return (
         <PrimaryContainer>
             <div className='flex flex-col w-full h-full '>
@@ -101,10 +115,17 @@ const Fees = () => {
                                             <InputLabel value={"Name   :"} className="font-weight-bold">
                                             </InputLabel>
                                             <ReactSelect
-                                                isClearable={true}
-                                                onChange={(option) => setSelectedAdmission(option?.value)} value={selectedAdmission || " "}
+                                                isClearable={selectedAdmission && true}
+                                                onChange={(option) => setSelectedAdmission(option?.value)} value={selectedAdmission || { label: "select" }}
                                                 options={admissionOptions} className='w-1/3' />
                                         </div>
+                                        {selectedAdmission && feeHistory?.length > 0 && <div className='col-span-2'>
+                                            <InputLabel className='mb-2 font-medium' value={"Fee History :"} />
+                                            <FeeHistoryChart feeList={feeHistory} />
+
+                                        </div>
+                                        }
+
                                         <div className='flex '>
                                             <label className="font-weight-bold">
                                                 Last Amount

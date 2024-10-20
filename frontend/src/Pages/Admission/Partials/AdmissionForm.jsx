@@ -471,7 +471,6 @@ const AdmissionForm = ({
           <input
             className="w-full p-2 mt-1 border border-gray-300 rounded-md"
             value={admissionDetail?.alternate_no || ""}
-            required="required"
             onChange={(e) =>
               handleAdmission("alternate_no", e.target.value)
             }
@@ -515,7 +514,7 @@ const AdmissionForm = ({
           <InputError message={errors["email"]} />
         </div>
         <div>
-          <InputLabel required="required" value={'Telecaller Name'}></InputLabel>
+          <InputLabel required="required" value={'Counseller Name'}></InputLabel>
           <input
             className="w-full p-2 mt-1 border border-gray-300 rounded-md"
             value={admissionDetail?.telecaller_name || ""}

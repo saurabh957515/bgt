@@ -23,7 +23,6 @@ const Messages = () => {
       false
     );
     if (searchName) {
-      console.log(searchName  )
       const newLists = response?.data?.filter(message => 
         message.first_name.toLowerCase().includes(searchName.toLowerCase())
       )
@@ -37,6 +36,9 @@ const Messages = () => {
   useEffect(() => {
     getData();
   }, [selectedIndex, searchName])
+  useEffect(()=>{
+    setSelectedNumber({})
+  },[selectedIndex])
   const tabs = [
     "Inquiry", "Admission"
   ]
@@ -51,7 +53,6 @@ const Messages = () => {
             {tabs.map((tab, index) => (
               <Tab
                 key={tab}
-
                 className={({ selected }) =>
                   classNames(
                     "text-base font-semibold text-seamlessBlue-700 focus:none ",

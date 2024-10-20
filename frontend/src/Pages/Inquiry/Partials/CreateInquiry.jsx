@@ -41,7 +41,7 @@ const CreateInquiry = () => {
     const handleInquiry = (name, value) => {
         setInquiry((prev) => ({ ...prev, [name]: value }));
     };
-    
+
     useEffect(() => {
         const optionValues = async () => {
 
@@ -65,8 +65,8 @@ const CreateInquiry = () => {
             );
         };
         optionValues();
-        const inquiryExists=location?.state?.inquiryData;
-        if(inquiryExists){
+        const inquiryExists = location?.state?.inquiryData;
+        if (inquiryExists) {
             setInquiry(inquiryExists);
             setIsEdit(true);
         }
@@ -79,8 +79,8 @@ const CreateInquiry = () => {
                 date_of_birth: moment(inquiry?.date_of_birth).format("YYYY-MM-DD"),
             };
             const response = isEdit
-                ? await editRoute(`/api/inquiry/${newInquiry?.id}`, newInquiry,{},true)
-                : await postRoute("/api/inquiry", newInquiry,true);
+                ? await editRoute(`/api/inquiry/${newInquiry?.id}`, newInquiry, {}, true)
+                : await postRoute("/api/inquiry", newInquiry, true);
             if (response?.errors) {
                 setErrors(response?.errors);
             } else if (response?.data) {
@@ -101,7 +101,7 @@ const CreateInquiry = () => {
                         <h1 onClick={() => {
                             setFlash('message is comming', 'is it')
                         }} className='text-base font-semibold '>
-                        {   isEdit ? "Edit Inquiry" : "Create Inquiry"}
+                            {isEdit ? "Edit Inquiry" : "Create Inquiry"}
                         </h1>
                     </div>
                     <div className='font-semibold'>
@@ -240,12 +240,11 @@ const CreateInquiry = () => {
                                 </div>
                                 <div className="form-group">
 
-                                    <InputLabel value={'Email Address'} required />
+                                    <InputLabel value={'Email Address'} />
 
 
                                     <input
                                         maxLength={320}
-                                        required
                                         className="w-full p-2 mt-1 border border-gray-300 rounded-md"
                                         value={inquiry?.email}
                                         type="email"
@@ -324,10 +323,9 @@ const CreateInquiry = () => {
                                     <p className="mt-2 text-red-500">{errors["visa_type"]}</p>
                                 </div>
                                 <div className="form-group">
-                                    <InputLabel value={'Telecaller Name'} required />
+                                    <InputLabel value={'Counseller  Name'} />
 
                                     <input
-                                        required
                                         maxLength={320}
                                         className="w-full p-2 mt-1 border border-gray-300 rounded-md"
                                         value={inquiry?.telecaller_name}

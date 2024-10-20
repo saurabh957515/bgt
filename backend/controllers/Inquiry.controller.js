@@ -22,13 +22,12 @@ const inquirySchema = Joi.object({
     "string.empty": "Name is required.",
     "string.max": "Name cannot exceed 255 characters.",
   }),
-  email: Joi.string().email().required().messages({
-    "string.empty": "Email is required.",
+  email: Joi.string().email().optional().messages({
     "string.email": "Invalid email format.",
   }),
   contact_no: Joi.string()
   .pattern(/^[0-9]{10,12}$/) // Ensure only digits with a minimum length of 10 and max of 12
-  .optional()
+  .required()
   .messages({
     "string.empty": "Contact number is required.",
     "string.pattern.base":
@@ -47,10 +46,9 @@ const inquirySchema = Joi.object({
   }),
 
     alternate_no: Joi.string()
-    .pattern(/^[0-9]{10,12}$/) // Ensure only digits with a minimum length of 10 and max of 12
+    .pattern(/^[0-9]{10,12}$/) 
     .optional()
     .messages({
-      "string.empty": "Alternate number is required.",
       "string.pattern.base":
         "Invalid alternate number (must be numeric, between 10 and 12 digits).",
       "string.min": "Alternate number must be at least 10 characters.",
@@ -75,25 +73,25 @@ const inquirySchema = Joi.object({
     "string.max": "Interested country cannot exceed 255 characters.",
   }),
   current_city: Joi.string()
-  .pattern(/^[a-zA-Z\s]+$/) // Allows only alphabetic characters and spaces
+  .pattern(/^[a-zA-Z\s]+$/) 
   .max(100)
   .required()
   .messages({
-    "string.empty": "City is required.", // When the field is empty
-    "string.base": "City must be a string.", // When the field is not a string
-    "string.pattern.base": "City must contain only alphabetic characters.", // When the pattern fails
-    "string.max": "City cannot exceed 100 characters.", // When the field exceeds the max length
+    "string.empty": "City is required.",
+    "string.base": "City must be a string.", 
+    "string.pattern.base": "City must contain only alphabetic characters.", 
+    "string.max": "City cannot exceed 100 characters.",
   }),
 
 current_state: Joi.string()
-  .pattern(/^[a-zA-Z\s]+$/) // Allows only alphabetic characters and spaces
+  .pattern(/^[a-zA-Z\s]+$/)
   .max(100)
   .required()
   .messages({
-    "string.empty": "State is required.", // When the field is empty
-    "string.base": "State must be a string.", // When the field is not a string
-    "string.pattern.base": "State must contain only alphabetic characters.", // When the pattern fails
-    "string.max": "State cannot exceed 100 characters.", // When the field exceeds the max length
+    "string.empty": "State is required.", 
+    "string.base": "State must be a string.",
+    "string.pattern.base": "State must contain only alphabetic characters.",
+    "string.max": "State cannot exceed 100 characters.", 
   }),
 
 

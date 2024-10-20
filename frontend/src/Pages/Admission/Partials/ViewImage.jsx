@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { classNames } from '../../../provider';
 
-const ViewImage = ({ imageDoc }) => {
+const ViewImage = ({ imageDoc ,className}) => {
     const [photoPreview, setPhotoPreview] = useState('')
     useEffect(() => {
         if (imageDoc) {
@@ -39,7 +40,7 @@ const ViewImage = ({ imageDoc }) => {
             <img
                 src={photoPreview || "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBA=="}
                 alt="Photo Preview"
-                className="object-cover w-full bg-gray-100 rounded-lg h-60"
+                className={classNames("object-cover w-full bg-gray-100  ",className)}
             />
         </div>
     );

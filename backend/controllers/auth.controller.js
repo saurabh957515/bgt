@@ -78,9 +78,10 @@ export const login = async (req, res) => {
       res.status(200).send({
         message: "Login successfull!",
         status: "success",
-        full_name: user.fullName,
+        full_name: user.full_name,
         username: user.username,
         profile_pic: user.profile_pic,
+        email:user?.email,
       });
     } else {
       return res.status(400).send({

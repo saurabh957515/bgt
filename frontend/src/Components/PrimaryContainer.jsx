@@ -67,6 +67,7 @@ function classNames(...classes) {
 }
 
 function PrimaryContainer({ children ,className }) {
+  const logInUserDetail=JSON.parse(localStorage.getItem("user"));
   const {logout}=useLogout()
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
@@ -128,9 +129,7 @@ function PrimaryContainer({ children ,className }) {
         </div>
       </Dialog>
       <div className="w-[100vw] flex flex-col h-[100vh]">
-       
-
-        <div className="w-full px-4 bg-white border-b border-gray-200 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 sm:px-6 lg:px-7">
+         <div className="w-full px-4 bg-white border-b border-gray-200 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 sm:px-6 lg:px-7">
           <div className="flex items-center justify-between py-1 my-1 w-fll">
             <button
               type="button"
@@ -160,33 +159,30 @@ function PrimaryContainer({ children ,className }) {
                 <Menu as="div" className="relative">
                   <Menu.Button className="-m-1.5 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>
-                    <UserCircleIcon className="h-8 w-7" />
-                    <span className="hidden md:flex md:items-center">
-                      <span className="ml-2 sm:ml-3 lg:ml-4 text-sm sm:text-base lg:text-base font-semibold text-[#282728]">
-                        {localStorage.getItem("user_name")}
-                      </span>
-                    </span>
+                    <UserCircleIcon className="h-10 w-9" />
                   </Menu.Button>
                   <Menu.Items className="absolute right-0 mt-2.5 w-28 sm:w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                    {userNavigation.map((item, index) => (
-                      <Menu.Item key={item.name}>
+                        <Menu.Item >
                         {({ active }) => (
                           <div
-                            onClick={() => {
-                              if (index === 1) {
-                                
-                                handleLogout();
-                              }
-                            }}
-                            href={item.path}
                             className={`${active ? "bg-gray-50" : ""
                               } block px-3 py-1 text-sm cursor-pointer leading-6 text-gray-900`}
                           >
-                            {item.name}
+                        {logInUserDetail?.username}
                           </div>
                         )}
                       </Menu.Item>
-                    ))}
+                      <Menu.Item >
+                        {({ active }) => (
+                          <div
+                            onClick={handleLogout}
+                            className={`${active ? "bg-gray-50" : ""
+                              } block px-3 py-1 text-sm cursor-pointer leading-6 text-gray-900`}
+                          >
+                          Sign out
+                          </div>
+                        )}
+                      </Menu.Item>
                   </Menu.Items>
                 </Menu>
               </div>
