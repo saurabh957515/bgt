@@ -13,11 +13,12 @@ import educationRoutes from "./routes/Education.routes.js";
 import fileRoutes from "./routes/file.routes.js";
 import protectRoute from "./middleware/protectRoute.js";
 import whatsappRoutes from "./routes/whatsappRoutes.js"
+import templateRoutes from './routes/TemplateRoutes.js'
+import { syncTemplate } from "./models/Template.model.js";
 const app = express();
 dotenv.config();
 const __dirname = path.resolve();
 const PORT = process.env.PORT || 5001;
-
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "backend", "views"));
 
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/feepayment", feePaymentRoutes);
 app.use("/api/university", universityRoutes);
+app.use('/api/template', templateRoutes);
 app.use("/api/inquiry", inquiryRoutes);
 app.use("/api/bank", bankRoutes);
 app.use("/api/admission", admissionRoutes);

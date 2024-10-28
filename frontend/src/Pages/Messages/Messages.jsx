@@ -6,6 +6,7 @@ import { classNames } from '../../provider';
 import SearchBar from '../../Components/SearchBar';
 import ListsNames from './Partials/ListsNames';
 import useApi from '../../utils/UseApi';
+import TemplateBuilder from '../../Components/TemplateBuilder';
 
 const Messages = () => {
   // use map fuction with the timeline in where check which message came first sender and reciver sort them in order with the time sender on right reciver on
@@ -79,6 +80,7 @@ const Messages = () => {
 
           </Tab.Panels>
         </Tab.Group>
+        <TemplateBuilder/>
       </div>
       <ChatBox className='grow' selectedNumber={selectedNumber} />
 

@@ -51,6 +51,7 @@ const navigation = [
   { name: 'Inquiry', path: '/inquiry', image: Organization, refPath: "/create-inquiry" },
   { name: 'Admission', path: '/total-admission', image: Membership, refPath: "/admission" },
   { name: 'Messages', path: '/messages', image: Financials },
+  { name: 'Templates', path: '/template', image: Financials },
   { name: 'Fees', path: '/fees', image: Chapters },
   { name: 'BankDetails', path: '/bankdetails', image: Commities, refPath: "/create-bank" },
   { name: 'SETTINGS', path: '/settings', image: Settings },

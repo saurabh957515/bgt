@@ -12,6 +12,7 @@ import TotalAdmission from "./Pages/Admission/TotalAdmission.jsx";
 import CreateBank from "./Pages/BankDetails/Partials/CreateBank.jsx";
 import Registration from "./Pages/Registration.jsx";
 import ProtectedRoute from "./ProtectRoute.jsx";
+import TemplatePage from "./Pages/Templates/Template.jsx";
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/create-inquiry" element={<ProtectedRoute element={CreateInquiry} />} />
         <Route path="/fees" element={<ProtectedRoute element={Fees} />} />
         <Route path="/bankdetails" element={<ProtectedRoute element={BankDetails} />} />
+        <Route path="/template" element={<ProtectedRoute element={TemplatePage} />} />
         <Route path="/settings" element={<ProtectedRoute element={Dashboard} />} />
         <Route path="*" element={<ProtectedRoute element={Dashboard} />} />
       </Routes>
