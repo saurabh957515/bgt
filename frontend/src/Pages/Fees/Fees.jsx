@@ -8,6 +8,7 @@ import InputLabel from '../../Components/InputLabel';
 import InputError from '../../Components/InputError';
 import { classNames } from '../../provider';
 import FeeHistoryChart from '../../Components/FeeHistoryChart';
+import FeeHistoryTable from '../../Components/FeeHistoryTabel';
 const Fees = () => {
 
     const { getRoute, postRoute } = useApi();
@@ -69,7 +70,9 @@ const Fees = () => {
                     return moment(b.updated_at).diff(moment(a.updated_at));
                 });
                 setFeeHistory(sortedData?.map(fee => ({
-                    date: moment(fee?.updated_at).format('YYYY-MM-DD'), fee: fee?.current_amount
+                    ...fee,
+              fee: fee?.current_amount,
+
                 })))
                 const lastFeePayment = sortedData[0];
                 const totalPaiedAmount = sortedData?.reduce(
@@ -90,7 +93,6 @@ const Fees = () => {
         }
     }, [selectedAdmission])
 
-    // Sample fee list data
     const feeList = [
         { date: '2024-01-01', fee: 500 },
         { date: '2024-02-01', fee: 1200 },
@@ -98,6 +100,7 @@ const Fees = () => {
         { date: '2024-04-01', fee: 8000 },
         { date: '2024-05-01', fee: 1500 },
     ];
+    console.log(feeHistory);
     return (
         <PrimaryContainer>
             <div className='flex flex-col w-full h-full '>
@@ -119,10 +122,13 @@ const Fees = () => {
                                                 onChange={(option) => setSelectedAdmission(option?.value)} value={selectedAdmission || { label: "select" }}
                                                 options={admissionOptions} className='w-1/3' />
                                         </div>
-                                        {selectedAdmission && feeHistory?.length > 0 && <div className='col-span-2'>
-                                            <InputLabel className='mb-2 font-medium' value={"Fee History :"} />
-                                            <FeeHistoryChart feeList={feeHistory} />
+                                        {selectedAdmission && feeHistory?.length > 0 &&
+                                            <h2 className="mb-4 text-sm font-semibold ">Fee History</h2>
 
+                                        }
+
+                                        {selectedAdmission && feeHistory?.length > 0 && <div className='col-span-2'>
+                                            <FeeHistoryTable feeList={feeHistory} />
                                         </div>
                                         }
 
